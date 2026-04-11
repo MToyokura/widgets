@@ -21,6 +21,16 @@ export function getTrianglePath(p1: Point, p2: Point, p3: Point) {
   return `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y} L ${p3.x} ${p3.y} Z`;
 }
 
+export function getPolygonPath(points: Point[]) {
+  if (points.length === 0) return "";
+
+  return (
+    points
+      .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`)
+      .join(" ") + " Z"
+  );
+}
+
 export function getPointOnCircle(
   center: Point,
   radius: number,
@@ -40,6 +50,63 @@ export function projectPointToCircle(
   const angle = Math.atan2(point.y - center.y, point.x - center.x);
 
   return getPointOnCircle(center, radius, angle);
+}
+
+export function translatePoint(point: Point, offset: Point): Point {
+  return {
+    x: point.x + offset.x,
+    y: point.y + offset.y,
+  };
+}
+
+export function rotatePoint(point: Point, center: Point, angle: number): Point {
+  const dx = point.x - center.x;
+  const dy = point.y - center.y;
+  const cosAngle = Math.cos(angle);
+  const sinAngle = Math.sin(angle);
+
+  return {
+    x: center.x + dx * cosAngle - dy * sinAngle,
+    y: center.y + dx * sinAngle + dy * cosAngle,
+  };
+}
+
+export function reflectPointAcrossLine(
+  point: Point,
+  linePoint: Point,
+  lineAngle: number,
+): Point {
+  const relativePoint = {
+    x: point.x - linePoint.x,
+    y: point.y - linePoint.y,
+  };
+  const ux = Math.cos(lineAngle);
+  const uy = Math.sin(lineAngle);
+  const parallelMagnitude = relativePoint.x * ux + relativePoint.y * uy;
+  const parallel = {
+    x: ux * parallelMagnitude,
+    y: uy * parallelMagnitude,
+  };
+  const perpendicular = {
+    x: relativePoint.x - parallel.x,
+    y: relativePoint.y - parallel.y,
+  };
+
+  return {
+    x: linePoint.x + parallel.x - perpendicular.x,
+    y: linePoint.y + parallel.y - perpendicular.y,
+  };
+}
+
+export function getLinePathThroughPoint(
+  point: Point,
+  angle: number,
+  halfLength: number,
+) {
+  const dx = Math.cos(angle) * halfLength;
+  const dy = Math.sin(angle) * halfLength;
+
+  return `M ${point.x - dx} ${point.y - dy} L ${point.x + dx} ${point.y + dy}`;
 }
 
 export function getRightAnglePath(
