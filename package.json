@@ -14,13 +14,15 @@
     "@astrojs/starlight": "^0.38.3",
     "astro": "^6.0.1",
     "d3": "^7.9.0",
-    "sharp": "^0.34.2"
+    "sharp": "^0.34.2",
+    "three": "^0.183.2"
   },
   "volta": {
     "node": "24.14.1"
   },
   "devDependencies": {
     "@types/d3": "^7.4.3",
+    "@types/three": "^0.183.1",
     "prettier": "3.8.1"
   }
 }

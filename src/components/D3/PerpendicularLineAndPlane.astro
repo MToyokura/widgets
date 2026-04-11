@@ -1,0 +1,209 @@
+---
+const { locale = "en" } = Astro.props;
+const copy = {
+  en: {
+    helperText:
+      "Rotate the view to inspect the plane, the perpendicular line, and the right-angle marker at their intersection.",
+  },
+  ja: {
+    helperText:
+      "視点を回転して、平面、垂直な直線、交点の直角マークを確認してみましょう。",
+  },
+} as const;
+const text = copy[locale as keyof typeof copy] ?? copy.en;
+---
+
+<div class="viz-container" id="perpendicular-line-and-plane-wrapper">
+  <div class="threejs-viz" aria-label={text.helperText}></div>
+  <p
+    style="margin-top: 0.75rem; text-align: center; color: var(--sl-color-text); font-size: 0.95rem;"
+  >
+    {text.helperText}
+  </p>
+</div>
+
+<style>
+  .threejs-viz {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 720px;
+    min-height: 320px;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #e0e0e0;
+  }
+
+  .threejs-viz :global(canvas) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import { Line2 } from "three/addons/lines/Line2.js";
+  import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+  import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+  import { LineSegments2 } from "three/addons/lines/LineSegments2.js";
+  import { LineSegmentsGeometry } from "three/addons/lines/LineSegmentsGeometry.js";
+
+  const wrappers = document.querySelectorAll(
+    "#perpendicular-line-and-plane-wrapper .threejs-viz",
+  );
+
+  for (const wrapper of wrappers) {
+    if (
+      !(wrapper instanceof HTMLDivElement) ||
+      wrapper.dataset.ready === "true"
+    ) {
+      continue;
+    }
+
+    wrapper.dataset.ready = "true";
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xe0e0e0);
+
+    const d = 4;
+    const camera = new THREE.OrthographicCamera(-d, d, d, -d, 0.1, 100);
+    camera.position.set(5, 5, 5);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    wrapper.appendChild(renderer.domElement);
+
+    const resolution = new THREE.Vector2(1, 1);
+    const unifiedThickness = 2.5;
+
+    const planeGeometry = new THREE.PlaneGeometry(4, 4);
+    const planeMaterial = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      side: THREE.DoubleSide,
+    });
+    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    plane.rotation.x = -Math.PI / 2;
+    scene.add(plane);
+
+    const planeLineMaterial = new LineMaterial({
+      color: 0x6b7280,
+      linewidth: 1.5,
+      resolution,
+    });
+
+    const planeLine1Geom = new LineGeometry();
+    planeLine1Geom.setPositions([-1.5, 0, 0, 1.5, 0, 0]);
+    const planeLine1 = new Line2(planeLine1Geom, planeLineMaterial);
+    planeLine1.rotation.x = -Math.PI / 2;
+    scene.add(planeLine1);
+
+    const planeLine2Geom = new LineGeometry();
+    planeLine2Geom.setPositions([0, -1.5, 0, 0, 1.5, 0]);
+    const planeLine2 = new Line2(planeLine2Geom, planeLineMaterial);
+    planeLine2.rotation.x = -Math.PI / 2;
+    scene.add(planeLine2);
+
+    const edges = new THREE.EdgesGeometry(planeGeometry);
+    const borderGeo = new LineSegmentsGeometry().fromEdgesGeometry(edges);
+    const borderMat = new LineMaterial({
+      color: 0x000000,
+      linewidth: unifiedThickness,
+      resolution,
+    });
+    const lineBorder = new LineSegments2(borderGeo, borderMat);
+    lineBorder.rotation.x = -Math.PI / 2;
+    scene.add(lineBorder);
+
+    const lineGeom = new LineGeometry();
+    lineGeom.setPositions([0, -3, 0, 0, 3, 0]);
+
+    const solidMat = new LineMaterial({
+      color: 0x000000,
+      linewidth: unifiedThickness,
+      resolution,
+    });
+    const solidLine = new Line2(lineGeom, solidMat);
+    solidLine.renderOrder = 1;
+    scene.add(solidLine);
+
+    const dashedMat = new LineMaterial({
+      color: 0x000000,
+      linewidth: unifiedThickness,
+      resolution,
+      dashed: true,
+      dashSize: 0.15,
+      gapSize: 0.15,
+      depthFunc: THREE.GreaterDepth,
+      depthWrite: false,
+    });
+    const dashedLine = new Line2(lineGeom, dashedMat);
+    dashedLine.computeLineDistances();
+    dashedLine.renderOrder = 2;
+    scene.add(dashedLine);
+
+    const s = 0.2;
+    const yOffset = 0.01;
+    const angleGeom = new LineGeometry();
+    angleGeom.setPositions([
+      0,
+      s + yOffset,
+      0,
+      s,
+      s + yOffset,
+      0,
+      s,
+      yOffset,
+      0,
+    ]);
+
+    const angleMat = new LineMaterial({
+      color: 0x000000,
+      linewidth: unifiedThickness,
+      resolution,
+    });
+    const angleSymbol = new Line2(angleGeom, angleMat);
+    angleSymbol.renderOrder = 3;
+    scene.add(angleSymbol);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = false;
+
+    function render() {
+      angleSymbol.rotation.y = Math.atan2(camera.position.x, camera.position.z);
+      renderer.render(scene, camera);
+    }
+
+    function resize() {
+      const bounds = wrapper.getBoundingClientRect();
+      const width = Math.max(1, Math.round(bounds.width));
+      const height = Math.max(1, Math.round(bounds.height));
+      const aspect = width / height;
+
+      camera.left = -d * aspect;
+      camera.right = d * aspect;
+      camera.top = d;
+      camera.bottom = -d;
+      camera.updateProjectionMatrix();
+
+      renderer.setSize(width, height, false);
+
+      borderMat.resolution.set(width, height);
+      planeLineMaterial.resolution.set(width, height);
+      solidMat.resolution.set(width, height);
+      dashedMat.resolution.set(width, height);
+      angleMat.resolution.set(width, height);
+
+      render();
+    }
+
+    controls.addEventListener("change", render);
+
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(wrapper);
+
+    requestAnimationFrame(resize);
+  }
+</script>
