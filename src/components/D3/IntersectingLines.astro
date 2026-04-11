@@ -42,7 +42,7 @@
     const line2 = new Line2(g2, new LineMaterial({ color: 0x2563eb, linewidth: 3, resolution }));
     scene.add(line1); scene.add(line2);
     scene.add(new THREE.AmbientLight(0xffffff, 1.3)); const light = new THREE.DirectionalLight(0xffffff, 1.2); light.position.set(3, 5, 4); scene.add(light);
-    function resize() { const bounds = wrapper.getBoundingClientRect(); const width = Math.max(1, Math.round(bounds.width)); const height = Math.max(1, Math.round(bounds.height)); camera.aspect = width / height; camera.updateProjectionMatrix(); renderer.setSize(width, height, false); line1.material.resolution.set(width, height); line2.material.resolution.set(width, height); render(); }
+    function resize() { if (!(wrapper instanceof HTMLDivElement)) return; const bounds = wrapper.getBoundingClientRect(); const width = Math.max(1, Math.round(bounds.width)); const height = Math.max(1, Math.round(bounds.height)); camera.aspect = width / height; camera.updateProjectionMatrix(); renderer.setSize(width, height, false); line1.material.resolution.set(width, height); line2.material.resolution.set(width, height); render(); }
     function render() { renderer.render(scene, camera); }
     controls.addEventListener("change", render); new ResizeObserver(resize).observe(wrapper); requestAnimationFrame(resize);
   }

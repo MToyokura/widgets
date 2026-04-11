@@ -46,6 +46,7 @@
     scene.add(new THREE.AmbientLight(0xffffff, 1.3)); const light = new THREE.DirectionalLight(0xffffff, 1.2); light.position.set(3, 5, 4); scene.add(light);
     function render() { renderer.render(scene, camera); }
     function resize() {
+      if (!(wrapper instanceof HTMLDivElement)) return;
       const bounds = wrapper.getBoundingClientRect();
       const width = Math.max(1, Math.round(bounds.width));
       const height = Math.max(1, Math.round(bounds.height));

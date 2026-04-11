@@ -72,6 +72,7 @@
     light.position.set(3, 5, 4);
     scene.add(light);
     function resize() {
+      if (!(wrapper instanceof HTMLDivElement)) return;
       const bounds = wrapper.getBoundingClientRect();
       const width = Math.max(1, Math.round(bounds.width));
       const height = Math.max(1, Math.round(bounds.height));
