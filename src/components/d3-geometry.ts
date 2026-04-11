@@ -74,6 +74,41 @@ export function getRightAnglePath(
   return `M ${cornerA.x} ${cornerA.y} L ${cornerB.x} ${cornerB.y} L ${cornerC.x} ${cornerC.y}`;
 }
 
+export function getAngleArcPath(
+  a: Point,
+  vertex: Point,
+  b: Point,
+  markerLimit = RIGHT_ANGLE_SIZE,
+) {
+  const markerRadius = Math.min(
+    markerLimit,
+    distance(vertex, a) * 0.3,
+    distance(vertex, b) * 0.3,
+  );
+
+  if (markerRadius < 1) return "";
+
+  const startAngle = Math.atan2(a.y - vertex.y, a.x - vertex.x);
+  const endAngle = Math.atan2(b.y - vertex.y, b.x - vertex.x);
+  let delta = endAngle - startAngle;
+
+  if (delta <= -Math.PI) delta += Math.PI * 2;
+  if (delta > Math.PI) delta -= Math.PI * 2;
+  if (Math.abs(delta) < 0.01) return "";
+
+  const start = {
+    x: vertex.x + Math.cos(startAngle) * markerRadius,
+    y: vertex.y + Math.sin(startAngle) * markerRadius,
+  };
+  const end = {
+    x: vertex.x + Math.cos(endAngle) * markerRadius,
+    y: vertex.y + Math.sin(endAngle) * markerRadius,
+  };
+  const sweepFlag = delta > 0 ? 1 : 0;
+
+  return `M ${start.x} ${start.y} A ${markerRadius} ${markerRadius} 0 0 ${sweepFlag} ${end.x} ${end.y}`;
+}
+
 export function getAngleDegrees(a: Point, vertex: Point, b: Point) {
   const vectorA = {
     x: a.x - vertex.x,
