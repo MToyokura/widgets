@@ -161,7 +161,7 @@ const initialHighlightedArcPath = getCircleArcPath(
       cy={p3.y}
       r={7}
       fill="#16a34a"
-      style="pointer-events: none;"></circle>
+      style="cursor: grab; touch-action: none;"></circle>
     <circle
       id="central-angle-handle-a"
       cx={p1.x}
@@ -260,15 +260,13 @@ const initialHighlightedArcPath = getCircleArcPath(
     const center = { x: cx, y: cy };
     let angleA = (3 * Math.PI) / 4;
     let angleB = Math.PI / 4;
+    let angleC = angleA + getSignedMinorDelta(angleA, angleB) / 2 + Math.PI;
 
     function getPoints() {
-      const midpointOfMajorArc =
-        angleA + getSignedMinorDelta(angleA, angleB) / 2 + Math.PI;
-
       return {
         p1: getPointOnCircle(center, radius, angleA),
         p2: getPointOnCircle(center, radius, angleB),
-        p3: getPointOnCircle(center, radius, midpointOfMajorArc),
+        p3: getPointOnCircle(center, radius, angleC),
       };
     }
 
@@ -278,6 +276,11 @@ const initialHighlightedArcPath = getCircleArcPath(
       return Number.isInteger(roundedAngle)
         ? `${roundedAngle.toFixed(0)}°`
         : `${roundedAngle.toFixed(1)}°`;
+    }
+
+    function normalizeAngle(angle: number) {
+      const fullTurn = Math.PI * 2;
+      return ((angle % fullTurn) + fullTurn) % fullTurn;
     }
 
     function render() {
@@ -316,6 +319,7 @@ const initialHighlightedArcPath = getCircleArcPath(
 
       handleA.style("cursor", cursor);
       handleB.style("cursor", cursor);
+      inscribedPoint.style("cursor", cursor);
     }
 
     function getPointerAngle(x: number, y: number) {
@@ -348,8 +352,43 @@ const initialHighlightedArcPath = getCircleArcPath(
         setDraggingState(false);
       });
 
+    const handleCDragBehavior = d3
+      .drag<SVGCircleElement, unknown>()
+      .on("start", () => {
+        setDraggingState(true);
+      })
+      .on("drag", (event) => {
+        const newAngle = getPointerAngle(event.x, event.y);
+        const delta = getSignedMinorDelta(angleA, angleB);
+
+        // The green dot is restricted to the MAJOR arc (the one NOT highlighted).
+        // If delta > 0, minor arc is A -> B CCW, so major arc is B -> A CCW.
+        // If delta < 0, minor arc is B -> A CCW, so major arc is A -> B CCW.
+        const majorStart = delta > 0 ? angleB : angleA;
+        const majorEnd = delta > 0 ? angleA : angleB;
+
+        const s = normalizeAngle(majorStart);
+        const e = normalizeAngle(majorEnd);
+        const phi = normalizeAngle(newAngle);
+
+        const inMajor = s <= e ? phi >= s && phi <= e : phi >= s || phi <= e;
+
+        if (inMajor) {
+          angleC = newAngle;
+        } else {
+          const distS = Math.abs(getSignedMinorDelta(newAngle, majorStart));
+          const distE = Math.abs(getSignedMinorDelta(newAngle, majorEnd));
+          angleC = distS < distE ? majorStart : majorEnd;
+        }
+        render();
+      })
+      .on("end", () => {
+        setDraggingState(false);
+      });
+
     handleA.call(handleADragBehavior);
     handleB.call(handleBDragBehavior);
+    inscribedPoint.call(handleCDragBehavior);
     render();
   }
 
