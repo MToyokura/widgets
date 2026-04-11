@@ -1,4 +1,5 @@
 ---
+
 ---
 
 <div class="viz-container" id="three-points-not-collinear-wrapper">
@@ -81,7 +82,9 @@
       renderer.setSize(width, height, false);
       render();
     }
-    function render() { renderer.render(scene, camera); }
+    function render() {
+      renderer.render(scene, camera);
+    }
     controls.addEventListener("change", render);
     new ResizeObserver(resize).observe(wrapper);
     requestAnimationFrame(resize);
