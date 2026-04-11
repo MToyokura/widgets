@@ -44,8 +44,7 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
       d={initialPath}
       fill="rgba(52, 152, 219, 0.3)"
       stroke="#3498db"
-      stroke-width="3"
-      style="cursor: grab; touch-action: none;"></path>
+      stroke-width="3"></path>
     <path
       id="thales-right-angle"
       d={initialRightAnglePath}
@@ -68,6 +67,13 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
     >
       {`${Math.round(initialAngleDegrees)}°`}
     </text>
+    <circle
+      id="thales-center-point"
+      cx={cx}
+      cy={cy}
+      r={4}
+      fill="#111827"
+      style="pointer-events: none;"></circle>
     <circle
       id="thales-handle-start"
       cx={p1.x}
@@ -183,7 +189,6 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
       startHandle.style("cursor", cursor);
       endHandle.style("cursor", cursor);
       vertexHandle.style("cursor", cursor);
-      triangle.style("cursor", cursor);
     }
 
     function getPointerAngle(x: number, y: number) {
@@ -229,23 +234,9 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
         setDraggingState(false);
       });
 
-    const triangleDragBehavior = d3
-      .drag<SVGPathElement, unknown>()
-      .on("start", () => {
-        setDraggingState(true);
-      })
-      .on("drag", (event) => {
-        vertexAngle = getPointerAngle(event.x, event.y);
-        render();
-      })
-      .on("end", () => {
-        setDraggingState(false);
-      });
-
     startHandle.call(startHandleDragBehavior);
     endHandle.call(endHandleDragBehavior);
     vertexHandle.call(vertexDragBehavior);
-    triangle.call(triangleDragBehavior);
     render();
   }
 
