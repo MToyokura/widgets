@@ -13,10 +13,13 @@ const radius = 150;
 const cx = width / 2;
 const cy = height / 2;
 const center = { x: cx, y: cy };
+const initialAngleA = (3 * Math.PI) / 4;
+const initialAngleB = Math.PI / 4;
+const initialAngleC = -Math.PI / 2;
 
-const p1 = getPointOnCircle(center, radius, (7 * Math.PI) / 6);
-const p2 = getPointOnCircle(center, radius, -Math.PI / 6);
-const p3 = getPointOnCircle(center, radius, -Math.PI / 2);
+const p1 = getPointOnCircle(center, radius, initialAngleA);
+const p2 = getPointOnCircle(center, radius, initialAngleB);
+const p3 = getPointOnCircle(center, radius, initialAngleC);
 const initialPath = getTrianglePath(p1, p2, p3);
 const initialAngleArcPath = getAngleArcPath(p1, p3, p2);
 const initialAngleLabelPosition = getAngleLabelPosition(p1, p3, p2);
@@ -129,8 +132,8 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
     const cy = 200;
     const radius = 150;
     const center = { x: cx, y: cy };
-    let angleA = (7 * Math.PI) / 6;
-    let angleB = -Math.PI / 6;
+    let angleA = (3 * Math.PI) / 4;
+    let angleB = Math.PI / 4;
     let angleC = -Math.PI / 2;
 
     function getPoints() {
