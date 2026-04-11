@@ -16,8 +16,8 @@ export default defineConfig({
       ],
       sidebar: [
         {
-          label: "Guides",
-          autogenerate: { directory: "guides" },
+          label: "図形",
+          autogenerate: { directory: "geometry" },
         },
       ],
     }),
