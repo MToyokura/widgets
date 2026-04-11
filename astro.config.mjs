@@ -7,6 +7,17 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "OER",
+      defaultLocale: "en",
+      locales: {
+        en: {
+          label: "English",
+          lang: "en",
+        },
+        ja: {
+          label: "日本語",
+          lang: "ja",
+        },
+      },
       social: [
         {
           icon: "github",
@@ -16,8 +27,13 @@ export default defineConfig({
       ],
       sidebar: [
         {
-          label: "図形",
-          autogenerate: { directory: "geometry" },
+          label: "Geometry",
+          translations: {
+            ja: "図形",
+          },
+          autogenerate: {
+            directory: "geometry",
+          },
         },
       ],
     }),
