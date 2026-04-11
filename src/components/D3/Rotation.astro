@@ -9,11 +9,13 @@ import {
 const { locale = "en" } = Astro.props;
 const copy = {
   en: {
-    helperText: "Drag the orange point to rotate the figure, or the blue dot to move it.",
+    helperText:
+      "Drag the orange point to rotate the figure, or the blue dot to move it.",
   },
   ja: {
     helperText: "オレンジの点を動かして回転、青い点を動かして移動させます。",
-  },} as const;
+  },
+} as const;
 const text = copy[locale as keyof typeof copy] ?? copy.en;
 
 const width = 400;
@@ -46,14 +48,32 @@ const initialAngleHandle = getPointOnCircle(
     style="display: block; margin: auto; background-color: #f3f4f6; border-radius: 8px;"
   >
     {
-      Array.from({ length: Math.floor(width / 40) + 1 }, (_, i) => i * 40).map((x) => (
-        <line x1={x} y1="0" x2={x} y2={height} stroke="#d7dde5" stroke-width="1" />
-      ))
+      Array.from({ length: Math.floor(width / 40) + 1 }, (_, i) => i * 40).map(
+        (x) => (
+          <line
+            x1={x}
+            y1="0"
+            x2={x}
+            y2={height}
+            stroke="#d7dde5"
+            stroke-width="1"
+          />
+        ),
+      )
     }
     {
-      Array.from({ length: Math.floor(height / 40) + 1 }, (_, i) => i * 40).map((y) => (
-        <line x1="0" y1={y} x2={width} y2={y} stroke="#d7dde5" stroke-width="1" />
-      ))
+      Array.from({ length: Math.floor(height / 40) + 1 }, (_, i) => i * 40).map(
+        (y) => (
+          <line
+            x1="0"
+            y1={y}
+            x2={width}
+            y2={y}
+            stroke="#d7dde5"
+            stroke-width="1"
+          />
+        ),
+      )
     }
     <circle
       cx={rotationCenter.x}
@@ -62,44 +82,47 @@ const initialAngleHandle = getPointOnCircle(
       fill="none"
       stroke="#cbd5e1"
       stroke-width="2"
-      stroke-dasharray="5 5"
-    ></circle>
+      stroke-dasharray="5 5"></circle>
     <path
       id="rotation-original-shape"
       d={getPolygonPath(originalPoints)}
       fill="rgba(37, 99, 235, 0.24)"
       stroke="#2563eb"
-      stroke-width="3"
-    ></path>
-    {originalPoints.map((point) => {
-      const radius = Math.sqrt(
-        Math.pow(point.x - rotationCenter.x, 2) +
-        Math.pow(point.y - rotationCenter.y, 2)
-      );
-      const startAngle = Math.atan2(point.y - rotationCenter.y, point.x - rotationCenter.x);
-      return (
-        <path
-          class="vertex-path"
-          d={getCircleArcPath(rotationCenter, radius, startAngle, startAngle + 0)}
-          fill="none"
-          stroke="#94a3b8"
-          stroke-width="1"
-          stroke-dasharray="2 2"
-        />
-      );
-    })}
+      stroke-width="3"></path>
+    {
+      originalPoints.map((point) => {
+        const radius = Math.sqrt(
+          Math.pow(point.x - rotationCenter.x, 2) +
+            Math.pow(point.y - rotationCenter.y, 2),
+        );
+        const startAngle = Math.atan2(
+          point.y - rotationCenter.y,
+          point.x - rotationCenter.x,
+        );
+        return (
+          <path
+            class="vertex-path"
+            d={getCircleArcPath(
+              rotationCenter,
+              radius,
+              startAngle,
+              startAngle + 0,
+            )}
+            fill="none"
+            stroke="#94a3b8"
+            stroke-width="1"
+            stroke-dasharray="2 2"
+          />
+        );
+      })
+    }
     <path
       id="rotation-transformed-shape"
       d={getPolygonPath(initialRotatedPoints)}
       fill="rgba(14, 165, 233, 0.22)"
       stroke="#0ea5e9"
-      stroke-width="3"
-    ></path>
-    <circle
-      cx={rotationCenter.x}
-      cy={rotationCenter.y}
-      r="4"
-      fill="#dc2626"
+      stroke-width="3"></path>
+    <circle cx={rotationCenter.x} cy={rotationCenter.y} r="4" fill="#dc2626"
     ></circle>
     <circle
       id="rotation-angle-handle"
@@ -107,19 +130,17 @@ const initialAngleHandle = getPointOnCircle(
       cy={initialAngleHandle.y}
       r="10"
       fill="#f97316"
-      style="cursor: grab; touch-action: none;"
-    ></circle>
+      style="cursor: grab; touch-action: none;"></circle>
     <circle
       id="rotation-move-handle"
       cx={centroid.x}
       cy={centroid.y}
       r="8"
       fill="#2563eb"
-      style="cursor: grab; touch-action: none;"
-    ></circle>
+      style="cursor: grab; touch-action: none;"></circle>
   </svg>
   <p
-    style="margin-top: 0.75rem; text-align: center; color: #475569; font-size: 0.95rem;"
+    style="margin-top: 0.75rem; text-align: center; color: var(--sl-color-text); font-size: 0.95rem;"
   >
     {text.helperText}
   </p>
@@ -135,21 +156,31 @@ const initialAngleHandle = getPointOnCircle(
   } from "./functions/geometry";
 
   function setupInteractivity() {
-    const originalShape = d3.select<SVGPathElement, unknown>("#rotation-original-shape");
-    const transformedShape = d3.select<SVGPathElement, unknown>("#rotation-transformed-shape");
-    const angleHandle = d3.select<SVGCircleElement, unknown>("#rotation-angle-handle");
-    const moveHandle = d3.select<SVGCircleElement, unknown>("#rotation-move-handle");
-    
+    const originalShape = d3.select<SVGPathElement, unknown>(
+      "#rotation-original-shape",
+    );
+    const transformedShape = d3.select<SVGPathElement, unknown>(
+      "#rotation-transformed-shape",
+    );
+    const angleHandle = d3.select<SVGCircleElement, unknown>(
+      "#rotation-angle-handle",
+    );
+    const moveHandle = d3.select<SVGCircleElement, unknown>(
+      "#rotation-move-handle",
+    );
+
     let originalPoints = [
       { x: 80, y: 270 },
       { x: 155, y: 130 },
       { x: 240, y: 230 },
     ];
     let centroid = {
-      x: originalPoints.reduce((sum, p) => sum + p.x, 0) / originalPoints.length,
-      y: originalPoints.reduce((sum, p) => sum + p.y, 0) / originalPoints.length,
+      x:
+        originalPoints.reduce((sum, p) => sum + p.x, 0) / originalPoints.length,
+      y:
+        originalPoints.reduce((sum, p) => sum + p.y, 0) / originalPoints.length,
     };
-    
+
     const rotationCenter = { x: 210, y: 210 };
     const guideRadius = 72;
     let rotationAngle = 0;
@@ -168,43 +199,50 @@ const initialAngleHandle = getPointOnCircle(
       transformedShape.attr("d", getPolygonPath(rotatedPoints));
       moveHandle.attr("cx", centroid.x).attr("cy", centroid.y);
       angleHandle.attr("cx", nextAngleHandle.x).attr("cy", nextAngleHandle.y);
-      
+
       d3.selectAll(".vertex-path")
         .data(originalPoints)
         .attr("d", (d: any) => {
           const radius = Math.sqrt(
             Math.pow(d.x - rotationCenter.x, 2) +
-            Math.pow(d.y - rotationCenter.y, 2)
+              Math.pow(d.y - rotationCenter.y, 2),
           );
-          const startAngle = Math.atan2(d.y - rotationCenter.y, d.x - rotationCenter.x);
-          return getCircleArcPath(rotationCenter, radius, startAngle, startAngle + rotationAngle);
+          const startAngle = Math.atan2(
+            d.y - rotationCenter.y,
+            d.x - rotationCenter.x,
+          );
+          return getCircleArcPath(
+            rotationCenter,
+            radius,
+            startAngle,
+            startAngle + rotationAngle,
+          );
         });
     }
 
     render();
 
     angleHandle.call(
-      d3
-        .drag<SVGCircleElement, unknown>()
-        .on("drag", (event) => {
-          rotationAngle = Math.atan2(
-            event.y - rotationCenter.y,
-            event.x - rotationCenter.x,
-          );
-          render();
-        }),
+      d3.drag<SVGCircleElement, unknown>().on("drag", (event) => {
+        rotationAngle = Math.atan2(
+          event.y - rotationCenter.y,
+          event.x - rotationCenter.x,
+        );
+        render();
+      }),
     );
 
     moveHandle.call(
-      d3
-        .drag<SVGCircleElement, unknown>()
-        .on("drag", (event) => {
-          const dx = event.x - centroid.x;
-          const dy = event.y - centroid.y;
-          originalPoints = originalPoints.map(p => ({ x: p.x + dx, y: p.y + dy }));
-          centroid = { x: event.x, y: event.y };
-          render();
-        }),
+      d3.drag<SVGCircleElement, unknown>().on("drag", (event) => {
+        const dx = event.x - centroid.x;
+        const dy = event.y - centroid.y;
+        originalPoints = originalPoints.map((p) => ({
+          x: p.x + dx,
+          y: p.y + dy,
+        }));
+        centroid = { x: event.x, y: event.y };
+        render();
+      }),
     );
   }
 

@@ -9,10 +9,12 @@ import {
 const { locale = "en" } = Astro.props;
 const copy = {
   en: {
-    helperText: "Drag the orange point to rotate the mirror line, or the blue dot to move the figure.",
+    helperText:
+      "Drag the orange point to rotate the mirror line, or the blue dot to move the figure.",
   },
   ja: {
-    helperText: "オレンジの点を動かすと軸の向きが変わり、青い点を動かすと図形が移動します。",
+    helperText:
+      "オレンジの点を動かすと軸の向きが変わり、青い点を動かすと図形が移動します。",
   },
 } as const;
 const text = copy[locale as keyof typeof copy] ?? copy.en;
@@ -27,8 +29,12 @@ const initialOriginalPoints = [
   { x: 175, y: 225 },
 ];
 const initialCentroid = {
-  x: initialOriginalPoints.reduce((sum, p) => sum + p.x, 0) / initialOriginalPoints.length,
-  y: initialOriginalPoints.reduce((sum, p) => sum + p.y, 0) / initialOriginalPoints.length,
+  x:
+    initialOriginalPoints.reduce((sum, p) => sum + p.x, 0) /
+    initialOriginalPoints.length,
+  y:
+    initialOriginalPoints.reduce((sum, p) => sum + p.y, 0) /
+    initialOriginalPoints.length,
 };
 const initialLinePoint = { x: 200, y: 200 };
 const initialLineAngle = -Math.PI / 2;
@@ -61,14 +67,32 @@ const initialLineHandle = getPointOnCircle(
     style="display: block; margin: auto; background-color: #f3f4f6; border-radius: 8px;"
   >
     {
-      Array.from({ length: Math.floor(width / 40) + 1 }, (_, i) => i * 40).map((x) => (
-        <line x1={x} y1="0" x2={x} y2={height} stroke="#d7dde5" stroke-width="1" />
-      ))
+      Array.from({ length: Math.floor(width / 40) + 1 }, (_, i) => i * 40).map(
+        (x) => (
+          <line
+            x1={x}
+            y1="0"
+            x2={x}
+            y2={height}
+            stroke="#d7dde5"
+            stroke-width="1"
+          />
+        ),
+      )
     }
     {
-      Array.from({ length: Math.floor(height / 40) + 1 }, (_, i) => i * 40).map((y) => (
-        <line x1="0" y1={y} x2={width} y2={y} stroke="#d7dde5" stroke-width="1" />
-      ))
+      Array.from({ length: Math.floor(height / 40) + 1 }, (_, i) => i * 40).map(
+        (y) => (
+          <line
+            x1="0"
+            y1={y}
+            x2={width}
+            y2={y}
+            stroke="#d7dde5"
+            stroke-width="1"
+          />
+        ),
+      )
     }
     <path
       id="reflection-connectors"
@@ -117,11 +141,10 @@ const initialLineHandle = getPointOnCircle(
       cy={initialCentroid.y}
       r="8"
       fill="#2563eb"
-      style="cursor: grab; touch-action: none;"
-    ></circle>
+      style="cursor: grab; touch-action: none;"></circle>
   </svg>
   <p
-    style="margin-top: 0.75rem; text-align: center; color: #475569; font-size: 0.95rem;"
+    style="margin-top: 0.75rem; text-align: center; color: var(--sl-color-text); font-size: 0.95rem;"
   >
     {text.helperText}
   </p>
@@ -162,7 +185,9 @@ const initialLineHandle = getPointOnCircle(
     const lineAngleHandle = d3.select<SVGCircleElement, unknown>(
       "#reflection-line-angle-handle",
     );
-    const moveHandle = d3.select<SVGCircleElement, unknown>("#reflection-move-handle");
+    const moveHandle = d3.select<SVGCircleElement, unknown>(
+      "#reflection-move-handle",
+    );
 
     if (
       originalShape.empty() ||
@@ -183,8 +208,10 @@ const initialLineHandle = getPointOnCircle(
       { x: 175, y: 225 },
     ];
     let centroid = {
-      x: originalPoints.reduce((sum, p) => sum + p.x, 0) / originalPoints.length,
-      y: originalPoints.reduce((sum, p) => sum + p.y, 0) / originalPoints.length,
+      x:
+        originalPoints.reduce((sum, p) => sum + p.x, 0) / originalPoints.length,
+      y:
+        originalPoints.reduce((sum, p) => sum + p.y, 0) / originalPoints.length,
     };
     const linePoint = { x: 200, y: 200 };
     let lineAngle = -Math.PI / 2;
@@ -209,9 +236,7 @@ const initialLineHandle = getPointOnCircle(
       lineAngleHandle
         .attr("cx", directionHandle.x)
         .attr("cy", directionHandle.y);
-      moveHandle
-        .attr("cx", centroid.x)
-        .attr("cy", centroid.y);
+      moveHandle.attr("cx", centroid.x).attr("cy", centroid.y);
     }
 
     lineAngleHandle.call(
@@ -238,7 +263,10 @@ const initialLineHandle = getPointOnCircle(
         .on("drag", (event) => {
           const dx = event.x - centroid.x;
           const dy = event.y - centroid.y;
-          originalPoints = originalPoints.map(p => ({ x: p.x + dx, y: p.y + dy }));
+          originalPoints = originalPoints.map((p) => ({
+            x: p.x + dx,
+            y: p.y + dy,
+          }));
           centroid = { x: event.x, y: event.y };
           render();
         })
