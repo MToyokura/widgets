@@ -9,6 +9,19 @@ import {
   getTrianglePath,
 } from "./functions/geometry";
 
+const { locale = "en" } = Astro.props;
+const copy = {
+  en: {
+    helperText:
+      "Drag the three points on the circle to see how inscribed angles subtending the same arc stay equal.",
+  },
+  ja: {
+    helperText:
+      "円周上の3つの点を動かして、同じ弧に対する円周角がいつも等しくなることを確かめてみましょう。",
+  },
+} as const;
+const text = copy[locale as keyof typeof copy] ?? copy.en;
+
 const width = 400;
 const height = 400;
 const radius = 150;
@@ -106,6 +119,11 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
       fill="#e74c3c"
       style="cursor: grab; touch-action: none;"></circle>
   </svg>
+  <p
+    style="margin-top: 0.75rem; text-align: center; color: #475569; font-size: 0.95rem;"
+  >
+    {text.helperText}
+  </p>
 </div>
 
 <script>

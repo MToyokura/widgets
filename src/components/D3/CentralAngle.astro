@@ -8,6 +8,19 @@ import {
   getTrianglePath,
 } from "./functions/geometry";
 
+const { locale = "en" } = Astro.props;
+const copy = {
+  en: {
+    helperText:
+      "Drag the blue endpoints to change the intercepted arc, and drag the green point to compare the inscribed angle with the central angle.",
+  },
+  ja: {
+    helperText:
+      "青い点を動かして弧を変え、緑の点を動かして円周角と中心角の関係を比べてみましょう。",
+  },
+} as const;
+const text = copy[locale as keyof typeof copy] ?? copy.en;
+
 const width = 400;
 const height = 400;
 const radius = 150;
@@ -180,6 +193,11 @@ const initialHighlightedArcPath = getCircleArcPath(
       fill="#2563eb"
       style="cursor: grab; touch-action: none;"></circle>
   </svg>
+  <p
+    style="margin-top: 0.75rem; text-align: center; color: #475569; font-size: 0.95rem;"
+  >
+    {text.helperText}
+  </p>
 </div>
 
 <script>
