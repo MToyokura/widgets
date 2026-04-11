@@ -1,5 +1,10 @@
 ---
-import { getRightAnglePath, getTrianglePath } from "./d3-geometry";
+import {
+  getAngleDegrees,
+  getAngleLabelPosition,
+  getRightAnglePath,
+  getTrianglePath,
+} from "./d3-geometry";
 
 // 1. SERVER-SIDE: Calculate initial state
 const width = 400;
@@ -13,6 +18,8 @@ const p2 = { x: cx + radius, y: cy };
 const p3 = { x: cx, y: cy - radius };
 const initialPath = getTrianglePath(p1, p2, p3);
 const initialRightAnglePath = getRightAnglePath(p1, p2, p3);
+const initialAngleLabelPosition = getAngleLabelPosition(p1, p3, p2);
+const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
 ---
 
 <div class="viz-container" id="thales-wrapper">
@@ -25,6 +32,7 @@ const initialRightAnglePath = getRightAnglePath(p1, p2, p3);
       stroke="#888"
       stroke-width="2"></circle>
     <line
+      id="thales-diameter"
       x1={p1.x}
       y1={p1.y}
       x2={p2.x}
@@ -47,8 +55,35 @@ const initialRightAnglePath = getRightAnglePath(p1, p2, p3);
       stroke-linecap="round"
       stroke-linejoin="round"
       style="pointer-events: none;"></path>
+    <text
+      id="thales-angle-label"
+      x={initialAngleLabelPosition.x}
+      y={initialAngleLabelPosition.y}
+      fill="#111827"
+      font-size="16"
+      font-weight="700"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      style="pointer-events: none; user-select: none;"
+    >
+      {`${Math.round(initialAngleDegrees)}°`}
+    </text>
     <circle
-      id="thales-handle"
+      id="thales-handle-start"
+      cx={p1.x}
+      cy={p1.y}
+      r={10}
+      fill="#2563eb"
+      style="cursor: grab; touch-action: none;"></circle>
+    <circle
+      id="thales-handle-end"
+      cx={p2.x}
+      cy={p2.y}
+      r={10}
+      fill="#2563eb"
+      style="cursor: grab; touch-action: none;"></circle>
+    <circle
+      id="thales-handle-vertex"
       cx={p3.x}
       cy={p3.y}
       r={10}
@@ -60,53 +95,135 @@ const initialRightAnglePath = getRightAnglePath(p1, p2, p3);
 <script>
   import * as d3 from "d3";
   import {
+    getAngleDegrees,
+    getAngleLabelPosition,
+    getPointOnCircle,
     getRightAnglePath,
     getTrianglePath,
-    projectPointToCircle,
   } from "./d3-geometry";
 
   function setupInteractivity() {
-    const handle = d3.select<SVGCircleElement, unknown>("#thales-handle");
+    const startHandle = d3.select<SVGCircleElement, unknown>(
+      "#thales-handle-start",
+    );
+    const endHandle = d3.select<SVGCircleElement, unknown>(
+      "#thales-handle-end",
+    );
+    const vertexHandle = d3.select<SVGCircleElement, unknown>(
+      "#thales-handle-vertex",
+    );
     const triangle = d3.select<SVGPathElement, unknown>("#thales-triangle");
+    const diameter = d3.select<SVGLineElement, unknown>("#thales-diameter");
     const rightAngle = d3.select<SVGPathElement, unknown>(
       "#thales-right-angle",
     );
+    const angleLabel = d3.select<SVGTextElement, unknown>(
+      "#thales-angle-label",
+    );
 
-    if (handle.empty() || triangle.empty() || rightAngle.empty()) return;
+    if (
+      startHandle.empty() ||
+      endHandle.empty() ||
+      vertexHandle.empty() ||
+      triangle.empty() ||
+      diameter.empty() ||
+      rightAngle.empty() ||
+      angleLabel.empty()
+    ) {
+      return;
+    }
 
     const cx = 200;
     const cy = 200;
     const radius = 150;
     const center = { x: cx, y: cy };
-    const p1 = { x: cx - radius, y: cy };
-    const p2 = { x: cx + radius, y: cy };
+    let diameterAngle = 0;
+    let vertexAngle = -Math.PI / 2;
 
-    function updateTriangleVertex(x: number, y: number) {
-      const p3 = projectPointToCircle(center, radius, { x, y });
+    function getPoints() {
+      return {
+        p1: getPointOnCircle(center, radius, diameterAngle + Math.PI),
+        p2: getPointOnCircle(center, radius, diameterAngle),
+        p3: getPointOnCircle(center, radius, vertexAngle),
+      };
+    }
 
-      handle.attr("cx", p3.x).attr("cy", p3.y);
+    function formatAngle(angleDegrees: number) {
+      const roundedAngle = Math.round(angleDegrees * 10) / 10;
+
+      return Number.isInteger(roundedAngle)
+        ? `${roundedAngle.toFixed(0)}°`
+        : `${roundedAngle.toFixed(1)}°`;
+    }
+
+    function render() {
+      const { p1, p2, p3 } = getPoints();
+      const angleDegrees = getAngleDegrees(p1, p3, p2);
+      const labelPosition = getAngleLabelPosition(p1, p3, p2);
+
+      startHandle.attr("cx", p1.x).attr("cy", p1.y);
+      endHandle.attr("cx", p2.x).attr("cy", p2.y);
+      vertexHandle.attr("cx", p3.x).attr("cy", p3.y);
+      diameter
+        .attr("x1", p1.x)
+        .attr("y1", p1.y)
+        .attr("x2", p2.x)
+        .attr("y2", p2.y);
       triangle.attr("d", getTrianglePath(p1, p2, p3));
       rightAngle.attr("d", getRightAnglePath(p1, p2, p3));
+      angleLabel
+        .attr("x", labelPosition.x)
+        .attr("y", labelPosition.y)
+        .text(formatAngle(angleDegrees));
     }
 
     function setDraggingState(isDragging: boolean) {
       const cursor = isDragging ? "grabbing" : "grab";
 
-      handle.style("cursor", cursor);
+      startHandle.style("cursor", cursor);
+      endHandle.style("cursor", cursor);
+      vertexHandle.style("cursor", cursor);
       triangle.style("cursor", cursor);
     }
 
-    const onDrag = (event: d3.D3DragEvent<SVGElement, unknown, unknown>) => {
-      updateTriangleVertex(event.x, event.y);
-    };
+    function getPointerAngle(x: number, y: number) {
+      return Math.atan2(y - cy, x - cx);
+    }
 
-    const handleDragBehavior = d3
+    const vertexDragBehavior = d3
       .drag<SVGCircleElement, unknown>()
       .on("start", () => {
         setDraggingState(true);
       })
       .on("drag", (event) => {
-        onDrag(event);
+        vertexAngle = getPointerAngle(event.x, event.y);
+        render();
+      })
+      .on("end", () => {
+        setDraggingState(false);
+      });
+
+    const startHandleDragBehavior = d3
+      .drag<SVGCircleElement, unknown>()
+      .on("start", () => {
+        setDraggingState(true);
+      })
+      .on("drag", (event) => {
+        diameterAngle = getPointerAngle(event.x, event.y) - Math.PI;
+        render();
+      })
+      .on("end", () => {
+        setDraggingState(false);
+      });
+
+    const endHandleDragBehavior = d3
+      .drag<SVGCircleElement, unknown>()
+      .on("start", () => {
+        setDraggingState(true);
+      })
+      .on("drag", (event) => {
+        diameterAngle = getPointerAngle(event.x, event.y);
+        render();
       })
       .on("end", () => {
         setDraggingState(false);
@@ -118,14 +235,18 @@ const initialRightAnglePath = getRightAnglePath(p1, p2, p3);
         setDraggingState(true);
       })
       .on("drag", (event) => {
-        onDrag(event);
+        vertexAngle = getPointerAngle(event.x, event.y);
+        render();
       })
       .on("end", () => {
         setDraggingState(false);
       });
 
-    handle.call(handleDragBehavior);
+    startHandle.call(startHandleDragBehavior);
+    endHandle.call(endHandleDragBehavior);
+    vertexHandle.call(vertexDragBehavior);
     triangle.call(triangleDragBehavior);
+    render();
   }
 
   setupInteractivity();

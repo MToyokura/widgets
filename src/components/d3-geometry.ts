@@ -73,3 +73,50 @@ export function getRightAnglePath(
 
   return `M ${cornerA.x} ${cornerA.y} L ${cornerB.x} ${cornerB.y} L ${cornerC.x} ${cornerC.y}`;
 }
+
+export function getAngleDegrees(a: Point, vertex: Point, b: Point) {
+  const vectorA = {
+    x: a.x - vertex.x,
+    y: a.y - vertex.y,
+  };
+  const vectorB = {
+    x: b.x - vertex.x,
+    y: b.y - vertex.y,
+  };
+  const magnitude =
+    Math.hypot(vectorA.x, vectorA.y) * Math.hypot(vectorB.x, vectorB.y);
+
+  if (magnitude === 0) return 0;
+
+  const cosine = (vectorA.x * vectorB.x + vectorA.y * vectorB.y) / magnitude;
+  const clampedCosine = Math.max(-1, Math.min(1, cosine));
+
+  return (Math.acos(clampedCosine) * 180) / Math.PI;
+}
+
+export function getAngleLabelPosition(
+  a: Point,
+  vertex: Point,
+  b: Point,
+  distanceFromVertex = RIGHT_ANGLE_SIZE + 26,
+): Point {
+  const toA = unitVector(vertex, a);
+  const toB = unitVector(vertex, b);
+  const bisector = {
+    x: toA.x + toB.x,
+    y: toA.y + toB.y,
+  };
+  const length = Math.hypot(bisector.x, bisector.y);
+
+  if (length === 0) {
+    return {
+      x: vertex.x,
+      y: vertex.y + distanceFromVertex,
+    };
+  }
+
+  return {
+    x: vertex.x + (bisector.x / length) * distanceFromVertex,
+    y: vertex.y + (bisector.y / length) * distanceFromVertex,
+  };
+}
