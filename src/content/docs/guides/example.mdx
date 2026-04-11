@@ -1,0 +1,71 @@
+---
+title: JSXGraph in Starlight
+---
+
+import JSXGraph from "../../../components/JSXGraph.astro";
+
+## JSXGraph
+
+<JSXGraph id="myBoard" height="450px" />
+
+<script
+  is:inline
+  set:html={`
+  window.initJSXGraph = (id) => {
+    // 1. Initialize the board
+    const board = JXG.JSXGraph.initBoard(id, {
+      boundingbox: [-5, 5, 5, -5],
+      axis: true,
+      showCopyright: true,
+    });
+
+    // 2. Create Geometry
+    const p1 = board.create('point', [-2, 1], { name: 'A', color: 'blue' });
+    const p2 = board.create('point', [2, -1], { name: 'B', color: 'red' });
+    
+    // 3. Create a line through the points
+    board.create('line', [p1, p2], { strokeColor: 'green', dash: 2 });
+    
+    // 4. Create a circle based on the distance between points
+    board.create('circle', [p1, p2], { strokeColor: '#00ff00', fillOpacity: 0.1, fillColor: 'green' });
+  };
+`}
+></script>
+
+---
+
+### Desmos
+
+<iframe
+  src="https://www.desmos.com/calculator/au6scynmx0"
+  width="100%"
+  style="min-height:500px"
+></iframe>
+
+### Simple SVG
+
+<svg
+  width="200"
+  height="200"
+  viewBox="0 0 100 100"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <circle cx="50" cy="50" r="45" stroke="#333" stroke-width="2" fill="none" />
+
+<line x1="5" y1="50" x2="95" y2="50" stroke="#007bff" stroke-width="2" />
+
+<path
+  d="M 5 50 L 75 18 L 95 50 Z"
+  stroke="#e63946"
+  stroke-width="2"
+  fill="rgba(230, 57, 70, 0.1)"
+/>
+
+<path
+  d="M 70 21 L 73 30 L 81 27"
+  stroke="#e63946"
+  stroke-width="1"
+  fill="none"
+/>
+
+</svg>

@@ -1,0 +1,46 @@
+---
+// src/components/JSXGraph.astro
+interface Props {
+  id: string;
+  height?: string;
+  aspectRatio?: string;
+}
+
+const { id, height = "400px", aspectRatio = "16/9" } = Astro.props;
+---
+
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraph.css" />
+<script is:inline src="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraphcore.js"></script>
+
+<div 
+  id={id} 
+  class="jxgbox" 
+  style={`width: 100%; height: ${height}; aspect-ratio: ${aspectRatio}; border-radius: 8px;`}
+></div>
+
+<script is:inline define:vars={{ id }}>
+  const init = () => {
+    // Check if the initialization function exists on the window
+    if (window.initJSXGraph && typeof window.initJSXGraph === 'function') {
+      window.initJSXGraph(id);
+    }
+  };
+
+  // Runs on initial load
+  if (document.readyState === 'complete') {
+    init();
+  } else {
+    window.addEventListener('load', init);
+  }
+
+  // Runs when Starlight navigates between pages
+  document.addEventListener('astro:after-swap', init);
+</script>
+
+<style>
+  /* Ensure the board is visible against Starlight backgrounds */
+  :global(.jxgbox) {
+    background-color: white !important;
+    border: 1px solid var(--sl-color-gray-5);
+  }
+</style>

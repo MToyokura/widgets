@@ -1,0 +1,133 @@
+---
+import { getRightAnglePath, getTrianglePath } from "./d3-geometry";
+
+// 1. SERVER-SIDE: Calculate initial state
+const width = 400;
+const height = 400;
+const radius = 150;
+const cx = width / 2;
+const cy = height / 2;
+
+const p1 = { x: cx - radius, y: cy };
+const p2 = { x: cx + radius, y: cy };
+const p3 = { x: cx, y: cy - radius };
+const initialPath = getTrianglePath(p1, p2, p3);
+const initialRightAnglePath = getRightAnglePath(p1, p2, p3);
+---
+
+<div class="viz-container" id="thales-wrapper">
+  <svg viewBox={`0 0 ${width} ${height}`} style="display: block; margin: auto;">
+    <circle
+      cx={cx}
+      cy={cy}
+      r={radius}
+      fill="none"
+      stroke="#888"
+      stroke-width="2"></circle>
+    <line
+      x1={p1.x}
+      y1={p1.y}
+      x2={p2.x}
+      y2={p2.y}
+      stroke="#666"
+      stroke-dasharray="4"></line>
+    <path
+      id="thales-triangle"
+      d={initialPath}
+      fill="rgba(52, 152, 219, 0.3)"
+      stroke="#3498db"
+      stroke-width="3"
+      style="cursor: grab; touch-action: none;"></path>
+    <path
+      id="thales-right-angle"
+      d={initialRightAnglePath}
+      fill="none"
+      stroke="#1f2937"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      style="pointer-events: none;"></path>
+    <circle
+      id="thales-handle"
+      cx={p3.x}
+      cy={p3.y}
+      r={10}
+      fill="#e74c3c"
+      style="cursor: grab; touch-action: none;"></circle>
+  </svg>
+</div>
+
+<script>
+  import * as d3 from "d3";
+  import {
+    getRightAnglePath,
+    getTrianglePath,
+    projectPointToCircle,
+  } from "./d3-geometry";
+
+  function setupInteractivity() {
+    const handle = d3.select<SVGCircleElement, unknown>("#thales-handle");
+    const triangle = d3.select<SVGPathElement, unknown>("#thales-triangle");
+    const rightAngle = d3.select<SVGPathElement, unknown>(
+      "#thales-right-angle",
+    );
+
+    if (handle.empty() || triangle.empty() || rightAngle.empty()) return;
+
+    const cx = 200;
+    const cy = 200;
+    const radius = 150;
+    const center = { x: cx, y: cy };
+    const p1 = { x: cx - radius, y: cy };
+    const p2 = { x: cx + radius, y: cy };
+
+    function updateTriangleVertex(x: number, y: number) {
+      const p3 = projectPointToCircle(center, radius, { x, y });
+
+      handle.attr("cx", p3.x).attr("cy", p3.y);
+      triangle.attr("d", getTrianglePath(p1, p2, p3));
+      rightAngle.attr("d", getRightAnglePath(p1, p2, p3));
+    }
+
+    function setDraggingState(isDragging: boolean) {
+      const cursor = isDragging ? "grabbing" : "grab";
+
+      handle.style("cursor", cursor);
+      triangle.style("cursor", cursor);
+    }
+
+    const onDrag = (event: d3.D3DragEvent<SVGElement, unknown, unknown>) => {
+      updateTriangleVertex(event.x, event.y);
+    };
+
+    const handleDragBehavior = d3
+      .drag<SVGCircleElement, unknown>()
+      .on("start", () => {
+        setDraggingState(true);
+      })
+      .on("drag", (event) => {
+        onDrag(event);
+      })
+      .on("end", () => {
+        setDraggingState(false);
+      });
+
+    const triangleDragBehavior = d3
+      .drag<SVGPathElement, unknown>()
+      .on("start", () => {
+        setDraggingState(true);
+      })
+      .on("drag", (event) => {
+        onDrag(event);
+      })
+      .on("end", () => {
+        setDraggingState(false);
+      });
+
+    handle.call(handleDragBehavior);
+    triangle.call(triangleDragBehavior);
+  }
+
+  setupInteractivity();
+  document.addEventListener("astro:after-swap", setupInteractivity);
+</script>
