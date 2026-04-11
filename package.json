@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "format": "prettier --write --cache ."
   },
   "dependencies": {
     "@astrojs/starlight": "^0.38.3",
@@ -19,6 +20,7 @@
     "node": "24.14.1"
   },
   "devDependencies": {
-    "@types/d3": "^7.4.3"
+    "@types/d3": "^7.4.3",
+    "prettier": "3.8.1"
   }
 }
