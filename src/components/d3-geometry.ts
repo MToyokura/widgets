@@ -109,6 +109,66 @@ export function getAngleArcPath(
   return `M ${start.x} ${start.y} A ${markerRadius} ${markerRadius} 0 0 ${sweepFlag} ${end.x} ${end.y}`;
 }
 
+export function getCircleArcPath(
+  center: Point,
+  radius: number,
+  startAngle: number,
+  endAngle: number,
+) {
+  let delta = endAngle - startAngle;
+
+  if (delta <= -Math.PI) delta += Math.PI * 2;
+  if (delta > Math.PI) delta -= Math.PI * 2;
+  if (Math.abs(delta) < 0.01) return "";
+
+  const start = getPointOnCircle(center, radius, startAngle);
+  const end = getPointOnCircle(center, radius, endAngle);
+  const sweepFlag = delta > 0 ? 1 : 0;
+
+  return `M ${start.x} ${start.y} A ${radius} ${radius} 0 0 ${sweepFlag} ${end.x} ${end.y}`;
+}
+
+function normalizeAngle(angle: number) {
+  const fullTurn = Math.PI * 2;
+
+  return ((angle % fullTurn) + fullTurn) % fullTurn;
+}
+
+function getCounterclockwiseDelta(startAngle: number, endAngle: number) {
+  const fullTurn = Math.PI * 2;
+
+  return (
+    (normalizeAngle(endAngle) - normalizeAngle(startAngle) + fullTurn) %
+    fullTurn
+  );
+}
+
+export function getCircleArcPathExcludingAngle(
+  center: Point,
+  radius: number,
+  startAngle: number,
+  endAngle: number,
+  excludedAngle: number,
+) {
+  const ccwDelta = getCounterclockwiseDelta(startAngle, endAngle);
+
+  if (ccwDelta < 0.01 || Math.abs(ccwDelta - Math.PI * 2) < 0.01) return "";
+
+  const excludedDelta = getCounterclockwiseDelta(startAngle, excludedAngle);
+  const excludedOnCounterclockwiseArc =
+    excludedDelta > 0.01 && excludedDelta < ccwDelta - 0.01;
+  const fullTurn = Math.PI * 2;
+  const signedDelta = excludedOnCounterclockwiseArc
+    ? ccwDelta - fullTurn
+    : ccwDelta;
+  const start = getPointOnCircle(center, radius, startAngle);
+  const end = getPointOnCircle(center, radius, endAngle);
+  const largeArcFlag = Math.abs(signedDelta) > Math.PI ? 1 : 0;
+  const sweepFlag = signedDelta > 0 ? 1 : 0;
+
+  return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} ${sweepFlag} ${end.x} ${end.y}`;
+}
+
 export function getAngleDegrees(a: Point, vertex: Point, b: Point) {
   const vectorA = {
     x: a.x - vertex.x,

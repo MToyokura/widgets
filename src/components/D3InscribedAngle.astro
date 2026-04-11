@@ -3,6 +3,8 @@ import {
   getAngleArcPath,
   getAngleDegrees,
   getAngleLabelPosition,
+  getCircleArcPath,
+  getCircleArcPathExcludingAngle,
   getPointOnCircle,
   getTrianglePath,
 } from "./d3-geometry";
@@ -24,6 +26,13 @@ const initialPath = getTrianglePath(p1, p2, p3);
 const initialAngleArcPath = getAngleArcPath(p1, p3, p2);
 const initialAngleLabelPosition = getAngleLabelPosition(p1, p3, p2);
 const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
+const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
+  center,
+  radius,
+  initialAngleA,
+  initialAngleB,
+  initialAngleC,
+);
 ---
 
 <div class="viz-container" id="inscribed-angle-wrapper">
@@ -35,6 +44,15 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
       fill="none"
       stroke="#888"
       stroke-width="2"></circle>
+    <path
+      id="inscribed-angle-highlighted-arc"
+      d={initialHighlightedArcPath}
+      fill="none"
+      stroke="#f59e0b"
+      stroke-width="8"
+      stroke-linecap="round"
+      opacity="0.85"
+      style="pointer-events: none;"></path>
     <path
       id="inscribed-angle-triangle"
       d={initialPath}
@@ -93,6 +111,7 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
     getAngleArcPath,
     getAngleDegrees,
     getAngleLabelPosition,
+    getCircleArcPathExcludingAngle,
     getPointOnCircle,
     getTrianglePath,
   } from "./d3-geometry";
@@ -106,6 +125,9 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
     );
     const handleC = d3.select<SVGCircleElement, unknown>(
       "#inscribed-angle-handle-c",
+    );
+    const highlightedArc = d3.select<SVGPathElement, unknown>(
+      "#inscribed-angle-highlighted-arc",
     );
     const triangle = d3.select<SVGPathElement, unknown>(
       "#inscribed-angle-triangle",
@@ -121,6 +143,7 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
       handleA.empty() ||
       handleB.empty() ||
       handleC.empty() ||
+      highlightedArc.empty() ||
       triangle.empty() ||
       marker.empty() ||
       angleLabel.empty()
@@ -160,6 +183,10 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
       handleA.attr("cx", p1.x).attr("cy", p1.y);
       handleB.attr("cx", p2.x).attr("cy", p2.y);
       handleC.attr("cx", p3.x).attr("cy", p3.y);
+      highlightedArc.attr(
+        "d",
+        getCircleArcPathExcludingAngle(center, radius, angleA, angleB, angleC),
+      );
       triangle.attr("d", getTrianglePath(p1, p2, p3));
       marker.attr("d", getAngleArcPath(p1, p3, p2));
       angleLabel
