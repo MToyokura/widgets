@@ -65,7 +65,10 @@ const initialHighlightedArcPath = getCircleArcPath(
 ---
 
 <div class="viz-container" id="central-angle-wrapper">
-  <svg viewBox={`0 0 ${width} ${height}`} style="display: block; margin: auto;">
+  <svg
+    viewBox={`0 0 ${width} ${height}`}
+    style="display: block; margin: auto; background-color: #f3f4f6; border-radius: 8px;"
+  >
     <circle
       cx={cx}
       cy={cy}
