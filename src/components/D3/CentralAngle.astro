@@ -6,7 +6,7 @@ import {
   getCircleArcPath,
   getPointOnCircle,
   getTrianglePath,
-} from "./d3-geometry";
+} from "./functions/geometry";
 
 const width = 400;
 const height = 400;
@@ -191,7 +191,7 @@ const initialHighlightedArcPath = getCircleArcPath(
     getCircleArcPath,
     getPointOnCircle,
     getTrianglePath,
-  } from "./d3-geometry";
+  } from "./functions/geometry";
 
   function getSignedMinorDelta(startAngle: number, endAngle: number) {
     let delta = endAngle - startAngle;
