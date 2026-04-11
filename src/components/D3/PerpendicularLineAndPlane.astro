@@ -1,25 +1,8 @@
 ---
-const { locale = "en" } = Astro.props;
-const copy = {
-  en: {
-    helperText:
-      "Rotate the view to inspect the plane, the perpendicular line, and the right-angle marker at their intersection.",
-  },
-  ja: {
-    helperText:
-      "視点を回転して、平面、垂直な直線、交点の直角マークを確認してみましょう。",
-  },
-} as const;
-const text = copy[locale as keyof typeof copy] ?? copy.en;
 ---
 
 <div class="viz-container" id="perpendicular-line-and-plane-wrapper">
-  <div class="threejs-viz" aria-label={text.helperText}></div>
-  <p
-    style="margin-top: 0.75rem; text-align: center; color: var(--sl-color-text); font-size: 0.95rem;"
-  >
-    {text.helperText}
-  </p>
+  <div class="threejs-viz"></div>
 </div>
 
 <style>
@@ -47,8 +30,6 @@ const text = copy[locale as keyof typeof copy] ?? copy.en;
   import { Line2 } from "three/addons/lines/Line2.js";
   import { LineGeometry } from "three/addons/lines/LineGeometry.js";
   import { LineMaterial } from "three/addons/lines/LineMaterial.js";
-  import { LineSegments2 } from "three/addons/lines/LineSegments2.js";
-  import { LineSegmentsGeometry } from "three/addons/lines/LineSegmentsGeometry.js";
 
   const wrappers = document.querySelectorAll(
     "#perpendicular-line-and-plane-wrapper .threejs-viz",
@@ -67,9 +48,8 @@ const text = copy[locale as keyof typeof copy] ?? copy.en;
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xe0e0e0);
 
-    const d = 4;
-    const camera = new THREE.OrthographicCamera(-d, d, d, -d, 0.1, 100);
-    camera.position.set(5, 5, 5);
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    camera.position.set(5, 3, 6);
     camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -87,35 +67,25 @@ const text = copy[locale as keyof typeof copy] ?? copy.en;
     const plane = new THREE.Mesh(planeGeometry, planeMaterial);
     plane.rotation.x = -Math.PI / 2;
     scene.add(plane);
+    scene.add(new THREE.GridHelper(4, 8, 0x94a3b8, 0xcbd5e1));
 
     const planeLineMaterial = new LineMaterial({
       color: 0x6b7280,
-      linewidth: 1.5,
+      linewidth: 3,
       resolution,
     });
 
     const planeLine1Geom = new LineGeometry();
-    planeLine1Geom.setPositions([-1.5, 0, 0, 1.5, 0, 0]);
+    planeLine1Geom.setPositions([-1.5, -1.5, 0, 1.5, 1.5, 0]);
     const planeLine1 = new Line2(planeLine1Geom, planeLineMaterial);
     planeLine1.rotation.x = -Math.PI / 2;
     scene.add(planeLine1);
 
     const planeLine2Geom = new LineGeometry();
-    planeLine2Geom.setPositions([0, -1.5, 0, 0, 1.5, 0]);
+    planeLine2Geom.setPositions([-1.5, 1.5, 0, 1.5, -1.5, 0]);
     const planeLine2 = new Line2(planeLine2Geom, planeLineMaterial);
     planeLine2.rotation.x = -Math.PI / 2;
     scene.add(planeLine2);
-
-    const edges = new THREE.EdgesGeometry(planeGeometry);
-    const borderGeo = new LineSegmentsGeometry().fromEdgesGeometry(edges);
-    const borderMat = new LineMaterial({
-      color: 0x000000,
-      linewidth: unifiedThickness,
-      resolution,
-    });
-    const lineBorder = new LineSegments2(borderGeo, borderMat);
-    lineBorder.rotation.x = -Math.PI / 2;
-    scene.add(lineBorder);
 
     const lineGeom = new LineGeometry();
     lineGeom.setPositions([0, -3, 0, 0, 3, 0]);
@@ -180,17 +150,11 @@ const text = copy[locale as keyof typeof copy] ?? copy.en;
       const bounds = wrapper.getBoundingClientRect();
       const width = Math.max(1, Math.round(bounds.width));
       const height = Math.max(1, Math.round(bounds.height));
-      const aspect = width / height;
-
-      camera.left = -d * aspect;
-      camera.right = d * aspect;
-      camera.top = d;
-      camera.bottom = -d;
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
 
       renderer.setSize(width, height, false);
 
-      borderMat.resolution.set(width, height);
       planeLineMaterial.resolution.set(width, height);
       solidMat.resolution.set(width, height);
       dashedMat.resolution.set(width, height);

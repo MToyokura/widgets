@@ -5,8 +5,31 @@ sidebar:
 ---
 
 import PerpendicularLineAndPlane from "@/components/D3/PerpendicularLineAndPlane.astro";
+import ThreePointsNotCollinear from "@/components/D3/ThreePointsNotCollinear.astro";
+import LineAndPointNotOnLine from "@/components/D3/LineAndPointNotOnLine.astro";
+import IntersectingLines from "@/components/D3/IntersectingLines.astro";
 
-## 直線と平面
+## 平面の決定
+
+平面は下記のいずれかの条件を満たす場合に決定されます。
+
+- 同一直線上にない3点
+- 一つの直線とその上にない1点
+- 交わる２直線
+
+### 同一直線上にない3点
+
+<ThreePointsNotCollinear locale="ja" />
+
+### 一つの直線とその上にない1点
+
+<LineAndPointNotOnLine locale="ja" />
+
+### 交わる２直線
+
+<IntersectingLines locale="ja" />
+
+## 平面に垂直な直線
 
 直線が平面と垂直であると言い切るためには、その平面上の交わる2直線と垂直であることを示すだけで十分です。一度この条件が満たされれば、その直線は平面全体と垂直であると定義され、結果として平面上に存在するあらゆる直線とのなす角はすべて90度になります。
 

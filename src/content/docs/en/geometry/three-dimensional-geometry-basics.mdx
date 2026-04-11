@@ -5,9 +5,32 @@ sidebar:
 ---
 
 import PerpendicularLineAndPlane from "@/components/D3/PerpendicularLineAndPlane.astro";
+import ThreePointsNotCollinear from "@/components/D3/ThreePointsNotCollinear.astro";
+import LineAndPointNotOnLine from "@/components/D3/LineAndPointNotOnLine.astro";
+import IntersectingLines from "@/components/D3/IntersectingLines.astro";
 
 ## Lines and Planes
 
+A plane is determined when it satisfies any of the following conditions:
+
+- Three points that are not on the same line
+- A line and a point not on that line
+- Two intersecting lines
+
+### Three points that are not on the same line
+
+<ThreePointsNotCollinear />
+
+### A line and a point not on that line
+
+<LineAndPointNotOnLine />
+
+### Two intersecting lines
+
+<IntersectingLines />
+
+## A line perpendicular to a plane
+
 To assert that a line is perpendicular to a plane, it is sufficient to show that it is perpendicular to two intersecting lines on that plane. Once this condition is met, the line is defined as being perpendicular to the entire plane, and as a result, the angle it forms with every line existing on the plane will be 90 degrees.
 
-<PerpendicularLineAndPlane locale="en" />
+<PerpendicularLineAndPlane />
