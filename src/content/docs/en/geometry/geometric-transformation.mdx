@@ -1,0 +1,32 @@
+---
+title: Geometric Transformations
+---
+
+import D3Translation from "@/components/D3/Translation.astro";
+import D3Rotation from "@/components/D3/Rotation.astro";
+import D3Reflection from "@/components/D3/Reflection.astro";
+
+Geometric transformations change the position of a figure while preserving the
+relationships between its points. Drag the handles in each diagram to see how the
+same shape can be moved, turned, or flipped.
+
+## Translation
+
+A translation slides every point of a figure by the same amount in the same direction. The size, shape,
+and orientation stay the same; only the position changes.
+
+<D3Translation />
+
+## Rotation
+
+A rotation turns a figure around a fixed center through a given angle. Distances
+from the center stay constant, so the image remains congruent to the original.
+
+<D3Rotation />
+
+## Reflection
+
+A reflection flips a figure across a mirror line. Each point and its image are the
+same distance from the line, and the segment joining them is perpendicular to it.
+
+<D3Reflection />

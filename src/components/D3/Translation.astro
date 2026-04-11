@@ -1,0 +1,236 @@
+---
+import { getPolygonPath, translatePoint } from "./functions/geometry";
+
+const { locale = "en" } = Astro.props;
+const copy = {
+  en: {
+    helperText:
+      "Drag the orange point to change the translation.",
+  },
+  ja: {
+    helperText:
+      "オレンジの点を動かして平行移動させてみましょう。",
+  },
+} as const;
+const text = copy[locale as keyof typeof copy] ?? copy.en;
+
+const width = 400;
+const height = 400;
+const gridSpacing = 40;
+const gridXs = Array.from(
+  { length: Math.floor(width / gridSpacing) + 1 },
+  (_, index) => index * gridSpacing,
+);
+const gridYs = Array.from(
+  { length: Math.floor(height / gridSpacing) + 1 },
+  (_, index) => index * gridSpacing,
+);
+const initialOriginalPoints = [
+  { x: 60, y: 265 },
+  { x: 125, y: 135 },
+  { x: 205, y: 225 },
+];
+const initialOffset = { x: 150, y: 0 };
+
+function getCentroid(points: { x: number; y: number }[]) {
+  return {
+    x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
+    y: points.reduce((sum, point) => sum + point.y, 0) / points.length,
+  };
+}
+
+function getConnectorPath(
+  originalPoints: { x: number; y: number }[],
+  transformedPoints: { x: number; y: number }[],
+) {
+  return originalPoints
+    .map(
+      (point, index) =>
+        `M ${point.x} ${point.y} L ${transformedPoints[index].x} ${transformedPoints[index].y}`,
+    )
+    .join(" ");
+}
+
+const initialTranslatedPoints = initialOriginalPoints.map((point) =>
+  translatePoint(point, initialOffset),
+);
+const initialCentroid = getCentroid(initialOriginalPoints);
+const initialTranslatedCentroid = translatePoint(
+  initialCentroid,
+  initialOffset,
+);
+---
+
+<div class="viz-container" id="translation-wrapper">
+  <svg
+    viewBox={`0 0 ${width} ${height}`}
+    style="display: block; margin: auto; background-color: #f3f4f6; border-radius: 8px;"
+  >
+    {
+      gridXs.map((x) => (
+        <line
+          x1={x}
+          y1="0"
+          x2={x}
+          y2={height}
+          stroke="#d7dde5"
+          stroke-width="1"
+        />
+      ))
+    }
+    {
+      gridYs.map((y) => (
+        <line
+          x1="0"
+          y1={y}
+          x2={width}
+          y2={y}
+          stroke="#d7dde5"
+          stroke-width="1"
+        />
+      ))
+    }
+    <path
+      id="translation-connectors"
+      d={getConnectorPath(initialOriginalPoints, initialTranslatedPoints)}
+      fill="none"
+      stroke="#94a3b8"
+      stroke-width="2"
+      stroke-dasharray="5 5"
+      style="pointer-events: none;"></path>
+    <path
+      id="translation-original-shape"
+      d={getPolygonPath(initialOriginalPoints)}
+      fill="rgba(37, 99, 235, 0.24)"
+      stroke="#2563eb"
+      stroke-width="3"
+      style="pointer-events: none;"></path>
+    <path
+      id="translation-transformed-shape"
+      d={getPolygonPath(initialTranslatedPoints)}
+      fill="rgba(249, 115, 22, 0.24)"
+      stroke="#f97316"
+      stroke-width="3"
+      style="pointer-events: none;"></path>
+    <circle
+      id="translation-vector-handle"
+      cx={initialTranslatedCentroid.x}
+      cy={initialTranslatedCentroid.y}
+      r="11"
+      fill="#f97316"
+      style="cursor: grab; touch-action: none;"></circle>
+  </svg>
+  <p
+    style="margin-top: 0.75rem; text-align: center; color: #475569; font-size: 0.95rem;"
+  >
+    {text.helperText}
+  </p>
+</div>
+
+<script>
+  import * as d3 from "d3";
+  import { getPolygonPath, translatePoint } from "./functions/geometry";
+
+  function getCentroid(points: { x: number; y: number }[]) {
+    return {
+      x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
+      y: points.reduce((sum, point) => sum + point.y, 0) / points.length,
+    };
+  }
+
+  function getConnectorPath(
+    originalPoints: { x: number; y: number }[],
+    transformedPoints: { x: number; y: number }[],
+  ) {
+    return originalPoints
+      .map(
+        (point, index) =>
+          `M ${point.x} ${point.y} L ${transformedPoints[index].x} ${transformedPoints[index].y}`,
+      )
+      .join(" ");
+  }
+
+  function clampPoint(point: { x: number; y: number }, margin = 18) {
+    return {
+      x: Math.max(margin, Math.min(400 - margin, point.x)),
+      y: Math.max(margin, Math.min(400 - margin, point.y)),
+    };
+  }
+
+  function setupInteractivity() {
+    const originalShape = d3.select<SVGPathElement, unknown>(
+      "#translation-original-shape",
+    );
+    const transformedShape = d3.select<SVGPathElement, unknown>(
+      "#translation-transformed-shape",
+    );
+    const connectors = d3.select<SVGPathElement, unknown>(
+      "#translation-connectors",
+    );
+    const vectorHandle = d3.select<SVGCircleElement, unknown>(
+      "#translation-vector-handle",
+    );
+
+    if (
+      originalShape.empty() ||
+      transformedShape.empty() ||
+      connectors.empty() ||
+      vectorHandle.empty()
+    ) {
+      return;
+    }
+
+    let originalPoints = [
+      { x: 60, y: 265 },
+      { x: 125, y: 135 },
+      { x: 205, y: 225 },
+    ];
+    let offset = { x: 150, y: 0 };
+
+    function render() {
+      const transformedPoints = originalPoints.map((point) =>
+        translatePoint(point, offset),
+      );
+      const centroid = getCentroid(originalPoints);
+      const translatedCentroid = translatePoint(centroid, offset);
+
+      originalShape.attr("d", getPolygonPath(originalPoints));
+      transformedShape.attr("d", getPolygonPath(transformedPoints));
+      connectors.attr("d", getConnectorPath(originalPoints, transformedPoints));
+      vectorHandle
+        .attr("cx", translatedCentroid.x)
+        .attr("cy", translatedCentroid.y);
+    }
+
+    function setDraggingState(isDragging: boolean) {
+      const cursor = isDragging ? "grabbing" : "grab";
+      vectorHandle.style("cursor", cursor);
+    }
+
+    vectorHandle.call(
+      d3
+        .drag<SVGCircleElement, unknown>()
+        .on("start", () => {
+          setDraggingState(true);
+        })
+        .on("drag", (event) => {
+          const centroid = getCentroid(originalPoints);
+          const handlePoint = clampPoint({ x: event.x, y: event.y });
+
+          offset = {
+            x: handlePoint.x - centroid.x,
+            y: handlePoint.y - centroid.y,
+          };
+          render();
+        })
+        .on("end", () => {
+          setDraggingState(false);
+        }),
+    );
+
+    render();
+  }
+
+  setupInteractivity();
+  document.addEventListener("astro:after-swap", setupInteractivity);
+</script>
