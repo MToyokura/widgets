@@ -9,7 +9,12 @@ import TwoLinesParallelToSameLine from "@/components/three.js/TwoLinesParallelTo
 import TwoLinesPerpendicularToSameLine from "@/components/three.js/TwoLinesPerpendicularToSameLine.astro";
 import ScenePowerToggle from "@/components/three.js/shared/ScenePowerToggle.astro";
 
-<ScenePowerToggle id="geometry-low-power-toggle" checked={false} />
+<ScenePowerToggle
+  id="geometry-low-power-toggle"
+  checked={false}
+  label="省電力モード"
+  description="低性能な端末ではオンにすると描画負荷を抑えられます。画質を優先したい場合はオフにしてください。"
+/>
 <ScenePowerToggle
   id="geometry-antialias-toggle"
   checked={true}
