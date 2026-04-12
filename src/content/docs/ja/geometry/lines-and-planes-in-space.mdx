@@ -4,7 +4,6 @@ sidebar:
   order: 1010
 ---
 
-import PerpendicularLineAndPlane from "@/components/three.js/PerpendicularLineAndPlane.astro";
 import ThreePointsNotCollinear from "@/components/three.js/ThreePointsNotCollinear.astro";
 import LineAndPointNotOnLine from "@/components/three.js/LineAndPointNotOnLine.astro";
 import IntersectingLinesOnPlane from "@/components/three.js/IntersectingLinesOnPlane.astro";
@@ -68,16 +67,6 @@ import RenderingSettings from "@/components/three.js/shared/RenderingSettings.as
 ### 交わらず、並行でない場合（ねじれの位置）
 
 <SkewPosition
-  locale="ja"
-  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
-  antialiasControlId="geometry-antialias-toggle"
-/>
-
-## 平面に垂直な直線
-
-直線が平面と垂直であると言い切るためには、その平面上の交わる2直線と垂直であることを示すだけで十分です。一度この条件が満たされれば、その直線は平面全体と垂直であると定義され、結果として平面上に存在するあらゆる直線とのなす角はすべて90度になります。
-
-<PerpendicularLineAndPlane
   locale="ja"
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
