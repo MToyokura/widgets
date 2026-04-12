@@ -7,6 +7,7 @@ sidebar:
 import MovingLineCreatesFlatPlane from "@/components/three.js/MovingLineCreatesFlatPlane.astro";
 import MovingLineCreatesCylindricalSurface from "@/components/three.js/MovingLineCreatesCylindricalSurface.astro";
 import MovingLineCreatesConicalSurface from "@/components/three.js/MovingLineCreatesConicalSurface.astro";
+import MovingTriangleCreatesTriangularPrism from "@/components/three.js/MovingTriangleCreatesTriangularPrism.astro";
 import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.astro";
 import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.astro";
 
@@ -51,4 +52,25 @@ import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.as
 <MovingLineCreatesConicalSurface
   lowPowerControlId="geometry-low-power-toggle"
   antialiasControlId="geometry-antialias-toggle"
+/>
+
+## 面の移動で立体を作る
+
+面を平行移動させると、その移動した軌跡によって立体が作られます。
+
+<MovingTriangleCreatesTriangularPrism
+  heightControlId="moving-triangle-prism-height"
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<SceneRangeControl
+  id="moving-triangle-prism-height"
+  label="高さの調整"
+  min={0}
+  max={2.4}
+  step={0.1}
+  value={0}
+  valueSuffix=""
+  description=""
 />
