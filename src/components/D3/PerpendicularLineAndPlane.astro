@@ -1,9 +1,14 @@
 ---
-
+const lowPowerControlId = Astro.props.lowPowerControlId ?? "";
+const antialiasControlId = Astro.props.antialiasControlId ?? "";
 ---
 
 <div class="viz-container" id="perpendicular-line-and-plane-wrapper">
-  <div class="threejs-viz"></div>
+  <div
+    class="threejs-viz"
+    data-low-power-control-id={lowPowerControlId}
+    data-antialias-control-id={antialiasControlId}
+  ></div>
 </div>
 
 <style>
@@ -27,148 +32,182 @@
 
 <script>
   import * as THREE from "three";
-  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-  import { Line2 } from "three/addons/lines/Line2.js";
-  import { LineGeometry } from "three/addons/lines/LineGeometry.js";
-  import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { Line2 } from "three/addons/lines/Line2.js";
+import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+import {
+createLowPowerRenderer,
+disposeRenderer,
+disposeSceneResources,
+initializeThreeScene,
+observeAntialiasPreference,
+observeLowPowerPreference,
+observeWrapperSize,
+setRendererPerformanceMode,
+} from "./functions/three";
 
   const wrappers = document.querySelectorAll(
     "#perpendicular-line-and-plane-wrapper .threejs-viz",
   );
 
   for (const wrapper of wrappers) {
-    if (
-      !(wrapper instanceof HTMLDivElement) ||
-      wrapper.dataset.ready === "true"
-    ) {
+    if (!(wrapper instanceof HTMLDivElement)) {
       continue;
     }
 
-    wrapper.dataset.ready = "true";
+    let sceneHandle: ReturnType<typeof initializeThreeScene> | undefined;
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xe0e0e0);
+    const mountScene = () => {
+      const lowPowerControlId = wrapper.dataset.lowPowerControlId || "";
+      const antialiasControlId = wrapper.dataset.antialiasControlId || "";
 
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    camera.position.set(5, 3, 6);
-    camera.lookAt(0, 0, 0);
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xe0e0e0);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    wrapper.appendChild(renderer.domElement);
+      const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+      camera.position.set(5, 3, 6);
+      camera.lookAt(0, 0, 0);
 
-    const resolution = new THREE.Vector2(1, 1);
-    const unifiedThickness = 2.5;
+      const renderer = createLowPowerRenderer(
+        wrapper,
+        lowPowerControlId,
+        antialiasControlId,
+      );
 
-    const planeGeometry = new THREE.PlaneGeometry(4, 4);
-    const planeMaterial = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      side: THREE.DoubleSide,
-    });
-    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.rotation.x = -Math.PI / 2;
-    scene.add(plane);
-    scene.add(new THREE.GridHelper(4, 8, 0x94a3b8, 0xcbd5e1));
+      const resolution = new THREE.Vector2(1, 1);
+      const unifiedThickness = 2.5;
 
-    const planeLineMaterial = new LineMaterial({
-      color: 0x6b7280,
-      linewidth: 3,
-      resolution,
-    });
+      const planeGeometry = new THREE.PlaneGeometry(4, 4);
+      const planeMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        side: THREE.DoubleSide,
+      });
+      const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+      plane.rotation.x = -Math.PI / 2;
+      scene.add(plane);
+      scene.add(new THREE.GridHelper(4, 8, 0x94a3b8, 0xcbd5e1));
 
-    const planeLine1Geom = new LineGeometry();
-    planeLine1Geom.setPositions([-1.5, -1.5, 0, 1.5, 1.5, 0]);
-    const planeLine1 = new Line2(planeLine1Geom, planeLineMaterial);
-    planeLine1.rotation.x = -Math.PI / 2;
-    scene.add(planeLine1);
+      const planeLineMaterial = new LineMaterial({
+        color: 0x6b7280,
+        linewidth: 3,
+        resolution,
+      });
 
-    const planeLine2Geom = new LineGeometry();
-    planeLine2Geom.setPositions([-1.5, 1.5, 0, 1.5, -1.5, 0]);
-    const planeLine2 = new Line2(planeLine2Geom, planeLineMaterial);
-    planeLine2.rotation.x = -Math.PI / 2;
-    scene.add(planeLine2);
+      const planeLine1Geom = new LineGeometry();
+      planeLine1Geom.setPositions([-1.5, -1.5, 0, 1.5, 1.5, 0]);
+      const planeLine1 = new Line2(planeLine1Geom, planeLineMaterial);
+      planeLine1.rotation.x = -Math.PI / 2;
+      scene.add(planeLine1);
 
-    const lineGeom = new LineGeometry();
-    lineGeom.setPositions([0, -3, 0, 0, 3, 0]);
+      const planeLine2Geom = new LineGeometry();
+      planeLine2Geom.setPositions([-1.5, 1.5, 0, 1.5, -1.5, 0]);
+      const planeLine2 = new Line2(planeLine2Geom, planeLineMaterial);
+      planeLine2.rotation.x = -Math.PI / 2;
+      scene.add(planeLine2);
 
-    const solidMat = new LineMaterial({
-      color: 0x000000,
-      linewidth: unifiedThickness,
-      resolution,
-    });
-    const solidLine = new Line2(lineGeom, solidMat);
-    solidLine.renderOrder = 1;
-    scene.add(solidLine);
+      const lineGeom = new LineGeometry();
+      lineGeom.setPositions([0, -3, 0, 0, 3, 0]);
 
-    const dashedMat = new LineMaterial({
-      color: 0x000000,
-      linewidth: unifiedThickness,
-      resolution,
-      dashed: true,
-      dashSize: 0.15,
-      gapSize: 0.15,
-      depthFunc: THREE.GreaterDepth,
-      depthWrite: false,
-    });
-    const dashedLine = new Line2(lineGeom, dashedMat);
-    dashedLine.computeLineDistances();
-    dashedLine.renderOrder = 2;
-    scene.add(dashedLine);
+      const solidMat = new LineMaterial({
+        color: 0x000000,
+        linewidth: unifiedThickness,
+        resolution,
+      });
+      const solidLine = new Line2(lineGeom, solidMat);
+      solidLine.renderOrder = 1;
+      scene.add(solidLine);
 
-    const s = 0.2;
-    const yOffset = 0.01;
-    const angleGeom = new LineGeometry();
-    angleGeom.setPositions([
-      0,
-      s + yOffset,
-      0,
-      s,
-      s + yOffset,
-      0,
-      s,
-      yOffset,
-      0,
-    ]);
+      const dashedMat = new LineMaterial({
+        color: 0x000000,
+        linewidth: unifiedThickness,
+        resolution,
+        dashed: true,
+        dashSize: 0.15,
+        gapSize: 0.15,
+        depthFunc: THREE.GreaterDepth,
+        depthWrite: false,
+      });
+      const dashedLine = new Line2(lineGeom, dashedMat);
+      dashedLine.computeLineDistances();
+      dashedLine.renderOrder = 2;
+      scene.add(dashedLine);
 
-    const angleMat = new LineMaterial({
-      color: 0x000000,
-      linewidth: unifiedThickness,
-      resolution,
-    });
-    const angleSymbol = new Line2(angleGeom, angleMat);
-    angleSymbol.renderOrder = 3;
-    scene.add(angleSymbol);
+      const s = 0.2;
+      const yOffset = 0.01;
+      const angleGeom = new LineGeometry();
+      angleGeom.setPositions([
+        0,
+        s + yOffset,
+        0,
+        s,
+        s + yOffset,
+        0,
+        s,
+        yOffset,
+        0,
+      ]);
 
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = false;
+      const angleMat = new LineMaterial({
+        color: 0x000000,
+        linewidth: unifiedThickness,
+        resolution,
+      });
+      const angleSymbol = new Line2(angleGeom, angleMat);
+      angleSymbol.renderOrder = 3;
+      scene.add(angleSymbol);
 
-    function render() {
-      angleSymbol.rotation.y = Math.atan2(camera.position.x, camera.position.z);
-      renderer.render(scene, camera);
-    }
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = false;
 
-    function resize() {
-      const bounds = wrapper.getBoundingClientRect();
-      const width = Math.max(1, Math.round(bounds.width));
-      const height = Math.max(1, Math.round(bounds.height));
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
+      function render() {
+        angleSymbol.rotation.y = Math.atan2(
+          camera.position.x,
+          camera.position.z,
+        );
+        renderer.render(scene, camera);
+      }
 
-      renderer.setSize(width, height, false);
+      function resizeScene(width: number, height: number) {
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
 
-      planeLineMaterial.resolution.set(width, height);
-      solidMat.resolution.set(width, height);
-      dashedMat.resolution.set(width, height);
-      angleMat.resolution.set(width, height);
+        renderer.setSize(width, height, false);
 
-      render();
-    }
+        planeLineMaterial.resolution.set(width, height);
+        solidMat.resolution.set(width, height);
+        dashedMat.resolution.set(width, height);
+        angleMat.resolution.set(width, height);
 
-    controls.addEventListener("change", render);
+        render();
+      }
 
-    const resizeObserver = new ResizeObserver(resize);
-    resizeObserver.observe(wrapper);
+      controls.addEventListener("change", render);
+      const stopLowPowerObserver = observeLowPowerPreference(
+        lowPowerControlId,
+        (lowPower) => {
+          setRendererPerformanceMode(renderer, lowPower);
+          render();
+        },
+      );
+      const stopAntialiasObserver = observeAntialiasPreference(
+        antialiasControlId,
+        () => {
+          sceneHandle?.remount();
+        },
+      );
+      const resizeObserver = observeWrapperSize(wrapper, resizeScene);
 
-    requestAnimationFrame(resize);
+      return () => {
+        controls.dispose();
+        stopLowPowerObserver?.();
+        stopAntialiasObserver?.();
+        resizeObserver.disconnect();
+        disposeSceneResources(scene);
+        disposeRenderer(renderer);
+      };
+    };
+
+    sceneHandle = initializeThreeScene(wrapper, mountScene);
   }
 </script>
