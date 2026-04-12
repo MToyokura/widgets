@@ -7,19 +7,9 @@ sidebar:
 import PerpendicularLineAndPlane from "@/components/three.js/PerpendicularLineAndPlane.astro";
 import TwoLinesParallelToSameLine from "@/components/three.js/TwoLinesParallelToSameLine.astro";
 import TwoLinesPerpendicularToSameLine from "@/components/three.js/TwoLinesPerpendicularToSameLine.astro";
-import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.astro";
+import RenderingSettings from "@/components/three.js/shared/RenderingSettings.astro";
 
-<SceneRenderToggle
-  id="geometry-pixel-ratio-cap-toggle"
-  checked={false}
-  locale="en"
-/>
-<SceneRenderToggle
-  id="geometry-antialias-toggle"
-  checked={true}
-  locale="en"
-  kind="antialias"
-/>
+<RenderingSettings locale="en" />
 
 ## A line perpendicular to a plane
 

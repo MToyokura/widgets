@@ -1,0 +1,74 @@
+---
+import SceneRenderToggle from "./SceneRenderToggle.astro";
+
+const { locale = "en" } = Astro.props;
+
+const copy = {
+  en: {
+    label: "Rendering Settings",
+  },
+  ja: {
+    label: "レンダリング設定",
+  },
+} as const;
+
+const language = locale === "ja" ? "ja" : "en";
+const text = copy[language];
+---
+
+<div class="not-content">
+  <details class="rendering-settings">
+    <summary class="rendering-settings__summary">
+      <span class="rendering-settings__label">{text.label}</span>
+    </summary>
+    <div class="rendering-settings__content">
+      <SceneRenderToggle
+        id="geometry-pixel-ratio-cap-toggle"
+        checked={false}
+        locale={locale}
+      />
+      <SceneRenderToggle
+        id="geometry-antialias-toggle"
+        checked={true}
+        locale={locale}
+        kind="antialias"
+      />
+    </div>
+  </details>
+</div>
+
+<style>
+  .rendering-settings {
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .rendering-settings__summary {
+    padding: 0.5rem 1rem;
+    background-color: var(--sl-color-gray-6);
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+  }
+
+  .rendering-settings[open] .rendering-settings__summary {
+    border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+
+  .rendering-settings__summary:hover {
+    background-color: var(--sl-color-gray-5);
+  }
+
+  .rendering-settings__label {
+    color: var(--sl-color-text-accent);
+  }
+
+  .rendering-settings__content {
+    padding: 1rem;
+    background-color: var(--sl-color-bg-nav);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+</style>

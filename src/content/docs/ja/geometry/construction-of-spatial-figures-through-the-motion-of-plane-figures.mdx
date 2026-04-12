@@ -10,19 +10,9 @@ import MovingLineCreatesConicalSurface from "@/components/three.js/MovingLineCre
 import MovingTriangleCreatesTriangularPrism from "@/components/three.js/MovingTriangleCreatesTriangularPrism.astro";
 import RotatingSquareCreatesCylinder from "@/components/three.js/RotatingSquareCreatesCylinder.astro";
 import RotatingTriangleCreatesCone from "@/components/three.js/RotatingTriangleCreatesCone.astro";
-import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.astro";
+import RenderingSettings from "@/components/three.js/shared/RenderingSettings.astro";
 
-<SceneRenderToggle
-  id="geometry-pixel-ratio-cap-toggle"
-  checked={false}
-  locale="ja"
-/>
-<SceneRenderToggle
-  id="geometry-antialias-toggle"
-  checked={true}
-  locale="ja"
-  kind="antialias"
-/>
+<RenderingSettings locale="ja" />
 
 ## 線分の平行移動で面を作る
 

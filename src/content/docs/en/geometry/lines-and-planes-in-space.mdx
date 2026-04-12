@@ -11,19 +11,9 @@ import IntersectingLinesOnPlane from "@/components/three.js/IntersectingLinesOnP
 import IntersectingLinesAbovePlane from "@/components/three.js/IntersectingLinesAbovePlane.astro";
 import ParallelLines from "@/components/three.js/ParallelLines.astro";
 import SkewPosition from "@/components/three.js/SkewPosition.astro";
-import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.astro";
+import RenderingSettings from "@/components/three.js/shared/RenderingSettings.astro";
 
-<SceneRenderToggle
-  id="geometry-pixel-ratio-cap-toggle"
-  checked={false}
-  locale="en"
-/>
-<SceneRenderToggle
-  id="geometry-antialias-toggle"
-  checked={true}
-  locale="en"
-  kind="antialias"
-/>
+<RenderingSettings locale="en" />
 
 ## Determination of a Plane
 
