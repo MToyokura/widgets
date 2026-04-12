@@ -7,6 +7,7 @@ sidebar:
 import D3Thales from "@/components/D3/Thales.astro";
 import D3InscribedAngle from "@/components/D3/InscribedAngle.astro";
 import D3CentralAngle from "@/components/D3/CentralAngle.astro";
+import InscribedAngleProof from "@/components/D3/InscribedAngleProof.astro";
 
 ## 円周角
 
@@ -22,6 +23,14 @@ import D3CentralAngle from "@/components/D3/CentralAngle.astro";
 
 ## タレスの定理
 
-タレスの定理は、円周上の点を頂点とする角度が、円の直径に対して90度であることを述べています。つまり、円の直径を底辺とする三角形は、必ず直角三角形になります。
+タレスの定理は、円周上の点を頂点とする角度が、円の直径に対して90度であることを示す定理です。つまり、円の直径を底辺とする三角形は、必ず直角三角形になります。
 
 <D3Thales />
+
+## 円周角の定理の証明
+
+円周角の定理は、同じ弧に対する円周角は常に同じ大きさであり、対応する中心角の半分であることを示す定理です。
+
+「三角形の外角はそのとなりにない2つの内角の和に等しい」という三角形の性質を利用して証明することができます。
+
+<InscribedAngleProof />

@@ -1,0 +1,651 @@
+---
+import WidgetContainer from "../WidgetContainer.astro";
+
+import {
+  getAngleArcPath,
+  getAngleDegrees,
+  getAngleLabelPosition,
+  getPointOnCircle,
+  getTrianglePath,
+} from "./functions/geometry";
+
+const width = 400;
+const height = 400;
+const radius = 150;
+const cx = width / 2;
+const cy = height / 2;
+const center = { x: cx, y: cy };
+const degenerateAngleThresholdDegrees = 0.5;
+const initialAngleA = (3 * Math.PI) / 4;
+const initialAngleB = Math.PI / 4;
+const initialAngleC = -Math.PI / 2;
+
+const p1 = getPointOnCircle(center, radius, initialAngleA);
+const p2 = getPointOnCircle(center, radius, initialAngleB);
+const p3 = getPointOnCircle(center, radius, initialAngleC);
+
+function getOppositePoint(point: { x: number; y: number }) {
+  return {
+    x: cx - (point.x - cx),
+    y: cy - (point.y - cy),
+  };
+}
+
+function getLinePath(
+  start: { x: number; y: number },
+  end: { x: number; y: number },
+) {
+  return `M ${start.x} ${start.y} L ${end.x} ${end.y}`;
+}
+
+function getPointLabelPosition(point: { x: number; y: number }) {
+  const dx = point.x - cx;
+  const dy = point.y - cy;
+  const length = Math.hypot(dx, dy) || 1;
+  const offset = 24;
+
+  return {
+    x: point.x + (dx / length) * offset,
+    y: point.y + (dy / length) * offset,
+  };
+}
+
+function getVisibilityStyle(isVisible: boolean) {
+  return isVisible
+    ? "pointer-events: none;"
+    : "pointer-events: none; display: none;";
+}
+
+function getDoubleAngleDotPositions(
+  a: { x: number; y: number },
+  vertex: { x: number; y: number },
+  b: { x: number; y: number },
+  distanceFromVertex = 22,
+  spacing = 10,
+) {
+  const midpoint = getAngleLabelPosition(a, vertex, b, distanceFromVertex);
+  const dx = midpoint.x - vertex.x;
+  const dy = midpoint.y - vertex.y;
+  const length = Math.hypot(dx, dy) || 1;
+  const offsetX = (-dy / length) * (spacing / 2);
+  const offsetY = (dx / length) * (spacing / 2);
+
+  return [
+    { x: midpoint.x + offsetX, y: midpoint.y + offsetY },
+    { x: midpoint.x - offsetX, y: midpoint.y - offsetY },
+  ];
+}
+
+const p4 = getOppositePoint(p3);
+const centerLabelX = cx + 16;
+const centerLabelY = cy - 14;
+const initialPointALabelPosition = getPointLabelPosition(p1);
+const initialPointBLabelPosition = getPointLabelPosition(p2);
+const initialPointCLabelPosition = getPointLabelPosition(p3);
+const initialPointDLabelPosition = getPointLabelPosition(p4);
+const initialAngleAcoDotPosition = getAngleLabelPosition(p1, p3, center, 18);
+const initialAngleCaoDotPosition = getAngleLabelPosition(p3, p1, center, 18);
+const initialAngleBcoDotPosition = getAngleLabelPosition(p2, p3, center, 18);
+const initialAngleCboDotPosition = getAngleLabelPosition(p3, p2, center, 18);
+const initialAngleAodDotPositions = getDoubleAngleDotPositions(p1, center, p4);
+const initialAngleBodDotPositions = getDoubleAngleDotPositions(p2, center, p4);
+const initialAngleAodArcPath = getAngleArcPath(p1, center, p4, 38);
+const initialAngleBodArcPath = getAngleArcPath(p2, center, p4, 30);
+const initialAcoPath = getTrianglePath(p1, p3, center);
+const initialBcoPath = getTrianglePath(p2, p3, center);
+const initialShowAcoGroup =
+  getAngleDegrees(p1, p3, p4) > degenerateAngleThresholdDegrees;
+const initialShowBcoGroup =
+  getAngleDegrees(p2, p3, p4) > degenerateAngleThresholdDegrees;
+---
+
+<WidgetContainer
+  id="inscribed-angle-proof-case-center-outside-triangle-wrapper"
+  data-degenerate-angle-threshold={degenerateAngleThresholdDegrees}
+  data-initial-angle-a={initialAngleA}
+  data-initial-angle-b={initialAngleB}
+  data-initial-angle-c={initialAngleC}
+>
+  <svg viewBox={`0 0 ${width} ${height}`}>
+    <circle
+      cx={cx}
+      cy={cy}
+      r={radius}
+      fill="none"
+      stroke="#888"
+      stroke-width="2"></circle>
+    <path
+      id="inscribed-angle-proof-case-center-outside-triangle-diameter"
+      d={getLinePath(p3, p4)}
+      fill="none"
+      stroke="#4b5563"
+      stroke-width="2.5"
+      stroke-dasharray="6 5"
+      stroke-linecap="round"
+      style="pointer-events: none;"></path>
+    <path
+      id="inscribed-angle-proof-case-center-outside-triangle-aco-shape"
+      d={initialAcoPath}
+      fill="rgba(250, 204, 21, 0.28)"
+      stroke="#ca8a04"
+      stroke-width="2"
+      style={getVisibilityStyle(initialShowAcoGroup)}></path>
+    <path
+      id="inscribed-angle-proof-case-center-outside-triangle-bco-shape"
+      d={initialBcoPath}
+      fill="rgba(22, 163, 74, 0.2)"
+      stroke="#15803d"
+      stroke-width="2"
+      style={getVisibilityStyle(initialShowBcoGroup)}></path>
+    <path
+      id="inscribed-angle-proof-case-center-outside-triangle-angle-aod-arc"
+      d={initialAngleAodArcPath}
+      fill="none"
+      stroke="#facc15"
+      stroke-width="5"
+      stroke-linecap="round"
+      style={getVisibilityStyle(initialShowAcoGroup)}></path>
+    <path
+      id="inscribed-angle-proof-case-center-outside-triangle-angle-bod-arc"
+      d={initialAngleBodArcPath}
+      fill="none"
+      stroke="#16a34a"
+      stroke-width="5"
+      stroke-linecap="round"
+      style={getVisibilityStyle(initialShowBcoGroup)}></path>
+    <circle
+      id="inscribed-angle-proof-case-center-outside-triangle-angle-aco-dot"
+      cx={initialAngleAcoDotPosition.x}
+      cy={initialAngleAcoDotPosition.y}
+      r={4}
+      fill="#facc15"
+      stroke="#111827"
+      stroke-width="1.5"
+      style={getVisibilityStyle(initialShowAcoGroup)}></circle>
+    <circle
+      id="inscribed-angle-proof-case-center-outside-triangle-angle-cao-dot"
+      cx={initialAngleCaoDotPosition.x}
+      cy={initialAngleCaoDotPosition.y}
+      r={4}
+      fill="#facc15"
+      stroke="#111827"
+      stroke-width="1.5"
+      style={getVisibilityStyle(initialShowAcoGroup)}></circle>
+    <circle
+      id="inscribed-angle-proof-case-center-outside-triangle-angle-bco-dot"
+      cx={initialAngleBcoDotPosition.x}
+      cy={initialAngleBcoDotPosition.y}
+      r={4}
+      fill="#16a34a"
+      stroke="#111827"
+      stroke-width="1.5"
+      style={getVisibilityStyle(initialShowBcoGroup)}></circle>
+    <circle
+      id="inscribed-angle-proof-case-center-outside-triangle-angle-cbo-dot"
+      cx={initialAngleCboDotPosition.x}
+      cy={initialAngleCboDotPosition.y}
+      r={4}
+      fill="#16a34a"
+      stroke="#111827"
+      stroke-width="1.5"
+      style={getVisibilityStyle(initialShowBcoGroup)}></circle>
+    <circle
+      id="inscribed-angle-proof-case-center-outside-triangle-angle-aod-dot-1"
+      cx={initialAngleAodDotPositions[0].x}
+      cy={initialAngleAodDotPositions[0].y}
+      r={4}
+      fill="#facc15"
+      stroke="#111827"
+      stroke-width="1.5"
+      style={getVisibilityStyle(initialShowAcoGroup)}></circle>
+    <circle
+      id="inscribed-angle-proof-case-center-outside-triangle-angle-aod-dot-2"
+      cx={initialAngleAodDotPositions[1].x}
+      cy={initialAngleAodDotPositions[1].y}
+      r={4}
+      fill="#facc15"
+      stroke="#111827"
+      stroke-width="1.5"
+      style={getVisibilityStyle(initialShowAcoGroup)}></circle>
+    <circle
+      id="inscribed-angle-proof-case-center-outside-triangle-angle-bod-dot-1"
+      cx={initialAngleBodDotPositions[0].x}
+      cy={initialAngleBodDotPositions[0].y}
+      r={4}
+      fill="#16a34a"
+      stroke="#111827"
+      stroke-width="1.5"
+      style={getVisibilityStyle(initialShowBcoGroup)}></circle>
+    <circle
+      id="inscribed-angle-proof-case-center-outside-triangle-angle-bod-dot-2"
+      cx={initialAngleBodDotPositions[1].x}
+      cy={initialAngleBodDotPositions[1].y}
+      r={4}
+      fill="#16a34a"
+      stroke="#111827"
+      stroke-width="1.5"
+      style={getVisibilityStyle(initialShowBcoGroup)}></circle>
+    <circle cx={cx} cy={cy} r={5} fill="#111827" style="pointer-events: none;"
+    ></circle>
+    <text
+      x={centerLabelX}
+      y={centerLabelY}
+      fill="#111827"
+      font-size="18"
+      font-weight="700"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      style="pointer-events: none; user-select: none;"
+    >
+      O
+    </text>
+    <circle
+      id="inscribed-angle-proof-case-center-outside-triangle-handle-a"
+      cx={p1.x}
+      cy={p1.y}
+      r={10}
+      fill="#2563eb"
+      style="cursor: grab; touch-action: none;"></circle>
+    <text
+      id="inscribed-angle-proof-case-center-outside-triangle-point-a-label"
+      x={initialPointALabelPosition.x}
+      y={initialPointALabelPosition.y}
+      fill="#111827"
+      font-size="18"
+      font-weight="700"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      style="pointer-events: none; user-select: none;"
+    >
+      A
+    </text>
+    <circle
+      id="inscribed-angle-proof-case-center-outside-triangle-handle-b"
+      cx={p2.x}
+      cy={p2.y}
+      r={10}
+      fill="#2563eb"
+      style="cursor: grab; touch-action: none;"></circle>
+    <text
+      id="inscribed-angle-proof-case-center-outside-triangle-point-b-label"
+      x={initialPointBLabelPosition.x}
+      y={initialPointBLabelPosition.y}
+      fill="#111827"
+      font-size="18"
+      font-weight="700"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      style="pointer-events: none; user-select: none;"
+    >
+      B
+    </text>
+    <circle
+      id="inscribed-angle-proof-case-center-outside-triangle-handle-c"
+      cx={p3.x}
+      cy={p3.y}
+      r={10}
+      fill="#e74c3c"
+      style="cursor: grab; touch-action: none;"></circle>
+    <text
+      id="inscribed-angle-proof-case-center-outside-triangle-point-c-label"
+      x={initialPointCLabelPosition.x}
+      y={initialPointCLabelPosition.y}
+      fill="#111827"
+      font-size="18"
+      font-weight="700"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      style="pointer-events: none; user-select: none;"
+    >
+      C
+    </text>
+    <circle
+      id="inscribed-angle-proof-case-center-outside-triangle-point-d"
+      cx={p4.x}
+      cy={p4.y}
+      r={6}
+      fill="#111827"
+      style="pointer-events: none;"></circle>
+    <text
+      id="inscribed-angle-proof-case-center-outside-triangle-point-d-label"
+      x={initialPointDLabelPosition.x}
+      y={initialPointDLabelPosition.y}
+      fill="#111827"
+      font-size="18"
+      font-weight="700"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      style="pointer-events: none; user-select: none;"
+    >
+      D
+    </text>
+  </svg>
+</WidgetContainer>
+
+<script>
+  import * as d3 from "d3";
+  import {
+    getAngleArcPath,
+    getAngleDegrees,
+    getAngleLabelPosition,
+    getPointOnCircle,
+    getTrianglePath,
+  } from "./functions/geometry";
+
+  function getOppositePoint(point: { x: number; y: number }) {
+    return {
+      x: 200 - (point.x - 200),
+      y: 200 - (point.y - 200),
+    };
+  }
+
+  function getLinePath(
+    start: { x: number; y: number },
+    end: { x: number; y: number },
+  ) {
+    return `M ${start.x} ${start.y} L ${end.x} ${end.y}`;
+  }
+
+  function getPointLabelPosition(point: { x: number; y: number }) {
+    const dx = point.x - 200;
+    const dy = point.y - 200;
+    const length = Math.hypot(dx, dy) || 1;
+    const offset = 24;
+
+    return {
+      x: point.x + (dx / length) * offset,
+      y: point.y + (dy / length) * offset,
+    };
+  }
+
+  function getDoubleAngleDotPositions(
+    a: { x: number; y: number },
+    vertex: { x: number; y: number },
+    b: { x: number; y: number },
+    distanceFromVertex = 22,
+    spacing = 10,
+  ) {
+    const midpoint = getAngleLabelPosition(a, vertex, b, distanceFromVertex);
+    const dx = midpoint.x - vertex.x;
+    const dy = midpoint.y - vertex.y;
+    const length = Math.hypot(dx, dy) || 1;
+    const offsetX = (-dy / length) * (spacing / 2);
+    const offsetY = (dx / length) * (spacing / 2);
+
+    return [
+      { x: midpoint.x + offsetX, y: midpoint.y + offsetY },
+      { x: midpoint.x - offsetX, y: midpoint.y - offsetY },
+    ];
+  }
+
+  function setupInteractivity() {
+    const wrapper = document.getElementById(
+      "inscribed-angle-proof-case-center-outside-triangle-wrapper",
+    );
+
+    if (!wrapper) {
+      return;
+    }
+
+    const handleA = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-handle-a",
+    );
+    const handleB = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-handle-b",
+    );
+    const handleC = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-handle-c",
+    );
+    const triangleAco = d3.select<SVGPathElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-aco-shape",
+    );
+    const triangleBco = d3.select<SVGPathElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-bco-shape",
+    );
+    const angleAodArc = d3.select<SVGPathElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-aod-arc",
+    );
+    const angleBodArc = d3.select<SVGPathElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-bod-arc",
+    );
+    const diameter = d3.select<SVGPathElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-diameter",
+    );
+    const angleAcoDot = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-aco-dot",
+    );
+    const angleCaoDot = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-cao-dot",
+    );
+    const angleBcoDot = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-bco-dot",
+    );
+    const angleCboDot = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-cbo-dot",
+    );
+    const angleAodDot1 = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-aod-dot-1",
+    );
+    const angleAodDot2 = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-aod-dot-2",
+    );
+    const angleBodDot1 = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-bod-dot-1",
+    );
+    const angleBodDot2 = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-bod-dot-2",
+    );
+    const pointALabel = d3.select<SVGTextElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-point-a-label",
+    );
+    const pointBLabel = d3.select<SVGTextElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-point-b-label",
+    );
+    const pointCLabel = d3.select<SVGTextElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-point-c-label",
+    );
+    const pointD = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-point-d",
+    );
+    const pointDLabel = d3.select<SVGTextElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-point-d-label",
+    );
+
+    if (
+      handleA.empty() ||
+      handleB.empty() ||
+      handleC.empty() ||
+      triangleAco.empty() ||
+      triangleBco.empty() ||
+      angleAodArc.empty() ||
+      angleBodArc.empty() ||
+      diameter.empty() ||
+      angleAcoDot.empty() ||
+      angleCaoDot.empty() ||
+      angleBcoDot.empty() ||
+      angleCboDot.empty() ||
+      angleAodDot1.empty() ||
+      angleAodDot2.empty() ||
+      angleBodDot1.empty() ||
+      angleBodDot2.empty() ||
+      pointALabel.empty() ||
+      pointBLabel.empty() ||
+      pointCLabel.empty() ||
+      pointD.empty() ||
+      pointDLabel.empty()
+    ) {
+      return;
+    }
+
+    const cx = 200;
+    const cy = 200;
+    const radius = 150;
+    const initialAngleAValue = Number(wrapper.dataset.initialAngleA);
+    const initialAngleBValue = Number(wrapper.dataset.initialAngleB);
+    const initialAngleCValue = Number(wrapper.dataset.initialAngleC);
+    const degenerateAngleThresholdValue = Number(
+      wrapper.dataset.degenerateAngleThreshold,
+    );
+    const center = { x: cx, y: cy };
+    const degenerateAngleThresholdDegrees = Number.isFinite(
+      degenerateAngleThresholdValue,
+    )
+      ? degenerateAngleThresholdValue
+      : 0.5;
+    let angleA = Number.isFinite(initialAngleAValue)
+      ? initialAngleAValue
+      : (3 * Math.PI) / 4;
+    let angleB = Number.isFinite(initialAngleBValue)
+      ? initialAngleBValue
+      : Math.PI / 4;
+    let angleC = Number.isFinite(initialAngleCValue)
+      ? initialAngleCValue
+      : -Math.PI / 2;
+
+    function getPoints() {
+      return {
+        p1: getPointOnCircle(center, radius, angleA),
+        p2: getPointOnCircle(center, radius, angleB),
+        p3: getPointOnCircle(center, radius, angleC),
+      };
+    }
+
+    function render() {
+      const { p1, p2, p3 } = getPoints();
+      const pointALabelPosition = getPointLabelPosition(p1);
+      const pointBLabelPosition = getPointLabelPosition(p2);
+      const pointCLabelPosition = getPointLabelPosition(p3);
+      const p4 = getOppositePoint(p3);
+      const pointDLabelPosition = getPointLabelPosition(p4);
+      const angleAcoDotPosition = getAngleLabelPosition(p1, p3, center, 18);
+      const angleCaoDotPosition = getAngleLabelPosition(p3, p1, center, 18);
+      const angleBcoDotPosition = getAngleLabelPosition(p2, p3, center, 18);
+      const angleCboDotPosition = getAngleLabelPosition(p3, p2, center, 18);
+      const angleAodDotPositions = getDoubleAngleDotPositions(p1, center, p4);
+      const angleBodDotPositions = getDoubleAngleDotPositions(p2, center, p4);
+      const angleAodArcPath = getAngleArcPath(p1, center, p4, 38);
+      const angleBodArcPath = getAngleArcPath(p2, center, p4, 30);
+      const showAcoGroup =
+        getAngleDegrees(p1, p3, p4) > degenerateAngleThresholdDegrees;
+      const showBcoGroup =
+        getAngleDegrees(p2, p3, p4) > degenerateAngleThresholdDegrees;
+
+      handleA.attr("cx", p1.x).attr("cy", p1.y);
+      handleB.attr("cx", p2.x).attr("cy", p2.y);
+      handleC.attr("cx", p3.x).attr("cy", p3.y);
+      angleAodArc.attr("d", angleAodArcPath);
+      angleBodArc.attr("d", angleBodArcPath);
+      triangleAco.style("display", showAcoGroup ? "" : "none");
+      triangleBco.style("display", showBcoGroup ? "" : "none");
+      angleAodArc.style("display", showAcoGroup ? "" : "none");
+      angleBodArc.style("display", showBcoGroup ? "" : "none");
+      angleAcoDot
+        .attr("cx", angleAcoDotPosition.x)
+        .attr("cy", angleAcoDotPosition.y)
+        .style("display", showAcoGroup ? "" : "none");
+      angleCaoDot
+        .attr("cx", angleCaoDotPosition.x)
+        .attr("cy", angleCaoDotPosition.y)
+        .style("display", showAcoGroup ? "" : "none");
+      angleBcoDot
+        .attr("cx", angleBcoDotPosition.x)
+        .attr("cy", angleBcoDotPosition.y)
+        .style("display", showBcoGroup ? "" : "none");
+      angleCboDot
+        .attr("cx", angleCboDotPosition.x)
+        .attr("cy", angleCboDotPosition.y)
+        .style("display", showBcoGroup ? "" : "none");
+      angleAodDot1
+        .attr("cx", angleAodDotPositions[0].x)
+        .attr("cy", angleAodDotPositions[0].y)
+        .style("display", showAcoGroup ? "" : "none");
+      angleAodDot2
+        .attr("cx", angleAodDotPositions[1].x)
+        .attr("cy", angleAodDotPositions[1].y)
+        .style("display", showAcoGroup ? "" : "none");
+      angleBodDot1
+        .attr("cx", angleBodDotPositions[0].x)
+        .attr("cy", angleBodDotPositions[0].y)
+        .style("display", showBcoGroup ? "" : "none");
+      angleBodDot2
+        .attr("cx", angleBodDotPositions[1].x)
+        .attr("cy", angleBodDotPositions[1].y)
+        .style("display", showBcoGroup ? "" : "none");
+      pointALabel
+        .attr("x", pointALabelPosition.x)
+        .attr("y", pointALabelPosition.y);
+      pointBLabel
+        .attr("x", pointBLabelPosition.x)
+        .attr("y", pointBLabelPosition.y);
+      pointCLabel
+        .attr("x", pointCLabelPosition.x)
+        .attr("y", pointCLabelPosition.y);
+      pointD.attr("cx", p4.x).attr("cy", p4.y);
+      pointDLabel
+        .attr("x", pointDLabelPosition.x)
+        .attr("y", pointDLabelPosition.y);
+      diameter.attr("d", getLinePath(p3, p4));
+      triangleAco.attr("d", getTrianglePath(p1, p3, center));
+      triangleBco.attr("d", getTrianglePath(p2, p3, center));
+    }
+
+    function setDraggingState(isDragging: boolean) {
+      const cursor = isDragging ? "grabbing" : "grab";
+
+      handleA.style("cursor", cursor);
+      handleB.style("cursor", cursor);
+      handleC.style("cursor", cursor);
+    }
+
+    function getPointerAngle(x: number, y: number) {
+      return Math.atan2(y - cy, x - cx);
+    }
+
+    const handleADragBehavior = d3
+      .drag<SVGCircleElement, unknown>()
+      .on("start", () => {
+        setDraggingState(true);
+      })
+      .on("drag", (event) => {
+        angleA = getPointerAngle(event.x, event.y);
+        render();
+      })
+      .on("end", () => {
+        setDraggingState(false);
+      });
+
+    const handleBDragBehavior = d3
+      .drag<SVGCircleElement, unknown>()
+      .on("start", () => {
+        setDraggingState(true);
+      })
+      .on("drag", (event) => {
+        angleB = getPointerAngle(event.x, event.y);
+        render();
+      })
+      .on("end", () => {
+        setDraggingState(false);
+      });
+
+    const handleCDragBehavior = d3
+      .drag<SVGCircleElement, unknown>()
+      .on("start", () => {
+        setDraggingState(true);
+      })
+      .on("drag", (event) => {
+        angleC = getPointerAngle(event.x, event.y);
+        render();
+      })
+      .on("end", () => {
+        setDraggingState(false);
+      });
+
+    handleA.call(handleADragBehavior);
+    handleB.call(handleBDragBehavior);
+    handleC.call(handleCDragBehavior);
+    render();
+  }
+
+  setupInteractivity();
+  document.addEventListener("astro:after-swap", setupInteractivity);
+</script>
