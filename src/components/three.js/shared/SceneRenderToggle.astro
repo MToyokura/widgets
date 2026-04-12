@@ -39,37 +39,40 @@ const toggleKind = kind === "antialias" ? "antialias" : "pixelRatioCap";
 const text = copy[language][toggleKind];
 ---
 
-<div class="scene-render-toggle">
-  <label class="scene-render-toggle__label" for={id}>
+<label class="scene-render-toggle" for={id}>
+  <div class="scene-render-toggle__header">
     <input
       id={id}
       class="scene-render-toggle__input"
       type="checkbox"
       checked={checked}
     />
-    <span>{label ?? text.label}</span>
-  </label>
+    <span class="scene-render-toggle__title">{label ?? text.label}</span>
+  </div>
   <p class="scene-render-toggle__description">
     {description ?? text.description}
   </p>
-</div>
+</label>
 
 <style>
   .scene-render-toggle {
+    display: block;
     margin: 0 0 1.5rem;
     padding: 0.875rem 1rem;
     border: 1px solid #cbd5e1;
     border-radius: 0.75rem;
-    background: #f8fafc;
+    cursor: pointer;
   }
 
-  .scene-render-toggle__label {
-    display: inline-flex;
+  .scene-render-toggle__header {
+    display: flex;
     align-items: center;
     gap: 0.625rem;
+  }
+
+  .scene-render-toggle__title {
+    color: var(--sl-color-text);
     font-weight: 600;
-    color: #0f172a;
-    cursor: pointer;
   }
 
   .scene-render-toggle__input {
@@ -81,6 +84,6 @@ const text = copy[language][toggleKind];
   .scene-render-toggle__description {
     margin: 0.5rem 0 0;
     font-size: 0.95rem;
-    color: #475569;
+    color: var(--sl-color-text);
   }
 </style>
