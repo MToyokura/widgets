@@ -10,17 +10,12 @@ import MovingLineCreatesConicalSurface from "@/components/three.js/MovingLineCre
 import ScenePowerToggle from "@/components/three.js/shared/ScenePowerToggle.astro";
 import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.astro";
 
-<ScenePowerToggle
-  id="geometry-low-power-toggle"
-  checked={false}
-  label="省電力モード"
-  description="低性能な端末ではオンにすると描画負荷を抑えられます。画質を優先したい場合はオフにしてください。"
-/>
+<ScenePowerToggle id="geometry-low-power-toggle" checked={false} locale="ja" />
 <ScenePowerToggle
   id="geometry-antialias-toggle"
   checked={true}
-  label="アンチエイリアス"
-  description="輪郭を滑らかにしますが、描画負荷と消費電力は増えます。"
+  locale="ja"
+  kind="antialias"
 />
 
 ## 線分の平行移動で面を作る

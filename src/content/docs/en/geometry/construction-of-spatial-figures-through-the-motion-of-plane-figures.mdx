@@ -10,12 +10,12 @@ import MovingLineCreatesConicalSurface from "@/components/three.js/MovingLineCre
 import ScenePowerToggle from "@/components/three.js/shared/ScenePowerToggle.astro";
 import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.astro";
 
-<ScenePowerToggle id="geometry-low-power-toggle" checked={false} />
+<ScenePowerToggle id="geometry-low-power-toggle" checked={false} locale="en" />
 <ScenePowerToggle
   id="geometry-antialias-toggle"
   checked={true}
-  label="Antialiasing"
-  description="Smooths edges, but increases rendering load and power consumption."
+  locale="en"
+  kind="antialias"
 />
 
 ## Creating a Plane by Translating a Line Segment

@@ -9,12 +9,12 @@ import TwoLinesParallelToSameLine from "@/components/three.js/TwoLinesParallelTo
 import TwoLinesPerpendicularToSameLine from "@/components/three.js/TwoLinesPerpendicularToSameLine.astro";
 import ScenePowerToggle from "@/components/three.js/shared/ScenePowerToggle.astro";
 
-<ScenePowerToggle id="geometry-low-power-toggle" checked={false} />
+<ScenePowerToggle id="geometry-low-power-toggle" checked={false} locale="en" />
 <ScenePowerToggle
   id="geometry-antialias-toggle"
   checked={true}
-  label="Antialias"
-  description="Smooths edges, but increases rendering load and power consumption."
+  locale="en"
+  kind="antialias"
 />
 
 ## A line perpendicular to a plane

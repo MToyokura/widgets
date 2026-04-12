@@ -115,7 +115,7 @@ export function getRangeControlValue(controlId = "", fallback = 0) {
   return getNumericInputValue(getRangeControl(controlId), fallback);
 }
 
-export function setRendererPerformanceMode(
+export function setRendererPixelRatioCap(
   renderer: THREE.WebGLRenderer,
   lowPower: boolean,
 ) {
@@ -201,7 +201,7 @@ export function createLowPowerRenderer(
     powerPreference: lowPower ? "low-power" : "default",
   });
 
-  setRendererPerformanceMode(renderer, lowPower);
+  setRendererPixelRatioCap(renderer, lowPower);
   wrapper.appendChild(renderer.domElement);
 
   return renderer;
@@ -322,7 +322,7 @@ export function mountManagedThreeScene(
     const stopLowPowerObserver = observeLowPowerPreference(
       lowPowerControlId,
       (lowPower) => {
-        setRendererPerformanceMode(renderer, lowPower);
+        setRendererPixelRatioCap(renderer, lowPower);
         render();
       },
     );

@@ -13,12 +13,12 @@ import ParallelLines from "@/components/three.js/ParallelLines.astro";
 import SkewPosition from "@/components/three.js/SkewPosition.astro";
 import ScenePowerToggle from "@/components/three.js/shared/ScenePowerToggle.astro";
 
-<ScenePowerToggle id="geometry-low-power-toggle" checked={false} />
+<ScenePowerToggle id="geometry-low-power-toggle" checked={false} locale="en" />
 <ScenePowerToggle
   id="geometry-antialias-toggle"
   checked={true}
-  label="Antialiasing"
-  description="Smooths out edges, but increases rendering load and power consumption."
+  locale="en"
+  kind="antialias"
 />
 
 ## Determination of a Plane

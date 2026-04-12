@@ -1,10 +1,43 @@
 ---
 const {
   id,
+  locale = "en",
+  kind = "pixelRatioCap",
   checked = true,
-  label = "Power Saving Mode",
-  description = "Enable to reduce rendering load on low-performance devices. Disable to prioritize visual quality.",
+  label,
+  description,
 } = Astro.props;
+
+const copy = {
+  en: {
+    pixelRatioCap: {
+      label: "Pixel Ratio Cap",
+      description:
+        "Enable to cap render resolution for lower GPU load and smoother performance on slower devices. Disable for sharper output.",
+    },
+    antialias: {
+      label: "Antialiasing",
+      description:
+        "Smooths edges, but increases rendering load and power consumption.",
+    },
+  },
+  ja: {
+    pixelRatioCap: {
+      label: "ピクセル比の上限",
+      description:
+        "オンにすると描画解像度の上限を抑え、GPU負荷を下げて動作を安定させます。より鮮明な表示を優先する場合はオフにしてください。",
+    },
+    antialias: {
+      label: "アンチエイリアス",
+      description:
+        "輪郭を滑らかにしますが、描画負荷と消費電力は増えます。",
+    },
+  },
+} as const;
+
+const language = locale === "ja" ? "ja" : "en";
+const toggleKind = kind === "antialias" ? "antialias" : "pixelRatioCap";
+const text = copy[language][toggleKind];
 ---
 
 <div class="scene-power-toggle">
@@ -15,9 +48,11 @@ const {
       type="checkbox"
       checked={checked}
     />
-    <span>{label}</span>
+    <span>{label ?? text.label}</span>
   </label>
-  <p class="scene-power-toggle__description">{description}</p>
+  <p class="scene-power-toggle__description">
+    {description ?? text.description}
+  </p>
 </div>
 
 <style>
