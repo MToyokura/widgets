@@ -1,5 +1,5 @@
 ---
-title: 空間における直線と平面の性質
+title: Properties of Lines and Planes in Space
 sidebar:
   order: 1020
 ---
@@ -13,32 +13,31 @@ import ScenePowerToggle from "@/components/three.js/shared/ScenePowerToggle.astr
 <ScenePowerToggle
   id="geometry-antialias-toggle"
   checked={true}
-  label="アンチエイリアス"
-  description="輪郭を滑らかにしますが、描画負荷と消費電力は増えます。"
+  label="Antialias"
+  description="Smooths edges, but increases rendering load and power consumption."
 />
 
-## 平面に垂直な直線
+## A line perpendicular to a plane
 
-直線が平面と垂直であると言い切るためには、その平面上の交わる2直線と垂直であることを示すだけで十分です。一度この条件が満たされれば、その直線は平面全体と垂直であると定義され、結果として平面上に存在するあらゆる直線とのなす角はすべて90度になります。
+To say that a line is perpendicular to a plane, it is sufficient to show that it is perpendicular to two intersecting lines on that plane. Once this condition is met, the line is defined as perpendicular to the entire plane, and as a result, the angle it makes with every line existing on the plane is 90 degrees.
 
 <PerpendicularLineAndPlane
-  locale="ja"
   lowPowerControlId="geometry-low-power-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## 一つの直線に平行な二つの直線
+## Two lines parallel to the same line
 
-一つの直線に平行な二つの直線は、互いに平行になります。
+Two lines parallel to the same line are parallel to each other.
 
 <TwoLinesParallelToSameLine
   lowPowerControlId="geometry-low-power-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## 直線に垂直な二つの直線
+## Two lines perpendicular to the same line
 
-空間では、同じ直線に垂直であっても互いに平行とは限りません。
+In space, two lines perpendicular to the same line are not necessarily parallel to each other.
 
 <TwoLinesPerpendicularToSameLine
   lowPowerControlId="geometry-low-power-toggle"
