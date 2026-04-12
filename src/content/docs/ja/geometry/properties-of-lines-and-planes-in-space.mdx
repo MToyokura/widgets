@@ -9,7 +9,11 @@ import TwoLinesParallelToSameLine from "@/components/three.js/TwoLinesParallelTo
 import TwoLinesPerpendicularToSameLine from "@/components/three.js/TwoLinesPerpendicularToSameLine.astro";
 import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.astro";
 
-<SceneRenderToggle id="geometry-low-power-toggle" checked={false} locale="ja" />
+<SceneRenderToggle
+  id="geometry-pixel-ratio-cap-toggle"
+  checked={false}
+  locale="ja"
+/>
 <SceneRenderToggle
   id="geometry-antialias-toggle"
   checked={true}
@@ -23,7 +27,7 @@ import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.as
 
 <PerpendicularLineAndPlane
   locale="ja"
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
@@ -32,7 +36,7 @@ import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.as
 一つの直線に平行な二つの直線は、互いに平行になります。
 
 <TwoLinesParallelToSameLine
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
@@ -41,6 +45,6 @@ import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.as
 空間では、同じ直線に垂直であっても互いに平行とは限りません。
 
 <TwoLinesPerpendicularToSameLine
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />

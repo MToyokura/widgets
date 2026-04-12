@@ -1,7 +1,7 @@
 ---
 const {
   id,
-  lowPowerControlId = "",
+  pixelRatioCapControlId = "",
   antialiasControlId = "",
   ...wrapperProps
 } = Astro.props;
@@ -10,7 +10,7 @@ const {
 <div class="viz-container" id={id}>
   <div
     class="threejs-viz"
-    data-low-power-control-id={lowPowerControlId}
+    data-pixel-ratio-cap-control-id={pixelRatioCapControlId}
     data-antialias-control-id={antialiasControlId}
     {...wrapperProps}
   >

@@ -13,7 +13,11 @@ import ParallelLines from "@/components/three.js/ParallelLines.astro";
 import SkewPosition from "@/components/three.js/SkewPosition.astro";
 import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.astro";
 
-<SceneRenderToggle id="geometry-low-power-toggle" checked={false} locale="en" />
+<SceneRenderToggle
+  id="geometry-pixel-ratio-cap-toggle"
+  checked={false}
+  locale="en"
+/>
 <SceneRenderToggle
   id="geometry-antialias-toggle"
   checked={true}
@@ -33,7 +37,7 @@ A plane is determined when it satisfies any of the following conditions:
 
 <ThreePointsNotCollinear
   locale="en"
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
@@ -41,7 +45,7 @@ A plane is determined when it satisfies any of the following conditions:
 
 <LineAndPointNotOnLine
   locale="en"
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
@@ -49,7 +53,7 @@ A plane is determined when it satisfies any of the following conditions:
 
 <IntersectingLinesOnPlane
   locale="en"
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
@@ -59,7 +63,7 @@ A plane is determined when it satisfies any of the following conditions:
 
 <IntersectingLinesAbovePlane
   locale="en"
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
@@ -67,7 +71,7 @@ A plane is determined when it satisfies any of the following conditions:
 
 <ParallelLines
   locale="en"
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
@@ -75,7 +79,7 @@ A plane is determined when it satisfies any of the following conditions:
 
 <SkewPosition
   locale="en"
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
@@ -85,6 +89,6 @@ To assert that a line is perpendicular to a plane, it is sufficient to show that
 
 <PerpendicularLineAndPlane
   locale="en"
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />

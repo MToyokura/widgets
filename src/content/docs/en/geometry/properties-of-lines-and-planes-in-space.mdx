@@ -9,7 +9,11 @@ import TwoLinesParallelToSameLine from "@/components/three.js/TwoLinesParallelTo
 import TwoLinesPerpendicularToSameLine from "@/components/three.js/TwoLinesPerpendicularToSameLine.astro";
 import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.astro";
 
-<SceneRenderToggle id="geometry-low-power-toggle" checked={false} locale="en" />
+<SceneRenderToggle
+  id="geometry-pixel-ratio-cap-toggle"
+  checked={false}
+  locale="en"
+/>
 <SceneRenderToggle
   id="geometry-antialias-toggle"
   checked={true}
@@ -22,7 +26,7 @@ import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.as
 To say that a line is perpendicular to a plane, it is sufficient to show that it is perpendicular to two intersecting lines on that plane. Once this condition is met, the line is defined as perpendicular to the entire plane, and as a result, the angle it makes with every line existing on the plane is 90 degrees.
 
 <PerpendicularLineAndPlane
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
@@ -31,7 +35,7 @@ To say that a line is perpendicular to a plane, it is sufficient to show that it
 Two lines parallel to the same line are parallel to each other.
 
 <TwoLinesParallelToSameLine
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
@@ -40,6 +44,6 @@ Two lines parallel to the same line are parallel to each other.
 In space, two lines perpendicular to the same line are not necessarily parallel to each other.
 
 <TwoLinesPerpendicularToSameLine
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />

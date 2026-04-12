@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-const LOW_POWER_PIXEL_RATIO = 1.25;
-const STANDARD_PIXEL_RATIO = 2;
+const PERFORMANCE_PIXEL_RATIO_CAP = 1.25;
+const DEFAULT_PIXEL_RATIO_CAP = 2;
 
 type Vector3Tuple = [x: number, y: number, z: number];
 
@@ -18,7 +18,7 @@ export type ManagedThreeSceneContext = {
   camera: THREE.PerspectiveCamera;
   renderer: THREE.WebGLRenderer;
   controls: OrbitControls;
-  lowPowerControlId: string;
+  pixelRatioCapControlId: string;
   antialiasControlId: string;
   addCleanup: (cleanup: () => void) => void;
   addRenderHook: (renderHook: () => void) => void;
@@ -99,7 +99,7 @@ export function isCheckboxEnabled(controlId = "", fallback = false) {
   return getCheckboxControl(controlId)?.checked ?? fallback;
 }
 
-export function isLowPowerEnabled(controlId = "") {
+export function isPixelRatioCapEnabled(controlId = "") {
   return isCheckboxEnabled(controlId, false);
 }
 
@@ -117,12 +117,14 @@ export function getRangeControlValue(controlId = "", fallback = 0) {
 
 export function setRendererPixelRatioCap(
   renderer: THREE.WebGLRenderer,
-  lowPower: boolean,
+  pixelRatioCapEnabled: boolean,
 ) {
   renderer.setPixelRatio(
     Math.min(
       window.devicePixelRatio || 1,
-      lowPower ? LOW_POWER_PIXEL_RATIO : STANDARD_PIXEL_RATIO,
+      pixelRatioCapEnabled
+        ? PERFORMANCE_PIXEL_RATIO_CAP
+        : DEFAULT_PIXEL_RATIO_CAP,
     ),
   );
 }
@@ -189,19 +191,19 @@ export function initializeThreeScene(
   return { remount, destroy };
 }
 
-export function createLowPowerRenderer(
+export function createPreferenceAwareRenderer(
   wrapper: HTMLDivElement,
-  lowPowerControlId = "",
+  pixelRatioCapControlId = "",
   antialiasControlId = "",
 ) {
-  const lowPower = isLowPowerEnabled(lowPowerControlId);
-  const antialias = isAntialiasEnabled(antialiasControlId);
+  const pixelRatioCapEnabled = isPixelRatioCapEnabled(pixelRatioCapControlId);
+  const antialiasEnabled = isAntialiasEnabled(antialiasControlId);
   const renderer = new THREE.WebGLRenderer({
-    antialias,
-    powerPreference: lowPower ? "low-power" : "default",
+    antialias: antialiasEnabled,
+    powerPreference: pixelRatioCapEnabled ? "low-power" : "default",
   });
 
-  setRendererPixelRatioCap(renderer, lowPower);
+  setRendererPixelRatioCap(renderer, pixelRatioCapEnabled);
   wrapper.appendChild(renderer.domElement);
 
   return renderer;
@@ -244,7 +246,7 @@ export function mountManagedThreeScene(
   let sceneHandle: ReturnType<typeof initializeThreeScene> | undefined;
 
   const mountScene = () => {
-    const lowPowerControlId = wrapper.dataset.lowPowerControlId || "";
+    const pixelRatioCapControlId = wrapper.dataset.pixelRatioCapControlId || "";
     const antialiasControlId = wrapper.dataset.antialiasControlId || "";
     const scene = new THREE.Scene();
 
@@ -257,9 +259,9 @@ export function mountManagedThreeScene(
       camera.lookAt(...options.cameraLookAt);
     }
 
-    const renderer = createLowPowerRenderer(
+    const renderer = createPreferenceAwareRenderer(
       wrapper,
-      lowPowerControlId,
+      pixelRatioCapControlId,
       antialiasControlId,
     );
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -284,7 +286,7 @@ export function mountManagedThreeScene(
       camera,
       renderer,
       controls,
-      lowPowerControlId,
+      pixelRatioCapControlId,
       antialiasControlId,
       addCleanup: (cleanup) => {
         cleanupCallbacks.push(cleanup);
@@ -319,10 +321,10 @@ export function mountManagedThreeScene(
 
     controls.addEventListener("change", render);
 
-    const stopLowPowerObserver = observeLowPowerPreference(
-      lowPowerControlId,
-      (lowPower) => {
-        setRendererPixelRatioCap(renderer, lowPower);
+    const stopPixelRatioCapObserver = observePixelRatioCapPreference(
+      pixelRatioCapControlId,
+      (pixelRatioCapEnabled) => {
+        setRendererPixelRatioCap(renderer, pixelRatioCapEnabled);
         render();
       },
     );
@@ -336,7 +338,7 @@ export function mountManagedThreeScene(
 
     return () => {
       controls.dispose();
-      stopLowPowerObserver?.();
+      stopPixelRatioCapObserver?.();
       stopAntialiasObserver?.();
       resizeObserver.disconnect();
 
@@ -375,9 +377,9 @@ export function observeCheckboxPreference(
   };
 }
 
-export function observeLowPowerPreference(
+export function observePixelRatioCapPreference(
   controlId: string,
-  onChange: (lowPower: boolean) => void,
+  onChange: (pixelRatioCapEnabled: boolean) => void,
 ) {
   return observeCheckboxPreference(controlId, onChange);
 }

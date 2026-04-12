@@ -1,27 +1,27 @@
 ---
 import ThreeSceneShell from "./shared/ThreeSceneShell.astro";
 
-const lowPowerControlId = Astro.props.lowPowerControlId ?? "";
+const pixelRatioCapControlId = Astro.props.pixelRatioCapControlId ?? "";
 const antialiasControlId = Astro.props.antialiasControlId ?? "";
 const heightControlId = Astro.props.heightControlId ?? "";
 ---
 
 <ThreeSceneShell
   id="moving-triangle-creates-triangular-prism-wrapper"
-  lowPowerControlId={lowPowerControlId}
+  pixelRatioCapControlId={pixelRatioCapControlId}
   antialiasControlId={antialiasControlId}
   data-height-control-id={heightControlId}
 />
 
 <script>
   import * as THREE from "three";
-import {
-addReferencePlane,
-getRangeControlValue,
-getThreeSceneWrapper,
-mountManagedThreeScene,
-observeRangePreference,
-} from "./functions/three";
+  import {
+    addReferencePlane,
+    getRangeControlValue,
+    getThreeSceneWrapper,
+    mountManagedThreeScene,
+    observeRangePreference,
+  } from "./functions/three";
 
   const BASE_Y = 0;
   const REFERENCE_PLANE_Y = BASE_Y - 0.001;
@@ -82,14 +82,8 @@ observeRangePreference,
           new THREE.BufferAttribute(new Float32Array(18), 3),
         );
         prismGeometry.setIndex([
-          0, 1, 2,
-          3, 5, 4,
-          0, 1, 4,
-          0, 4, 3,
-          1, 2, 5,
-          1, 5, 4,
-          2, 0, 3,
-          2, 3, 5,
+          0, 1, 2, 3, 5, 4, 0, 1, 4, 0, 4, 3, 1, 2, 5, 1, 5, 4, 2, 0, 3, 2, 3,
+          5,
         ]);
         const prism = new THREE.Mesh(
           prismGeometry,
@@ -267,7 +261,10 @@ observeRangePreference,
           render();
         };
 
-        const stopObservingRange = observeRangePreference(controlId, updateScene);
+        const stopObservingRange = observeRangePreference(
+          controlId,
+          updateScene,
+        );
         updateScene(getRangeControlValue(controlId, DEFAULT_HEIGHT));
 
         addCleanup(() => {

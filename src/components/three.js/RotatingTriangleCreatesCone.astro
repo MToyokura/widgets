@@ -1,26 +1,26 @@
 ---
 import ThreeSceneShell from "./shared/ThreeSceneShell.astro";
 
-const lowPowerControlId = Astro.props.lowPowerControlId ?? "";
+const pixelRatioCapControlId = Astro.props.pixelRatioCapControlId ?? "";
 const antialiasControlId = Astro.props.antialiasControlId ?? "";
 ---
 
 <ThreeSceneShell
   id="rotating-triangle-creates-cone-wrapper"
-  lowPowerControlId={lowPowerControlId}
+  pixelRatioCapControlId={pixelRatioCapControlId}
   antialiasControlId={antialiasControlId}
 />
 
 <script>
   import * as THREE from "three";
-import { Line2 } from "three/addons/lines/Line2.js";
-import { LineGeometry } from "three/addons/lines/LineGeometry.js";
-import { LineMaterial } from "three/addons/lines/LineMaterial.js";
-import {
-addReferencePlane,
-getThreeSceneWrapper,
-mountManagedThreeScene,
-} from "./functions/three";
+  import { Line2 } from "three/addons/lines/Line2.js";
+  import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+  import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+  import {
+    addReferencePlane,
+    getThreeSceneWrapper,
+    mountManagedThreeScene,
+  } from "./functions/three";
 
   const SIDE = 1.7;
   const HEIGHT = SIDE;
@@ -56,20 +56,7 @@ mountManagedThreeScene,
   }
 
   function createTriangleOutlinePositions() {
-    return [
-      0,
-      0,
-      0,
-      BASE_RADIUS,
-      0,
-      0,
-      0,
-      HEIGHT,
-      0,
-      0,
-      0,
-      0,
-    ];
+    return [0, 0, 0, BASE_RADIUS, 0, 0, 0, HEIGHT, 0, 0, 0, 0];
   }
 
   const wrapper = getThreeSceneWrapper(

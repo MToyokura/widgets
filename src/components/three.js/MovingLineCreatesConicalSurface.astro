@@ -1,26 +1,26 @@
 ---
 import ThreeSceneShell from "./shared/ThreeSceneShell.astro";
 
-const lowPowerControlId = Astro.props.lowPowerControlId ?? "";
+const pixelRatioCapControlId = Astro.props.pixelRatioCapControlId ?? "";
 const antialiasControlId = Astro.props.antialiasControlId ?? "";
 ---
 
 <ThreeSceneShell
   id="moving-line-creates-conical-surface-wrapper"
-  lowPowerControlId={lowPowerControlId}
+  pixelRatioCapControlId={pixelRatioCapControlId}
   antialiasControlId={antialiasControlId}
 />
 
 <script>
   import * as THREE from "three";
-import { Line2 } from "three/addons/lines/Line2.js";
-import { LineGeometry } from "three/addons/lines/LineGeometry.js";
-import { LineMaterial } from "three/addons/lines/LineMaterial.js";
-import {
-addReferencePlane,
-getThreeSceneWrapper,
-mountManagedThreeScene,
-} from "./functions/three";
+  import { Line2 } from "three/addons/lines/Line2.js";
+  import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+  import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+  import {
+    addReferencePlane,
+    getThreeSceneWrapper,
+    mountManagedThreeScene,
+  } from "./functions/three";
 
   const BASE_RADIUS = 1.35;
   const HEIGHT = 3;

@@ -1,26 +1,26 @@
 ---
 import ThreeSceneShell from "./shared/ThreeSceneShell.astro";
 
-const lowPowerControlId = Astro.props.lowPowerControlId ?? "";
+const pixelRatioCapControlId = Astro.props.pixelRatioCapControlId ?? "";
 const antialiasControlId = Astro.props.antialiasControlId ?? "";
 ---
 
 <ThreeSceneShell
   id="two-lines-parallel-to-same-line-wrapper"
-  lowPowerControlId={lowPowerControlId}
+  pixelRatioCapControlId={pixelRatioCapControlId}
   antialiasControlId={antialiasControlId}
 />
 
 <script>
   import * as THREE from "three";
-import { Line2 } from "three/addons/lines/Line2.js";
-import { LineGeometry } from "three/addons/lines/LineGeometry.js";
-import { LineMaterial } from "three/addons/lines/LineMaterial.js";
-import {
-addReferencePlane,
-getThreeSceneWrapper,
-mountManagedThreeScene,
-} from "./functions/three";
+  import { Line2 } from "three/addons/lines/Line2.js";
+  import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+  import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+  import {
+    addReferencePlane,
+    getThreeSceneWrapper,
+    mountManagedThreeScene,
+  } from "./functions/three";
 
   const wrapper = getThreeSceneWrapper(
     "two-lines-parallel-to-same-line-wrapper",
@@ -93,23 +93,35 @@ mountManagedThreeScene,
         });
 
         const plane1 = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane1.position.copy(centers[0].clone().add(centers[1]).multiplyScalar(0.5));
+        plane1.position.copy(
+          centers[0].clone().add(centers[1]).multiplyScalar(0.5),
+        );
         plane1.lookAt(
-          plane1.position.clone().add(direction.clone().cross(centers[1].clone().sub(centers[0]))),
+          plane1.position
+            .clone()
+            .add(direction.clone().cross(centers[1].clone().sub(centers[0]))),
         );
         scene.add(plane1);
 
         const plane2 = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane2.position.copy(centers[0].clone().add(centers[2]).multiplyScalar(0.5));
+        plane2.position.copy(
+          centers[0].clone().add(centers[2]).multiplyScalar(0.5),
+        );
         plane2.lookAt(
-          plane2.position.clone().add(direction.clone().cross(centers[2].clone().sub(centers[0]))),
+          plane2.position
+            .clone()
+            .add(direction.clone().cross(centers[2].clone().sub(centers[0]))),
         );
         scene.add(plane2);
 
         const plane3 = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane3.position.copy(centers[1].clone().add(centers[2]).multiplyScalar(0.5));
+        plane3.position.copy(
+          centers[1].clone().add(centers[2]).multiplyScalar(0.5),
+        );
         plane3.lookAt(
-          plane3.position.clone().add(direction.clone().cross(centers[2].clone().sub(centers[1]))),
+          plane3.position
+            .clone()
+            .add(direction.clone().cross(centers[2].clone().sub(centers[1]))),
         );
         scene.add(plane3);
       },

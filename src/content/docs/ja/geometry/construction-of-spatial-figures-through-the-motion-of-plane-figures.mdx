@@ -13,7 +13,11 @@ import RotatingTriangleCreatesCone from "@/components/three.js/RotatingTriangleC
 import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.astro";
 import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.astro";
 
-<SceneRenderToggle id="geometry-low-power-toggle" checked={false} locale="ja" />
+<SceneRenderToggle
+  id="geometry-pixel-ratio-cap-toggle"
+  checked={false}
+  locale="ja"
+/>
 <SceneRenderToggle
   id="geometry-antialias-toggle"
   checked={true}
@@ -27,7 +31,7 @@ import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.as
 
 <MovingLineCreatesFlatPlane
   linePositionControlId="moving-line-flat-plane-position"
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
@@ -47,12 +51,12 @@ import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.as
 円柱や円錐すいの側面は、1つの線分が定直線（軸）のまわりに回転してできる曲面とみなせます。
 
 <MovingLineCreatesCylindricalSurface
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
 <MovingLineCreatesConicalSurface
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
@@ -62,7 +66,7 @@ import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.as
 
 <MovingTriangleCreatesTriangularPrism
   heightControlId="moving-triangle-prism-height"
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
@@ -82,11 +86,11 @@ import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.as
 面を回転させると、その回転した軌跡によって立体が作られます。
 
 <RotatingSquareCreatesCylinder
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
 <RotatingTriangleCreatesCone
-  lowPowerControlId="geometry-low-power-toggle"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
