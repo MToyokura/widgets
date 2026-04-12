@@ -32,20 +32,10 @@ const antialiasControlId = Astro.props.antialiasControlId ?? "";
 
 <script>
   import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { Line2 } from "three/addons/lines/Line2.js";
 import { LineGeometry } from "three/addons/lines/LineGeometry.js";
 import { LineMaterial } from "three/addons/lines/LineMaterial.js";
-import {
-createLowPowerRenderer,
-disposeRenderer,
-disposeSceneResources,
-initializeThreeScene,
-observeAntialiasPreference,
-observeLowPowerPreference,
-observeWrapperSize,
-setRendererPerformanceMode,
-} from "./functions/three";
+import { mountManagedThreeScene } from "./functions/three";
 
   const wrappers = document.querySelectorAll(
     "#perpendicular-line-and-plane-wrapper .threejs-viz",
@@ -56,27 +46,12 @@ setRendererPerformanceMode,
       continue;
     }
 
-    let sceneHandle: ReturnType<typeof initializeThreeScene> | undefined;
-
-    const mountScene = () => {
-      const lowPowerControlId = wrapper.dataset.lowPowerControlId || "";
-      const antialiasControlId = wrapper.dataset.antialiasControlId || "";
-
-      const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xe0e0e0);
-
-      const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-      camera.position.set(5, 3, 6);
-      camera.lookAt(0, 0, 0);
-
-      const renderer = createLowPowerRenderer(
-        wrapper,
-        lowPowerControlId,
-        antialiasControlId,
-      );
-
-      const resolution = new THREE.Vector2(1, 1);
-      const unifiedThickness = 2.5;
+    mountManagedThreeScene(wrapper, {
+      cameraPosition: [5, 3, 6],
+      cameraLookAt: [0, 0, 0],
+      setup: ({ scene, camera, addRenderHook, trackResolutionTarget }) => {
+        const resolution = new THREE.Vector2(1, 1);
+        const unifiedThickness = 2.5;
 
       const planeGeometry = new THREE.PlaneGeometry(4, 4);
       const planeMaterial = new THREE.MeshBasicMaterial({
@@ -157,57 +132,15 @@ setRendererPerformanceMode,
       angleSymbol.renderOrder = 3;
       scene.add(angleSymbol);
 
-      const controls = new OrbitControls(camera, renderer.domElement);
-      controls.enableDamping = false;
-
-      function render() {
+      addRenderHook(() => {
         angleSymbol.rotation.y = Math.atan2(
           camera.position.x,
           camera.position.z,
         );
-        renderer.render(scene, camera);
-      }
+      });
 
-      function resizeScene(width: number, height: number) {
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(width, height, false);
-
-        planeLineMaterial.resolution.set(width, height);
-        solidMat.resolution.set(width, height);
-        dashedMat.resolution.set(width, height);
-        angleMat.resolution.set(width, height);
-
-        render();
-      }
-
-      controls.addEventListener("change", render);
-      const stopLowPowerObserver = observeLowPowerPreference(
-        lowPowerControlId,
-        (lowPower) => {
-          setRendererPerformanceMode(renderer, lowPower);
-          render();
-        },
-      );
-      const stopAntialiasObserver = observeAntialiasPreference(
-        antialiasControlId,
-        () => {
-          sceneHandle?.remount();
-        },
-      );
-      const resizeObserver = observeWrapperSize(wrapper, resizeScene);
-
-      return () => {
-        controls.dispose();
-        stopLowPowerObserver?.();
-        stopAntialiasObserver?.();
-        resizeObserver.disconnect();
-        disposeSceneResources(scene);
-        disposeRenderer(renderer);
-      };
-    };
-
-    sceneHandle = initializeThreeScene(wrapper, mountScene);
+        trackResolutionTarget(planeLineMaterial, solidMat, dashedMat, angleMat);
+      },
+    });
   }
 </script>

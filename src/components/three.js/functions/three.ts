@@ -1,7 +1,48 @@
 import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const LOW_POWER_PIXEL_RATIO = 1.25;
 const STANDARD_PIXEL_RATIO = 2;
+
+type Vector3Tuple = [x: number, y: number, z: number];
+
+type ResolutionTarget = {
+  resolution: {
+    set: (width: number, height: number) => void;
+  };
+};
+
+export type ManagedThreeSceneContext = {
+  wrapper: HTMLDivElement;
+  scene: THREE.Scene;
+  camera: THREE.PerspectiveCamera;
+  renderer: THREE.WebGLRenderer;
+  controls: OrbitControls;
+  lowPowerControlId: string;
+  antialiasControlId: string;
+  addCleanup: (cleanup: () => void) => void;
+  addRenderHook: (renderHook: () => void) => void;
+  addResizeHook: (resizeHook: (width: number, height: number) => void) => void;
+  trackResolutionTarget: (...targets: ResolutionTarget[]) => void;
+  render: () => void;
+};
+
+type ManagedThreeSceneOptions = {
+  background?: THREE.ColorRepresentation;
+  cameraPosition: Vector3Tuple;
+  cameraLookAt?: Vector3Tuple;
+  configureControls?: (controls: OrbitControls) => void;
+  setup: (context: ManagedThreeSceneContext) => void;
+};
+
+type ReferencePlaneOptions = {
+  size?: number;
+  segments?: number;
+  planeColor?: THREE.ColorRepresentation;
+  opacity?: number;
+  gridColor?: THREE.ColorRepresentation;
+  gridSecondaryColor?: THREE.ColorRepresentation;
+};
 
 function getCheckboxControl(controlId: string) {
   const control = document.getElementById(controlId);
@@ -119,6 +160,153 @@ export function createLowPowerRenderer(
   wrapper.appendChild(renderer.domElement);
 
   return renderer;
+}
+
+export function addReferencePlane(
+  scene: THREE.Scene,
+  options: ReferencePlaneOptions = {},
+) {
+  const size = options.size ?? 4.4;
+  const plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(size, size),
+    new THREE.MeshBasicMaterial({
+      color: options.planeColor ?? 0xf8fafc,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: options.opacity ?? 0.5,
+    }),
+  );
+
+  plane.rotation.x = -Math.PI / 2;
+
+  const grid = new THREE.GridHelper(
+    size,
+    options.segments ?? 8,
+    options.gridColor ?? 0x94a3b8,
+    options.gridSecondaryColor ?? 0xcbd5e1,
+  );
+
+  scene.add(plane);
+  scene.add(grid);
+
+  return { plane, grid };
+}
+
+export function mountManagedThreeScene(
+  wrapper: HTMLDivElement,
+  options: ManagedThreeSceneOptions,
+) {
+  let sceneHandle: ReturnType<typeof initializeThreeScene> | undefined;
+
+  const mountScene = () => {
+    const lowPowerControlId = wrapper.dataset.lowPowerControlId || "";
+    const antialiasControlId = wrapper.dataset.antialiasControlId || "";
+    const scene = new THREE.Scene();
+
+    scene.background = new THREE.Color(options.background ?? 0xe0e0e0);
+
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    camera.position.set(...options.cameraPosition);
+
+    if (options.cameraLookAt) {
+      camera.lookAt(...options.cameraLookAt);
+    }
+
+    const renderer = createLowPowerRenderer(
+      wrapper,
+      lowPowerControlId,
+      antialiasControlId,
+    );
+    const controls = new OrbitControls(camera, renderer.domElement);
+    const cleanupCallbacks: Array<() => void> = [];
+    const renderHooks: Array<() => void> = [];
+    const resizeHooks: Array<(width: number, height: number) => void> = [];
+    const resolutionTargets: ResolutionTarget[] = [];
+
+    options.configureControls?.(controls);
+
+    const render = () => {
+      for (const renderHook of renderHooks) {
+        renderHook();
+      }
+
+      renderer.render(scene, camera);
+    };
+
+    options.setup({
+      wrapper,
+      scene,
+      camera,
+      renderer,
+      controls,
+      lowPowerControlId,
+      antialiasControlId,
+      addCleanup: (cleanup) => {
+        cleanupCallbacks.push(cleanup);
+      },
+      addRenderHook: (renderHook) => {
+        renderHooks.push(renderHook);
+      },
+      addResizeHook: (resizeHook) => {
+        resizeHooks.push(resizeHook);
+      },
+      trackResolutionTarget: (...targets) => {
+        resolutionTargets.push(...targets);
+      },
+      render,
+    });
+
+    const resize = (width: number, height: number) => {
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height, false);
+
+      for (const target of resolutionTargets) {
+        target.resolution.set(width, height);
+      }
+
+      for (const resizeHook of resizeHooks) {
+        resizeHook(width, height);
+      }
+
+      render();
+    };
+
+    controls.addEventListener("change", render);
+
+    const stopLowPowerObserver = observeLowPowerPreference(
+      lowPowerControlId,
+      (lowPower) => {
+        setRendererPerformanceMode(renderer, lowPower);
+        render();
+      },
+    );
+    const stopAntialiasObserver = observeAntialiasPreference(
+      antialiasControlId,
+      () => {
+        sceneHandle?.remount();
+      },
+    );
+    const resizeObserver = observeWrapperSize(wrapper, resize);
+
+    return () => {
+      controls.dispose();
+      stopLowPowerObserver?.();
+      stopAntialiasObserver?.();
+      resizeObserver.disconnect();
+
+      for (let index = cleanupCallbacks.length - 1; index >= 0; index -= 1) {
+        cleanupCallbacks[index]();
+      }
+
+      disposeSceneResources(scene);
+      disposeRenderer(renderer);
+    };
+  };
+
+  sceneHandle = initializeThreeScene(wrapper, mountScene);
+
+  return sceneHandle;
 }
 
 export function observeCheckboxPreference(

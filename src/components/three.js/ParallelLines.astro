@@ -32,19 +32,12 @@ const antialiasControlId = Astro.props.antialiasControlId ?? "";
 
 <script>
   import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { Line2 } from "three/addons/lines/Line2.js";
 import { LineGeometry } from "three/addons/lines/LineGeometry.js";
 import { LineMaterial } from "three/addons/lines/LineMaterial.js";
 import {
-createLowPowerRenderer,
-disposeRenderer,
-disposeSceneResources,
-initializeThreeScene,
-observeAntialiasPreference,
-observeLowPowerPreference,
-observeWrapperSize,
-setRendererPerformanceMode,
+addReferencePlane,
+mountManagedThreeScene,
 } from "./functions/three";
 
   const wrapper = document.querySelector(
@@ -52,40 +45,13 @@ setRendererPerformanceMode,
   );
 
   if (wrapper instanceof HTMLDivElement) {
-    let sceneHandle: ReturnType<typeof initializeThreeScene> | undefined;
+    mountManagedThreeScene(wrapper, {
+      cameraPosition: [3.5, 3.5, 7.2],
+      cameraLookAt: [0, 1.6, 0],
+      setup: ({ scene, trackResolutionTarget }) => {
+        addReferencePlane(scene);
 
-    const mountScene = () => {
-      const lowPowerControlId = wrapper.dataset.lowPowerControlId || "";
-      const antialiasControlId = wrapper.dataset.antialiasControlId || "";
-
-      const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xe0e0e0);
-
-      const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-      camera.position.set(3.5, 3.5, 7.2);
-      camera.lookAt(0, 1.6, 0);
-
-      const renderer = createLowPowerRenderer(
-        wrapper,
-        lowPowerControlId,
-        antialiasControlId,
-      );
-
-      const controls = new OrbitControls(camera, renderer.domElement);
       const resolution = new THREE.Vector2(1, 1);
-
-      const plane = new THREE.Mesh(
-        new THREE.PlaneGeometry(4.4, 4.4),
-        new THREE.MeshBasicMaterial({
-          color: 0xf8fafc,
-          side: THREE.DoubleSide,
-          transparent: true,
-          opacity: 0.5,
-        }),
-      );
-      plane.rotation.x = -Math.PI / 2;
-      scene.add(plane);
-      scene.add(new THREE.GridHelper(4.4, 8, 0x94a3b8, 0xcbd5e1));
 
       const direction = new THREE.Vector3(1.9, 0.8, 0.9).normalize();
       const halfLength = 1.85;
@@ -171,47 +137,9 @@ setRendererPerformanceMode,
       intersectionPlane.rotation.setFromRotationMatrix(planeBasis);
 
       scene.add(intersectionPlane);
-      // ------------------------------------------------
 
-      function resize(width: number, height: number) {
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-        renderer.setSize(width, height, false);
-        blackLine.material.resolution.set(width, height);
-        redLine.material.resolution.set(width, height);
-        render();
-      }
-
-      function render() {
-        renderer.render(scene, camera);
-      }
-
-      controls.addEventListener("change", render);
-      const stopLowPowerObserver = observeLowPowerPreference(
-        lowPowerControlId,
-        (lowPower) => {
-          setRendererPerformanceMode(renderer, lowPower);
-          render();
-        },
-      );
-      const stopAntialiasObserver = observeAntialiasPreference(
-        antialiasControlId,
-        () => {
-          sceneHandle?.remount();
-        },
-      );
-      const resizeObserver = observeWrapperSize(wrapper, resize);
-
-      return () => {
-        controls.dispose();
-        stopLowPowerObserver?.();
-        stopAntialiasObserver?.();
-        resizeObserver.disconnect();
-        disposeSceneResources(scene);
-        disposeRenderer(renderer);
-      };
-    };
-
-    sceneHandle = initializeThreeScene(wrapper, mountScene);
+        trackResolutionTarget(blackLine.material, redLine.material);
+      },
+    });
   }
 </script>
