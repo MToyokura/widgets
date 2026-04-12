@@ -13,11 +13,11 @@ const antialiasControlId = Astro.props.antialiasControlId ?? "";
 
 <script>
   import * as THREE from "three";
-import {
-addReferencePlane,
-getThreeSceneWrapper,
-mountManagedThreeScene,
-} from "./functions/three";
+  import {
+    addReferencePlane,
+    getThreeSceneWrapper,
+    mountManagedThreeScene,
+  } from "./functions/three";
 
   const wrapper = getThreeSceneWrapper("three-points-not-collinear-wrapper");
   if (wrapper instanceof HTMLDivElement) {
@@ -27,18 +27,18 @@ mountManagedThreeScene,
       setup: ({ scene }) => {
         addReferencePlane(scene);
 
-      const points = [
-        new THREE.Vector3(-1.5, 0, -0.8),
-        new THREE.Vector3(1.2, 0, -0.4),
-        new THREE.Vector3(0.2, 0, 1.5),
-      ];
-      const markerGeometry = new THREE.SphereGeometry(0.06, 12, 8);
-      const markerMaterial = new THREE.MeshBasicMaterial({ color: 0xdc2626 });
-      for (const p of points) {
-        const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-        marker.position.copy(p);
-        scene.add(marker);
-      }
+        const points = [
+          new THREE.Vector3(-1.5, 0, -0.8),
+          new THREE.Vector3(1.2, 0, -0.4),
+          new THREE.Vector3(0.2, 0, 1.5),
+        ];
+        const markerGeometry = new THREE.SphereGeometry(0.06, 12, 8);
+        const markerMaterial = new THREE.MeshBasicMaterial({ color: 0xdc2626 });
+        for (const p of points) {
+          const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+          marker.position.copy(p);
+          scene.add(marker);
+        }
 
         return undefined;
       },
