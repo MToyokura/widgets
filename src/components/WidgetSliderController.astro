@@ -25,7 +25,11 @@ const {
     data-value-prefix={valuePrefix}
     data-value-suffix={valueSuffix}
   />
-  {description && <p class="widget-slider-controller__description">{description}</p>}
+  {
+    description && (
+      <p class="widget-slider-controller__description">{description}</p>
+    )
+  }
 </div>
 
 <style>
@@ -41,11 +45,14 @@ const {
     width: 100%;
   }
 
-  .widget-slider-controller__description {}
+  .widget-slider-controller__description {
+  }
 </style>
 
 <script>
-  for (const root of document.querySelectorAll("[data-widget-slider-controller]")) {
+  for (const root of document.querySelectorAll(
+    "[data-widget-slider-controller]",
+  )) {
     if (!(root instanceof HTMLDivElement) || root.dataset.ready === "true") {
       continue;
     }

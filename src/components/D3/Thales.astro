@@ -25,9 +25,7 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
 ---
 
 <WidgetContainer id="thales-wrapper">
-  <svg
-    viewBox={`0 0 ${width} ${height}`}
-  >
+  <svg viewBox={`0 0 ${width} ${height}`}>
     <circle
       cx={cx}
       cy={cy}
@@ -104,13 +102,13 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
 
 <script>
   import * as d3 from "d3";
-import {
-getAngleDegrees,
-getAngleLabelPosition,
-getPointOnCircle,
-getRightAnglePath,
-getTrianglePath,
-} from "./functions/geometry";
+  import {
+    getAngleDegrees,
+    getAngleLabelPosition,
+    getPointOnCircle,
+    getRightAnglePath,
+    getTrianglePath,
+  } from "./functions/geometry";
 
   function setupInteractivity() {
     const startHandle = d3.select<SVGCircleElement, unknown>(

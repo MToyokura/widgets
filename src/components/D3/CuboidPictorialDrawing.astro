@@ -17,7 +17,10 @@ type Props = {
   zScaleControlId?: string;
 };
 
-function getPositiveNumber(value: number | string | undefined, fallback: number) {
+function getPositiveNumber(
+  value: number | string | undefined,
+  fallback: number,
+) {
   if (typeof value === "number") {
     return Number.isFinite(value) && value > 0 ? value : fallback;
   }
@@ -94,7 +97,12 @@ const frontFace = [
   frontBottomLeft,
 ];
 const topFace = [frontTopLeft, frontTopRight, backTopRight, backTopLeft];
-const sideFace = [frontTopRight, backTopRight, backBottomRight, frontBottomRight];
+const sideFace = [
+  frontTopRight,
+  backTopRight,
+  backBottomRight,
+  frontBottomRight,
+];
 
 const visibleEdges = [
   [frontTopLeft, frontTopRight],
@@ -138,102 +146,92 @@ const resolvedYScaleControlId = yScaleControlId ?? `${baseId}-y-scale`;
 const resolvedZScaleControlId = zScaleControlId ?? `${baseId}-z-scale`;
 ---
 
-<WidgetContainer
-  aspectRatio={`${viewBoxWidth} / ${viewBoxHeight}`}
-  maxWidth="720px"
->
-  <svg
-    viewBox={`${minX} ${minY} ${viewBoxWidth} ${viewBoxHeight}`}
-    role="img"
-    aria-labelledby={titleId}
-    data-cube-pictorial-svg
-    data-x-scale-control-id={resolvedXScaleControlId}
-    data-y-scale-control-id={resolvedYScaleControlId}
-    data-z-scale-control-id={resolvedZScaleControlId}
-    data-initial-x-scale={xScale}
-    data-initial-y-scale={yScale}
-    data-initial-z-scale={zScale}
+<div class="not-content">
+  <WidgetContainer
+    aspectRatio={`${viewBoxWidth} / ${viewBoxHeight}`}
+    maxWidth="720px"
   >
-    <title id={titleId}>{text.title}</title>
+    <svg
+      viewBox={`${minX} ${minY} ${viewBoxWidth} ${viewBoxHeight}`}
+      role="img"
+      aria-labelledby={titleId}
+      data-cube-pictorial-svg
+      data-x-scale-control-id={resolvedXScaleControlId}
+      data-y-scale-control-id={resolvedYScaleControlId}
+      data-z-scale-control-id={resolvedZScaleControlId}
+      data-initial-x-scale={xScale}
+      data-initial-y-scale={yScale}
+      data-initial-z-scale={zScale}
+    >
+      <title id={titleId}>{text.title}</title>
 
-    <path
-      class="face"
-      data-face="top"
-      d={getClosedPath(topFace)}
-    ></path>
-    <path
-      class="face"
-      data-face="side"
-      d={getClosedPath(sideFace)}
-    ></path>
-    <path
-      class="face"
-      data-face="front"
-      d={getClosedPath(frontFace)}
-    ></path>
+      <path class="face" data-face="top" d={getClosedPath(topFace)}></path>
+      <path class="face" data-face="side" d={getClosedPath(sideFace)}></path>
+      <path class="face" data-face="front" d={getClosedPath(frontFace)}></path>
 
-    {
-      hiddenEdges.map(([start, end], index) => (
-        <line
-          class="edge edge-hidden"
-          data-edge-kind="hidden"
-          data-edge-index={index}
-          x1={start.x}
-          y1={start.y}
-          x2={end.x}
-          y2={end.y}
-        ></line>
-      ))
-    }
+      {
+        hiddenEdges.map(([start, end], index) => (
+          <line
+            class="edge edge-hidden"
+            data-edge-kind="hidden"
+            data-edge-index={index}
+            x1={start.x}
+            y1={start.y}
+            x2={end.x}
+            y2={end.y}
+          />
+        ))
+      }
 
-    {
-      visibleEdges.map(([start, end], index) => (
-        <line
-          class="edge edge-visible"
-          data-edge-kind="visible"
-          data-edge-index={index}
-          x1={start.x}
-          y1={start.y}
-          x2={end.x}
-          y2={end.y}
-        ></line>
-      ))
-    }
-  </svg>
+      {
+        visibleEdges.map(([start, end], index) => (
+          <line
+            class="edge edge-visible"
+            data-edge-kind="visible"
+            data-edge-index={index}
+            x1={start.x}
+            y1={start.y}
+            x2={end.x}
+            y2={end.y}
+          />
+        ))
+      }
+    </svg>
 
-  <div class="pictorial-drawing-controls not-content" slot="controls">
-    <div>
-      <WidgetSliderController
-        id={resolvedXScaleControlId}
-        label={text.xLabel}
-        min={0.5}
-        max={2.5}
-        step={0.1}
-        value={xScale}
-      />
+    <div class="pictorial-drawing-controls" slot="controls">
+      <div>
+        <WidgetSliderController
+          id={resolvedXScaleControlId}
+          label={text.xLabel}
+          min={0.5}
+          max={2.5}
+          step={0.1}
+          value={xScale}
+        />
+      </div>
+      <div>
+        <WidgetSliderController
+          id={resolvedYScaleControlId}
+          label={text.yLabel}
+          min={0.5}
+          max={2.5}
+          step={0.1}
+          value={yScale}
+        />
+      </div>
+      <div>
+        <WidgetSliderController
+          id={resolvedZScaleControlId}
+          label={text.zLabel}
+          min={0.5}
+          max={2.5}
+          step={0.1}
+          value={zScale}
+        />
+      </div>
     </div>
-    <div>
-      <WidgetSliderController
-        id={resolvedYScaleControlId}
-        label={text.yLabel}
-        min={0.5}
-        max={2.5}
-        step={0.1}
-        value={yScale}
-      />
-    </div>
-    <div>
-      <WidgetSliderController
-        id={resolvedZScaleControlId}
-        label={text.zLabel}
-        min={0.5}
-        max={2.5}
-        step={0.1}
-        value={zScale}
-      />
-    </div>
-  </div>
-</WidgetContainer>
+  </WidgetContainer>
+</div>
 
 <style>
   .pictorial-drawing-controls {
@@ -280,7 +278,10 @@ const resolvedZScaleControlId = zScaleControlId ?? `${baseId}-z-scale`;
   const ORIGIN = { x: 108, y: 110 };
   const VIEWBOX_PADDING = 24;
 
-  function getPositiveNumber(value: string | number | null | undefined, fallback: number) {
+  function getPositiveNumber(
+    value: string | number | null | undefined,
+    fallback: number,
+  ) {
     if (typeof value === "number") {
       return Number.isFinite(value) && value > 0 ? value : fallback;
     }
@@ -319,9 +320,19 @@ const resolvedZScaleControlId = zScaleControlId ?? `${baseId}-z-scale`;
     const backTopRight = addPoints(ORIGIN, xAxis, zAxis);
     const backBottomRight = addPoints(ORIGIN, xAxis, yAxis, zAxis);
     const backBottomLeft = addPoints(ORIGIN, yAxis, zAxis);
-    const frontFace = [frontTopLeft, frontTopRight, frontBottomRight, frontBottomLeft];
+    const frontFace = [
+      frontTopLeft,
+      frontTopRight,
+      frontBottomRight,
+      frontBottomLeft,
+    ];
     const topFace = [frontTopLeft, frontTopRight, backTopRight, backTopLeft];
-    const sideFace = [frontTopRight, backTopRight, backBottomRight, frontBottomRight];
+    const sideFace = [
+      frontTopRight,
+      backTopRight,
+      backBottomRight,
+      frontBottomRight,
+    ];
     const visibleEdges = [
       [frontTopLeft, frontTopRight],
       [frontTopRight, frontBottomRight],
@@ -345,10 +356,14 @@ const resolvedZScaleControlId = zScaleControlId ?? `${baseId}-z-scale`;
       backBottomRight,
       backBottomLeft,
     ];
-    const minX = Math.min(...allPoints.map((point) => point.x)) - VIEWBOX_PADDING;
-    const maxX = Math.max(...allPoints.map((point) => point.x)) + VIEWBOX_PADDING;
-    const minY = Math.min(...allPoints.map((point) => point.y)) - VIEWBOX_PADDING;
-    const maxY = Math.max(...allPoints.map((point) => point.y)) + VIEWBOX_PADDING;
+    const minX =
+      Math.min(...allPoints.map((point) => point.x)) - VIEWBOX_PADDING;
+    const maxX =
+      Math.max(...allPoints.map((point) => point.x)) + VIEWBOX_PADDING;
+    const minY =
+      Math.min(...allPoints.map((point) => point.y)) - VIEWBOX_PADDING;
+    const maxY =
+      Math.max(...allPoints.map((point) => point.y)) + VIEWBOX_PADDING;
 
     return {
       frontFace,
@@ -391,7 +406,9 @@ const resolvedZScaleControlId = zScaleControlId ?? `${baseId}-z-scale`;
     const visibleEdges = Array.from(
       svg.querySelectorAll('[data-edge-kind="visible"]'),
     );
-    const hiddenEdges = Array.from(svg.querySelectorAll('[data-edge-kind="hidden"]'));
+    const hiddenEdges = Array.from(
+      svg.querySelectorAll('[data-edge-kind="hidden"]'),
+    );
 
     if (
       !(topFace instanceof SVGPathElement) ||
@@ -404,15 +421,21 @@ const resolvedZScaleControlId = zScaleControlId ?? `${baseId}-z-scale`;
     const render = () => {
       const geometry = getGeometry(
         getPositiveNumber(
-          xControl instanceof HTMLInputElement ? xControl.value : svg.dataset.initialXScale,
+          xControl instanceof HTMLInputElement
+            ? xControl.value
+            : svg.dataset.initialXScale,
           1,
         ),
         getPositiveNumber(
-          yControl instanceof HTMLInputElement ? yControl.value : svg.dataset.initialYScale,
+          yControl instanceof HTMLInputElement
+            ? yControl.value
+            : svg.dataset.initialYScale,
           1,
         ),
         getPositiveNumber(
-          zControl instanceof HTMLInputElement ? zControl.value : svg.dataset.initialZScale,
+          zControl instanceof HTMLInputElement
+            ? zControl.value
+            : svg.dataset.initialZScale,
           1,
         ),
       );

@@ -51,9 +51,7 @@ const initialTranslatedCentroid = translatePoint(
 ---
 
 <WidgetContainer id="translation-wrapper">
-  <svg
-    viewBox={`0 0 ${width} ${height}`}
-  >
+  <svg viewBox={`0 0 ${width} ${height}`}>
     {
       gridXs.map((x) => (
         <line
@@ -112,7 +110,7 @@ const initialTranslatedCentroid = translatePoint(
 
 <script>
   import * as d3 from "d3";
-import { getPolygonPath, translatePoint } from "./functions/geometry";
+  import { getPolygonPath, translatePoint } from "./functions/geometry";
 
   function getCentroid(points: { x: number; y: number }[]) {
     return {

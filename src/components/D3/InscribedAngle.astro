@@ -37,9 +37,7 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
 ---
 
 <WidgetContainer id="inscribed-angle-wrapper">
-  <svg
-    viewBox={`0 0 ${width} ${height}`}
-  >
+  <svg viewBox={`0 0 ${width} ${height}`}>
     <circle
       cx={cx}
       cy={cy}
@@ -110,14 +108,14 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
 
 <script>
   import * as d3 from "d3";
-import {
-getAngleArcPath,
-getAngleDegrees,
-getAngleLabelPosition,
-getCircleArcPathExcludingAngle,
-getPointOnCircle,
-getTrianglePath,
-} from "./functions/geometry";
+  import {
+    getAngleArcPath,
+    getAngleDegrees,
+    getAngleLabelPosition,
+    getCircleArcPathExcludingAngle,
+    getPointOnCircle,
+    getTrianglePath,
+  } from "./functions/geometry";
 
   function setupInteractivity() {
     const handleA = d3.select<SVGCircleElement, unknown>(

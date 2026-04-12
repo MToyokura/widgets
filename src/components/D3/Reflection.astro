@@ -51,9 +51,7 @@ const initialLineHandle = getPointOnCircle(
 ---
 
 <WidgetContainer id="reflection-wrapper">
-  <svg
-    viewBox={`0 0 ${width} ${height}`}
-  >
+  <svg viewBox={`0 0 ${width} ${height}`}>
     {
       Array.from({ length: Math.floor(width / 40) + 1 }, (_, i) => i * 40).map(
         (x) => (
@@ -135,12 +133,12 @@ const initialLineHandle = getPointOnCircle(
 
 <script>
   import * as d3 from "d3";
-import {
-getLinePathThroughPoint,
-getPointOnCircle,
-getPolygonPath,
-reflectPointAcrossLine,
-} from "./functions/geometry";
+  import {
+    getLinePathThroughPoint,
+    getPointOnCircle,
+    getPolygonPath,
+    reflectPointAcrossLine,
+  } from "./functions/geometry";
 
   function getConnectorPath(
     originalPoints: { x: number; y: number }[],

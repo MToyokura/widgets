@@ -1,76 +1,78 @@
 ---
 const {
-	id,
-	class: className = "",
-	style: inlineStyle = "",
-	sceneClass = "",
-	aspectRatio = "1 / 1",
-	maxWidth = "720px",
-	minHeight = "320px",
-	background = "#f3f4f6",
-	...containerProps
+  id,
+  class: className = "",
+  style: inlineStyle = "",
+  sceneClass = "",
+  aspectRatio = "1 / 1",
+  maxWidth = "720px",
+  minHeight = "320px",
+  background = "#f3f4f6",
+  ...containerProps
 } = Astro.props;
 
 const hasControlsSlot = Astro.slots.has("controls");
 
 const containerStyle = [
-	`--widget-container-aspect-ratio: ${aspectRatio}`,
-	`--widget-container-max-width: ${maxWidth}`,
-	`--widget-container-min-height: ${minHeight}`,
-	`--widget-container-background: ${background}`,
-	inlineStyle,
+  `--widget-container-aspect-ratio: ${aspectRatio}`,
+  `--widget-container-max-width: ${maxWidth}`,
+  `--widget-container-min-height: ${minHeight}`,
+  `--widget-container-background: ${background}`,
+  inlineStyle,
 ]
-	.filter(Boolean)
-	.join("; ");
+  .filter(Boolean)
+  .join("; ");
 ---
 
 <div
-	id={id}
-	class:list={["widget-container", className]}
-	style={containerStyle}
-	{...containerProps}
+  id={id}
+  class:list={["widget-container", className]}
+  style={containerStyle}
+  {...containerProps}
 >
-	<div class:list={["widget-container__scene", sceneClass]}>
-		<slot />
-	</div>
+  <div class:list={["widget-container__scene", sceneClass]}>
+    <slot />
+  </div>
 
-	{hasControlsSlot && (
-		<div class="widget-container__controls">
-			<slot name="controls" />
-		</div>
-	)}
+  {
+    hasControlsSlot && (
+      <div class="widget-container__controls">
+        <slot name="controls" />
+      </div>
+    )
+  }
 </div>
 
 <style>
-	.widget-container {
-		width: 100%;
-		margin: 0 auto;
-	}
+  .widget-container {
+    width: 100%;
+    margin: 0 auto;
+  }
 
-	.widget-container__scene {
-		width: min(100%, var(--widget-container-max-width));
-		aspect-ratio: var(--widget-container-aspect-ratio);
-		min-height: min(var(--widget-container-min-height), 75vw);
-		margin: 0 auto;
-		border-radius: 8px;
-		overflow: hidden;
-		background: var(--widget-container-background);
-	}
+  .widget-container__scene {
+    width: min(100%, var(--widget-container-max-width));
+    aspect-ratio: var(--widget-container-aspect-ratio);
+    min-height: min(var(--widget-container-min-height), 75vw);
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--widget-container-background);
+  }
 
-	.widget-container__scene > :global(*) {
-		display: block;
-		width: 100%;
-		height: 100%;
-		max-width: none;
-	}
+  .widget-container__scene > :global(*) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+  }
 
-	.widget-container__controls {
-		width: min(100%, var(--widget-container-max-width));
-		margin: 1.5rem auto 0;
-	}
-	@media (max-width: 40rem) {
-		.widget-container__scene {
-			min-height: min(var(--widget-container-min-height), 85vw);
-		}
-	}
+  .widget-container__controls {
+    width: min(100%, var(--widget-container-max-width));
+    margin: 1.5rem auto 0;
+  }
+  @media (max-width: 40rem) {
+    .widget-container__scene {
+      min-height: min(var(--widget-container-min-height), 85vw);
+    }
+  }
 </style>

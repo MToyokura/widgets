@@ -39,16 +39,16 @@ const text = copy[locale as keyof typeof copy] ?? copy.ja;
 
 <script>
   import * as THREE from "three";
-import { Line2 } from "three/addons/lines/Line2.js";
-import { LineGeometry } from "three/addons/lines/LineGeometry.js";
-import { LineMaterial } from "three/addons/lines/LineMaterial.js";
-import {
-addReferencePlane,
-getRangeControlValue,
-getThreeSceneWrapper,
-mountManagedThreeScene,
-observeRangePreference,
-} from "./functions/three";
+  import { Line2 } from "three/addons/lines/Line2.js";
+  import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+  import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+  import {
+    addReferencePlane,
+    getRangeControlValue,
+    getThreeSceneWrapper,
+    mountManagedThreeScene,
+    observeRangePreference,
+  } from "./functions/three";
 
   const DEFAULT_LINE_OFFSET = 0;
   const MIN_LINE_OFFSET = 0;

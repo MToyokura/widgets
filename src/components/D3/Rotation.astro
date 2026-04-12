@@ -33,9 +33,7 @@ const initialAngleHandle = getPointOnCircle(
 ---
 
 <WidgetContainer id="rotation-wrapper">
-  <svg
-    viewBox={`0 0 ${width} ${height}`}
-  >
+  <svg viewBox={`0 0 ${width} ${height}`}>
     {
       Array.from({ length: Math.floor(width / 40) + 1 }, (_, i) => i * 40).map(
         (x) => (
@@ -132,12 +130,12 @@ const initialAngleHandle = getPointOnCircle(
 
 <script>
   import * as d3 from "d3";
-import {
-getCircleArcPath,
-getPointOnCircle,
-getPolygonPath,
-rotatePoint,
-} from "./functions/geometry";
+  import {
+    getCircleArcPath,
+    getPointOnCircle,
+    getPolygonPath,
+    rotatePoint,
+  } from "./functions/geometry";
 
   function setupInteractivity() {
     const originalShape = d3.select<SVGPathElement, unknown>(
