@@ -40,23 +40,23 @@ const toggleKind = kind === "antialias" ? "antialias" : "pixelRatioCap";
 const text = copy[language][toggleKind];
 ---
 
-<div class="scene-power-toggle">
-  <label class="scene-power-toggle__label" for={id}>
+<div class="scene-render-toggle">
+  <label class="scene-render-toggle__label" for={id}>
     <input
       id={id}
-      class="scene-power-toggle__input"
+      class="scene-render-toggle__input"
       type="checkbox"
       checked={checked}
     />
     <span>{label ?? text.label}</span>
   </label>
-  <p class="scene-power-toggle__description">
+  <p class="scene-render-toggle__description">
     {description ?? text.description}
   </p>
 </div>
 
 <style>
-  .scene-power-toggle {
+  .scene-render-toggle {
     margin: 0 0 1.5rem;
     padding: 0.875rem 1rem;
     border: 1px solid #cbd5e1;
@@ -64,7 +64,7 @@ const text = copy[language][toggleKind];
     background: #f8fafc;
   }
 
-  .scene-power-toggle__label {
+  .scene-render-toggle__label {
     display: inline-flex;
     align-items: center;
     gap: 0.625rem;
@@ -73,13 +73,13 @@ const text = copy[language][toggleKind];
     cursor: pointer;
   }
 
-  .scene-power-toggle__input {
+  .scene-render-toggle__input {
     inline-size: 1rem;
     block-size: 1rem;
     margin: 0;
   }
 
-  .scene-power-toggle__description {
+  .scene-render-toggle__description {
     margin: 0.5rem 0 0;
     font-size: 0.95rem;
     color: #475569;
