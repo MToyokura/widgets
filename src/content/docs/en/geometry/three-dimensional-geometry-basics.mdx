@@ -4,33 +4,87 @@ sidebar:
   order: 1010
 ---
 
-import PerpendicularLineAndPlane from "@/components/D3/PerpendicularLineAndPlane.astro";
-import ThreePointsNotCollinear from "@/components/D3/ThreePointsNotCollinear.astro";
-import LineAndPointNotOnLine from "@/components/D3/LineAndPointNotOnLine.astro";
-import IntersectingLinesOnPlane from "@/components/D3/IntersectingLinesOnPlane.astro";
+import PerpendicularLineAndPlane from "@/components/three.js/PerpendicularLineAndPlane.astro";
+import ThreePointsNotCollinear from "@/components/three.js/ThreePointsNotCollinear.astro";
+import LineAndPointNotOnLine from "@/components/three.js/LineAndPointNotOnLine.astro";
+import IntersectingLinesOnPlane from "@/components/three.js/IntersectingLinesOnPlane.astro";
+import IntersectingLinesAbovePlane from "@/components/three.js/IntersectingLinesAbovePlane.astro";
+import ParallelLines from "@/components/three.js/ParallelLines.astro";
+import SkewPosition from "@/components/three.js/SkewPosition.astro";
+import ScenePowerToggle from "@/components/three.js/ScenePowerToggle.astro";
 
-## Lines and Planes
+<ScenePowerToggle id="geometry-low-power-toggle" checked={false} />
+<ScenePowerToggle
+  id="geometry-antialias-toggle"
+  checked={true}
+  label="Antialiasing"
+  description="Smooths out edges, but increases rendering load and power consumption."
+/>
+
+## Determination of a Plane
 
 A plane is determined when it satisfies any of the following conditions:
 
-- Three points that are not on the same line
+- Three points not on the same line
 - A line and a point not on that line
 - Two intersecting lines
 
-### Three points that are not on the same line
+### Three points not on the same line
 
-<ThreePointsNotCollinear />
+<ThreePointsNotCollinear
+  locale="en"
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
 
 ### A line and a point not on that line
 
-<LineAndPointNotOnLine />
+<LineAndPointNotOnLine
+  locale="en"
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
 
 ### Two intersecting lines
 
-<IntersectingLinesOnPlane />
+<IntersectingLinesOnPlane
+  locale="en"
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Positional Relationship Between Two Lines
+
+### Intersecting
+
+<IntersectingLinesAbovePlane
+  locale="en"
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### Parallel (Not Intersecting)
+
+<ParallelLines
+  locale="en"
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### Skew Position (Neither Intersecting nor Parallel)
+
+<SkewPosition
+  locale="en"
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
 
 ## A line perpendicular to a plane
 
 To assert that a line is perpendicular to a plane, it is sufficient to show that it is perpendicular to two intersecting lines on that plane. Once this condition is met, the line is defined as being perpendicular to the entire plane, and as a result, the angle it forms with every line existing on the plane will be 90 degrees.
 
-<PerpendicularLineAndPlane />
+<PerpendicularLineAndPlane
+  locale="en"
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
