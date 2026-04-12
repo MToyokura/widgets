@@ -1,5 +1,5 @@
 ---
-title: Three-Dimensional Geometry Basics
+title: 空間における直線と平面
 sidebar:
   order: 1010
 ---
@@ -17,74 +17,74 @@ import ScenePowerToggle from "@/components/three.js/shared/ScenePowerToggle.astr
 <ScenePowerToggle
   id="geometry-antialias-toggle"
   checked={true}
-  label="Antialiasing"
-  description="Smooths out edges, but increases rendering load and power consumption."
+  label="アンチエイリアス"
+  description="輪郭を滑らかにしますが、描画負荷と消費電力は増えます。"
 />
 
-## Determination of a Plane
+## 平面の決定
 
-A plane is determined when it satisfies any of the following conditions:
+平面は下記のいずれかの条件を満たす場合に決定されます。
 
-- Three points not on the same line
-- A line and a point not on that line
-- Two intersecting lines
+- 同一直線上にない3点
+- 一つの直線とその上にない1点
+- 交わる２直線
 
-### Three points not on the same line
+### 同一直線上にない3点
 
 <ThreePointsNotCollinear
-  locale="en"
+  locale="ja"
   lowPowerControlId="geometry-low-power-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### A line and a point not on that line
+### 一つの直線とその上にない1点
 
 <LineAndPointNotOnLine
-  locale="en"
+  locale="ja"
   lowPowerControlId="geometry-low-power-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### Two intersecting lines
+### 交わる２直線
 
 <IntersectingLinesOnPlane
-  locale="en"
+  locale="ja"
   lowPowerControlId="geometry-low-power-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## Positional Relationship Between Two Lines
+## 2つの直線の位置関係
 
-### Intersecting
+### 交わる場合
 
 <IntersectingLinesAbovePlane
-  locale="en"
+  locale="ja"
   lowPowerControlId="geometry-low-power-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### Parallel (Not Intersecting)
+### 交わらず、平行な場合
 
 <ParallelLines
-  locale="en"
+  locale="ja"
   lowPowerControlId="geometry-low-power-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### Skew Position (Neither Intersecting nor Parallel)
+### 交わらず、並行でない場合（ねじれの位置）
 
 <SkewPosition
-  locale="en"
+  locale="ja"
   lowPowerControlId="geometry-low-power-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## A line perpendicular to a plane
+## 平面に垂直な直線
 
-To assert that a line is perpendicular to a plane, it is sufficient to show that it is perpendicular to two intersecting lines on that plane. Once this condition is met, the line is defined as being perpendicular to the entire plane, and as a result, the angle it forms with every line existing on the plane will be 90 degrees.
+直線が平面と垂直であると言い切るためには、その平面上の交わる2直線と垂直であることを示すだけで十分です。一度この条件が満たされれば、その直線は平面全体と垂直であると定義され、結果として平面上に存在するあらゆる直線とのなす角はすべて90度になります。
 
 <PerpendicularLineAndPlane
-  locale="en"
+  locale="ja"
   lowPowerControlId="geometry-low-power-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
