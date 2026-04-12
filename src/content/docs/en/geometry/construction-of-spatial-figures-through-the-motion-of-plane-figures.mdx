@@ -11,7 +11,6 @@ import MovingTriangleCreatesTriangularPrism from "@/components/three.js/MovingTr
 import RotatingSquareCreatesCylinder from "@/components/three.js/RotatingSquareCreatesCylinder.astro";
 import RotatingTriangleCreatesCone from "@/components/three.js/RotatingTriangleCreatesCone.astro";
 import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.astro";
-import WidgetSliderController from "@/components/WidgetSliderController.astro";
 
 <SceneRenderToggle
   id="geometry-pixel-ratio-cap-toggle"
@@ -30,22 +29,10 @@ import WidgetSliderController from "@/components/WidgetSliderController.astro";
 When a line segment is moved in parallel, the trace of its movement forms a single plane.
 
 <MovingLineCreatesFlatPlane
-  linePositionControlId="moving-line-flat-plane-position"
+  locale="en"
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
->
-  <WidgetSliderController
-    slot="controls"
-    id="moving-line-flat-plane-position"
-    label=""
-    min={0}
-    max={2.4}
-    step={0.1}
-    value={0}
-    valueSuffix=""
-    description=""
-  />
-</MovingLineCreatesFlatPlane>
+/>
 
 ## Creating a Curved Surface by Rotating a Line
 
@@ -66,22 +53,10 @@ The sides of a cylinder or a cone can be considered as a curved surface created 
 When a plane figure is moved in parallel, the trace of its movement forms a solid.
 
 <MovingTriangleCreatesTriangularPrism
-  heightControlId="moving-triangle-prism-height"
+  locale="en"
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
->
-  <WidgetSliderController
-    slot="controls"
-    id="moving-triangle-prism-height"
-    label="Adjust Height"
-    min={0}
-    max={2.4}
-    step={0.1}
-    value={0}
-    valueSuffix=""
-    description=""
-  />
-</MovingTriangleCreatesTriangularPrism>
+/>
 
 ## Creating a Solid by Rotating a Plane Figure
 

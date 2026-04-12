@@ -1,18 +1,39 @@
 ---
 import ThreeSceneShell from "./shared/ThreeSceneShell.astro";
+import WidgetSliderController from "../WidgetSliderController.astro";
 
+const locale = Astro.props.locale ?? "ja";
 const pixelRatioCapControlId = Astro.props.pixelRatioCapControlId ?? "";
 const antialiasControlId = Astro.props.antialiasControlId ?? "";
 const heightControlId = Astro.props.heightControlId ?? "";
+const baseId = `moving-triangle-creates-triangular-prism-${crypto.randomUUID()}`;
+const resolvedHeightControlId = heightControlId || `${baseId}-height`;
+const copy = {
+  en: {
+    heightLabel: "Height",
+  },
+  ja: {
+    heightLabel: "高さ",
+  },
+} as const;
+const text = copy[locale as keyof typeof copy] ?? copy.ja;
 ---
 
 <ThreeSceneShell
   id="moving-triangle-creates-triangular-prism-wrapper"
   pixelRatioCapControlId={pixelRatioCapControlId}
   antialiasControlId={antialiasControlId}
-  data-height-control-id={heightControlId}
+  data-height-control-id={resolvedHeightControlId}
 >
-  <slot name="controls" slot="controls" />
+  <WidgetSliderController
+    slot="controls"
+    id={resolvedHeightControlId}
+    label={text.heightLabel}
+    min={0}
+    max={2.4}
+    step={0.1}
+    value={0}
+  />
 </ThreeSceneShell>
 
 <script>

@@ -1,18 +1,40 @@
 ---
 import ThreeSceneShell from "./shared/ThreeSceneShell.astro";
+import WidgetSliderController from "../WidgetSliderController.astro";
 
+const locale = Astro.props.locale ?? "ja";
 const pixelRatioCapControlId = Astro.props.pixelRatioCapControlId ?? "";
 const antialiasControlId = Astro.props.antialiasControlId ?? "";
 const linePositionControlId = Astro.props.linePositionControlId ?? "";
+const baseId = `moving-line-creates-flat-plane-${crypto.randomUUID()}`;
+const resolvedLinePositionControlId =
+  linePositionControlId || `${baseId}-line-position`;
+const copy = {
+  en: {
+    linePositionLabel: "Translation amount",
+  },
+  ja: {
+    linePositionLabel: "動かす",
+  },
+} as const;
+const text = copy[locale as keyof typeof copy] ?? copy.ja;
 ---
 
 <ThreeSceneShell
   id="moving-line-creates-flat-plane-wrapper"
   pixelRatioCapControlId={pixelRatioCapControlId}
   antialiasControlId={antialiasControlId}
-  data-line-position-control-id={linePositionControlId}
+  data-line-position-control-id={resolvedLinePositionControlId}
 >
-  <slot name="controls" slot="controls" />
+  <WidgetSliderController
+    slot="controls"
+    id={resolvedLinePositionControlId}
+    label={text.linePositionLabel}
+    min={0}
+    max={2.4}
+    step={0.1}
+    value={0}
+  />
 </ThreeSceneShell>
 
 <script>

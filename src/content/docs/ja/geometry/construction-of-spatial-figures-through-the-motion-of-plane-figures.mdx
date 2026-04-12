@@ -11,7 +11,6 @@ import MovingTriangleCreatesTriangularPrism from "@/components/three.js/MovingTr
 import RotatingSquareCreatesCylinder from "@/components/three.js/RotatingSquareCreatesCylinder.astro";
 import RotatingTriangleCreatesCone from "@/components/three.js/RotatingTriangleCreatesCone.astro";
 import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.astro";
-import WidgetSliderController from "@/components/WidgetSliderController.astro";
 
 <SceneRenderToggle
   id="geometry-pixel-ratio-cap-toggle"
@@ -30,22 +29,10 @@ import WidgetSliderController from "@/components/WidgetSliderController.astro";
 線分を平行に移動させると、その移動した軌跡によって1つの面が作られます。
 
 <MovingLineCreatesFlatPlane
-  linePositionControlId="moving-line-flat-plane-position"
+  locale="ja"
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
->
-  <WidgetSliderController
-    slot="controls"
-    id="moving-line-flat-plane-position"
-    label=""
-    min={0}
-    max={2.4}
-    step={0.1}
-    value={0}
-    valueSuffix=""
-    description=""
-  />
-</MovingLineCreatesFlatPlane>
+/>
 
 ## 直線の回転で曲面を作る
 
@@ -66,21 +53,10 @@ import WidgetSliderController from "@/components/WidgetSliderController.astro";
 面を平行移動させると、その移動した軌跡によって立体が作られます。
 
 <MovingTriangleCreatesTriangularPrism
-  heightControlId="moving-triangle-prism-height"
+  locale="ja"
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
->
-  <WidgetSliderController
-    slot="controls"
-    id="moving-triangle-prism-height"
-    min={0}
-    max={2.4}
-    step={0.1}
-    value={0}
-    valueSuffix=""
-    description=""
-  />
-</MovingTriangleCreatesTriangularPrism>
+/>
 
 ## 面の回転で立体を作る
 
