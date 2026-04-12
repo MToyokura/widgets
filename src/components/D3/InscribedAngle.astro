@@ -7,7 +7,6 @@ import {
   getAngleLabelPosition,
   getCircleArcPathExcludingAngle,
   getPointOnCircle,
-  getTrianglePath,
 } from "./functions/geometry";
 
 const width = 400;
@@ -20,10 +19,18 @@ const initialAngleA = (3 * Math.PI) / 4;
 const initialAngleB = Math.PI / 4;
 const initialAngleC = -Math.PI / 2;
 
+function getInscribedLinesPath(
+  a: { x: number; y: number },
+  b: { x: number; y: number },
+  vertex: { x: number; y: number },
+) {
+  return `M ${vertex.x} ${vertex.y} L ${a.x} ${a.y} M ${vertex.x} ${vertex.y} L ${b.x} ${b.y}`;
+}
+
 const p1 = getPointOnCircle(center, radius, initialAngleA);
 const p2 = getPointOnCircle(center, radius, initialAngleB);
 const p3 = getPointOnCircle(center, radius, initialAngleC);
-const initialPath = getTrianglePath(p1, p2, p3);
+const initialLinesPath = getInscribedLinesPath(p1, p2, p3);
 const initialAngleArcPath = getAngleArcPath(p1, p3, p2);
 const initialAngleLabelPosition = getAngleLabelPosition(p1, p3, p2);
 const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
@@ -55,9 +62,9 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
       opacity="0.85"
       style="pointer-events: none;"></path>
     <path
-      id="inscribed-angle-triangle"
-      d={initialPath}
-      fill="rgba(52, 152, 219, 0.3)"
+      id="inscribed-angle-lines"
+      d={initialLinesPath}
+      fill="none"
       stroke="#3498db"
       stroke-width="3"
       style="pointer-events: none;"></path>
@@ -114,8 +121,15 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
     getAngleLabelPosition,
     getCircleArcPathExcludingAngle,
     getPointOnCircle,
-    getTrianglePath,
   } from "./functions/geometry";
+
+  function getInscribedLinesPath(
+    a: { x: number; y: number },
+    b: { x: number; y: number },
+    vertex: { x: number; y: number },
+  ) {
+    return `M ${vertex.x} ${vertex.y} L ${a.x} ${a.y} M ${vertex.x} ${vertex.y} L ${b.x} ${b.y}`;
+  }
 
   function setupInteractivity() {
     const handleA = d3.select<SVGCircleElement, unknown>(
@@ -130,9 +144,7 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
     const highlightedArc = d3.select<SVGPathElement, unknown>(
       "#inscribed-angle-highlighted-arc",
     );
-    const triangle = d3.select<SVGPathElement, unknown>(
-      "#inscribed-angle-triangle",
-    );
+    const lines = d3.select<SVGPathElement, unknown>("#inscribed-angle-lines");
     const marker = d3.select<SVGPathElement, unknown>(
       "#inscribed-angle-marker",
     );
@@ -145,7 +157,7 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
       handleB.empty() ||
       handleC.empty() ||
       highlightedArc.empty() ||
-      triangle.empty() ||
+      lines.empty() ||
       marker.empty() ||
       angleLabel.empty()
     ) {
@@ -188,7 +200,7 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
         "d",
         getCircleArcPathExcludingAngle(center, radius, angleA, angleB, angleC),
       );
-      triangle.attr("d", getTrianglePath(p1, p2, p3));
+      lines.attr("d", getInscribedLinesPath(p1, p2, p3));
       marker.attr("d", getAngleArcPath(p1, p3, p2));
       angleLabel
         .attr("x", labelPosition.x)
