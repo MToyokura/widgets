@@ -12,11 +12,11 @@ const {
 } = Astro.props;
 ---
 
-<div class="scene-range-control" data-scene-range-control>
-  <label class="scene-range-control__label" for={id}>{label}</label>
+<div class="widget-slider-controller" data-widget-slider-controller>
+  <label class="widget-slider-controller__label" for={id}>{label}</label>
   <input
     id={id}
-    class="scene-range-control__input"
+    class="widget-slider-controller__input"
     type="range"
     min={min}
     max={max}
@@ -25,11 +25,11 @@ const {
     data-value-prefix={valuePrefix}
     data-value-suffix={valueSuffix}
   />
-  {description && <p class="scene-range-control__description">{description}</p>}
+  {description && <p class="widget-slider-controller__description">{description}</p>}
 </div>
 
 <style>
-  .scene-range-control {
+  .widget-slider-controller {
     margin: 1.5rem 0;
     padding: 0;
     border: none;
@@ -37,19 +37,19 @@ const {
     background: transparent;
   }
 
-  .scene-range-control__label {
+  .widget-slider-controller__label {
     display: block;
     font-weight: 600;
     color: var(--sl-color-text);
     margin-bottom: 0.5rem;
   }
 
-  .scene-range-control__input {
+  .widget-slider-controller__input {
     width: 100%;
     margin: 0;
   }
 
-  .scene-range-control__description {
+  .widget-slider-controller__description {
     margin: 0.5rem 0 0;
     font-size: 0.95rem;
     color: var(--sl-color-text);
@@ -57,7 +57,7 @@ const {
 </style>
 
 <script>
-  for (const root of document.querySelectorAll("[data-scene-range-control]")) {
+  for (const root of document.querySelectorAll("[data-widget-slider-controller]")) {
     if (!(root instanceof HTMLDivElement) || root.dataset.ready === "true") {
       continue;
     }

@@ -11,7 +11,7 @@ import MovingTriangleCreatesTriangularPrism from "@/components/three.js/MovingTr
 import RotatingSquareCreatesCylinder from "@/components/three.js/RotatingSquareCreatesCylinder.astro";
 import RotatingTriangleCreatesCone from "@/components/three.js/RotatingTriangleCreatesCone.astro";
 import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.astro";
-import SceneRangeControl from "@/components/SceneRangeControl.astro";
+import WidgetSliderController from "@/components/WidgetSliderController.astro";
 
 <SceneRenderToggle
   id="geometry-pixel-ratio-cap-toggle"
@@ -35,7 +35,7 @@ import SceneRangeControl from "@/components/SceneRangeControl.astro";
   antialiasControlId="geometry-antialias-toggle"
 />
 
-<SceneRangeControl
+<WidgetSliderController
   id="moving-line-flat-plane-position"
   label=""
   min={0}
@@ -70,7 +70,7 @@ import SceneRangeControl from "@/components/SceneRangeControl.astro";
   antialiasControlId="geometry-antialias-toggle"
 />
 
-<SceneRangeControl
+<WidgetSliderController
   id="moving-triangle-prism-height"
   label="高さの調整"
   min={0}

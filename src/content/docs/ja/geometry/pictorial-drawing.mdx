@@ -5,7 +5,7 @@ sidebar:
 ---
 
 import CubePictorialDrawing from "@/components/D3/CubePictorialDrawing.astro";
-import SceneRangeControl from "@/components/SceneRangeControl.astro";
+import WidgetSliderController from "@/components/WidgetSliderController.astro";
 
 ### 直方体の見取図
 
@@ -17,7 +17,7 @@ import SceneRangeControl from "@/components/SceneRangeControl.astro";
 
 <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
   <div>
-    <SceneRangeControl
+    <WidgetSliderController
       id="cube-pictorial-x-scale"
       label="X 方向"
       min={0.5}
@@ -27,7 +27,7 @@ import SceneRangeControl from "@/components/SceneRangeControl.astro";
     />
   </div>
   <div>
-    <SceneRangeControl
+    <WidgetSliderController
       id="cube-pictorial-y-scale"
       label="Y 方向"
       min={0.5}
@@ -37,7 +37,7 @@ import SceneRangeControl from "@/components/SceneRangeControl.astro";
     />
   </div>
   <div>
-    <SceneRangeControl
+    <WidgetSliderController
       id="cube-pictorial-z-scale"
       label="Z 方向"
       min={0.5}
