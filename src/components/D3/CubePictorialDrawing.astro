@@ -1,0 +1,393 @@
+---
+type Point = {
+  x: number;
+  y: number;
+};
+
+type Props = {
+  locale?: "en" | "ja";
+  xScale?: number | string;
+  yScale?: number | string;
+  zScale?: number | string;
+  xScaleControlId?: string;
+  yScaleControlId?: string;
+  zScaleControlId?: string;
+};
+
+function getPositiveNumber(value: number | string | undefined, fallback: number) {
+  if (typeof value === "number") {
+    return Number.isFinite(value) && value > 0 ? value : fallback;
+  }
+
+  if (typeof value === "string") {
+    const parsed = Number(value);
+
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+  }
+
+  return fallback;
+}
+
+const {
+  locale = "ja",
+  xScale: rawXScale,
+  yScale: rawYScale,
+  zScale: rawZScale,
+  xScaleControlId,
+  yScaleControlId,
+  zScaleControlId,
+} = Astro.props as Props;
+const copy = {
+  en: {
+    title: "Pictorial drawing of a cuboid",
+    caption: "Pictorial drawing of a cuboid."
+  },
+  ja: {
+    title: "直方体の見取図",
+    caption: "直方体の見取図"
+  },
+} as const;
+const text = copy[locale as keyof typeof copy] ?? copy.ja;
+
+const xScale = getPositiveNumber(rawXScale, 1);
+const yScale = getPositiveNumber(rawYScale, 1);
+const zScale = getPositiveNumber(rawZScale, 1);
+const origin = { x: 108, y: 110 };
+const xAxis = { x: 120 * xScale, y: 0 };
+const yAxis = { x: 0, y: 120 * yScale };
+const zAxis = { x: 82 * zScale, y: -58 * zScale };
+
+function addPoints(...points: Point[]): Point {
+  return points.reduce(
+    (sum, point) => ({ x: sum.x + point.x, y: sum.y + point.y }),
+    { x: 0, y: 0 },
+  );
+}
+
+function getClosedPath(points: Point[]): string {
+  return `${points
+    .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`)
+    .join(" ")} Z`;
+}
+
+const frontTopLeft = origin;
+const frontTopRight = addPoints(origin, xAxis);
+const frontBottomRight = addPoints(origin, xAxis, yAxis);
+const frontBottomLeft = addPoints(origin, yAxis);
+
+const backTopLeft = addPoints(origin, zAxis);
+const backTopRight = addPoints(origin, xAxis, zAxis);
+const backBottomRight = addPoints(origin, xAxis, yAxis, zAxis);
+const backBottomLeft = addPoints(origin, yAxis, zAxis);
+
+const frontFace = [
+  frontTopLeft,
+  frontTopRight,
+  frontBottomRight,
+  frontBottomLeft,
+];
+const topFace = [frontTopLeft, frontTopRight, backTopRight, backTopLeft];
+const sideFace = [frontTopRight, backTopRight, backBottomRight, frontBottomRight];
+
+const visibleEdges = [
+  [frontTopLeft, frontTopRight],
+  [frontTopRight, frontBottomRight],
+  [frontBottomRight, frontBottomLeft],
+  [frontBottomLeft, frontTopLeft],
+  [frontTopLeft, backTopLeft],
+  [frontTopRight, backTopRight],
+  [frontBottomRight, backBottomRight],
+  [backTopLeft, backTopRight],
+  [backTopRight, backBottomRight],
+];
+const hiddenEdges = [
+  [frontBottomLeft, backBottomLeft],
+  [backTopLeft, backBottomLeft],
+  [backBottomLeft, backBottomRight],
+];
+
+const allPoints = [
+  frontTopLeft,
+  frontTopRight,
+  frontBottomRight,
+  frontBottomLeft,
+  backTopLeft,
+  backTopRight,
+  backBottomRight,
+  backBottomLeft,
+];
+const viewBoxPadding = 24;
+const minX = Math.min(...allPoints.map((point) => point.x)) - viewBoxPadding;
+const maxX = Math.max(...allPoints.map((point) => point.x)) + viewBoxPadding;
+const minY = Math.min(...allPoints.map((point) => point.y)) - viewBoxPadding;
+const maxY = Math.max(...allPoints.map((point) => point.y)) + viewBoxPadding;
+const viewBoxWidth = maxX - minX;
+const viewBoxHeight = maxY - minY;
+
+const baseId = `cube-pictorial-${crypto.randomUUID()}`;
+const titleId = `${baseId}-title`;
+const descId = `${baseId}-desc`;
+---
+
+<div class="viz-container" style="width: 100%; max-width: 720px; height: 500px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+  <svg
+    viewBox={`${minX} ${minY} ${viewBoxWidth} ${viewBoxHeight}`}
+    role="img"
+    aria-labelledby={`${titleId} ${descId}`}
+    data-cube-pictorial-svg
+    data-x-scale-control-id={xScaleControlId}
+    data-y-scale-control-id={yScaleControlId}
+    data-z-scale-control-id={zScaleControlId}
+    data-initial-x-scale={xScale}
+    data-initial-y-scale={yScale}
+    data-initial-z-scale={zScale}
+    style="display: block; width: 100%; height: 100%; background-color: #f3f4f6; border-radius: 8px;"
+  >
+    <title id={titleId}>{text.title}</title>
+    <desc id={descId}>{text.caption}</desc>
+
+    <path
+      class="face"
+      data-face="top"
+      d={getClosedPath(topFace)}
+    ></path>
+    <path
+      class="face"
+      data-face="side"
+      d={getClosedPath(sideFace)}
+    ></path>
+    <path
+      class="face"
+      data-face="front"
+      d={getClosedPath(frontFace)}
+    ></path>
+
+    {
+      hiddenEdges.map(([start, end], index) => (
+        <line
+          class="edge edge-hidden"
+          data-edge-kind="hidden"
+          data-edge-index={index}
+          x1={start.x}
+          y1={start.y}
+          x2={end.x}
+          y2={end.y}
+        ></line>
+      ))
+    }
+
+    {
+      visibleEdges.map(([start, end], index) => (
+        <line
+          class="edge edge-visible"
+          data-edge-kind="visible"
+          data-edge-index={index}
+          x1={start.x}
+          y1={start.y}
+          x2={end.x}
+          y2={end.y}
+        ></line>
+      ))
+    }
+  </svg>
+  <p
+    style="margin-top: 0.75rem; text-align: center; color: var(--sl-color-text); font-size: 0.95rem;"
+  >
+    {text.caption}
+  </p>
+</div>
+
+<style>
+  .face {
+    fill: none;
+    stroke: none;
+  }
+
+  .edge {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .edge-visible {
+    stroke: #0f172a;
+    stroke-width: 4;
+  }
+
+  .edge-hidden {
+    stroke: #64748b;
+    stroke-width: 3;
+    stroke-dasharray: 8 8;
+  }
+</style>
+
+<script>
+  type Point = { x: number; y: number };
+
+  const ORIGIN = { x: 108, y: 110 };
+  const VIEWBOX_PADDING = 24;
+
+  function getPositiveNumber(value: string | number | null | undefined, fallback: number) {
+    if (typeof value === "number") {
+      return Number.isFinite(value) && value > 0 ? value : fallback;
+    }
+
+    if (typeof value === "string") {
+      const parsed = Number(value);
+
+      return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+    }
+
+    return fallback;
+  }
+
+  function addPoints(...points: Point[]): Point {
+    return points.reduce(
+      (sum, point) => ({ x: sum.x + point.x, y: sum.y + point.y }),
+      { x: 0, y: 0 },
+    );
+  }
+
+  function getClosedPath(points: Point[]) {
+    return `${points
+      .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`)
+      .join(" ")} Z`;
+  }
+
+  function getGeometry(xScale: number, yScale: number, zScale: number) {
+    const xAxis = { x: 120 * xScale, y: 0 };
+    const yAxis = { x: 0, y: 120 * yScale };
+    const zAxis = { x: 82 * zScale, y: -58 * zScale };
+    const frontTopLeft = ORIGIN;
+    const frontTopRight = addPoints(ORIGIN, xAxis);
+    const frontBottomRight = addPoints(ORIGIN, xAxis, yAxis);
+    const frontBottomLeft = addPoints(ORIGIN, yAxis);
+    const backTopLeft = addPoints(ORIGIN, zAxis);
+    const backTopRight = addPoints(ORIGIN, xAxis, zAxis);
+    const backBottomRight = addPoints(ORIGIN, xAxis, yAxis, zAxis);
+    const backBottomLeft = addPoints(ORIGIN, yAxis, zAxis);
+    const frontFace = [frontTopLeft, frontTopRight, frontBottomRight, frontBottomLeft];
+    const topFace = [frontTopLeft, frontTopRight, backTopRight, backTopLeft];
+    const sideFace = [frontTopRight, backTopRight, backBottomRight, frontBottomRight];
+    const visibleEdges = [
+      [frontTopLeft, frontTopRight],
+      [frontTopRight, frontBottomRight],
+      [frontBottomRight, frontBottomLeft],
+      [frontBottomLeft, frontTopLeft],
+      [frontTopLeft, backTopLeft],
+      [frontTopRight, backTopRight],
+      [frontBottomRight, backBottomRight],
+      [backTopLeft, backTopRight],
+      [backTopRight, backBottomRight],
+    ];
+    const hiddenEdges = [
+      [frontBottomLeft, backBottomLeft],
+      [backTopLeft, backBottomLeft],
+      [backBottomLeft, backBottomRight],
+    ];
+    const allPoints = [
+      ...frontFace,
+      backTopLeft,
+      backTopRight,
+      backBottomRight,
+      backBottomLeft,
+    ];
+    const minX = Math.min(...allPoints.map((point) => point.x)) - VIEWBOX_PADDING;
+    const maxX = Math.max(...allPoints.map((point) => point.x)) + VIEWBOX_PADDING;
+    const minY = Math.min(...allPoints.map((point) => point.y)) - VIEWBOX_PADDING;
+    const maxY = Math.max(...allPoints.map((point) => point.y)) + VIEWBOX_PADDING;
+
+    return {
+      frontFace,
+      topFace,
+      sideFace,
+      visibleEdges,
+      hiddenEdges,
+      viewBox: `${minX} ${minY} ${maxX - minX} ${maxY - minY}`,
+    };
+  }
+
+  function updateEdge(line: SVGLineElement, edge: Point[]) {
+    const [start, end] = edge;
+
+    line.setAttribute("x1", String(start.x));
+    line.setAttribute("y1", String(start.y));
+    line.setAttribute("x2", String(end.x));
+    line.setAttribute("y2", String(end.y));
+  }
+
+  for (const svg of document.querySelectorAll("[data-cube-pictorial-svg]")) {
+    if (!(svg instanceof SVGSVGElement) || svg.dataset.ready === "true") {
+      continue;
+    }
+
+    svg.dataset.ready = "true";
+
+    const xControl = svg.dataset.xScaleControlId
+      ? document.getElementById(svg.dataset.xScaleControlId)
+      : null;
+    const yControl = svg.dataset.yScaleControlId
+      ? document.getElementById(svg.dataset.yScaleControlId)
+      : null;
+    const zControl = svg.dataset.zScaleControlId
+      ? document.getElementById(svg.dataset.zScaleControlId)
+      : null;
+    const topFace = svg.querySelector('[data-face="top"]');
+    const sideFace = svg.querySelector('[data-face="side"]');
+    const frontFace = svg.querySelector('[data-face="front"]');
+    const visibleEdges = Array.from(
+      svg.querySelectorAll('[data-edge-kind="visible"]'),
+    );
+    const hiddenEdges = Array.from(svg.querySelectorAll('[data-edge-kind="hidden"]'));
+
+    if (
+      !(topFace instanceof SVGPathElement) ||
+      !(sideFace instanceof SVGPathElement) ||
+      !(frontFace instanceof SVGPathElement)
+    ) {
+      continue;
+    }
+
+    const render = () => {
+      const geometry = getGeometry(
+        getPositiveNumber(
+          xControl instanceof HTMLInputElement ? xControl.value : svg.dataset.initialXScale,
+          1,
+        ),
+        getPositiveNumber(
+          yControl instanceof HTMLInputElement ? yControl.value : svg.dataset.initialYScale,
+          1,
+        ),
+        getPositiveNumber(
+          zControl instanceof HTMLInputElement ? zControl.value : svg.dataset.initialZScale,
+          1,
+        ),
+      );
+
+      svg.setAttribute("viewBox", geometry.viewBox);
+      topFace.setAttribute("d", getClosedPath(geometry.topFace));
+      sideFace.setAttribute("d", getClosedPath(geometry.sideFace));
+      frontFace.setAttribute("d", getClosedPath(geometry.frontFace));
+
+      for (const [index, line] of visibleEdges.entries()) {
+        if (line instanceof SVGLineElement) {
+          updateEdge(line, geometry.visibleEdges[index]);
+        }
+      }
+
+      for (const [index, line] of hiddenEdges.entries()) {
+        if (line instanceof SVGLineElement) {
+          updateEdge(line, geometry.hiddenEdges[index]);
+        }
+      }
+    };
+
+    for (const control of [xControl, yControl, zControl]) {
+      if (control instanceof HTMLInputElement) {
+        control.addEventListener("input", render);
+      }
+    }
+
+    render();
+  }
+</script>
