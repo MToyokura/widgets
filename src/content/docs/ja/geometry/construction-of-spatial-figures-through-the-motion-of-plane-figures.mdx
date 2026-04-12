@@ -1,0 +1,42 @@
+---
+title: 平面図形の運動による空間図形の構成
+sidebar:
+  order: 1040
+---
+
+import MovingLineCreatesFlatPlane from "@/components/three.js/MovingLineCreatesFlatPlane.astro";
+import ScenePowerToggle from "@/components/three.js/shared/ScenePowerToggle.astro";
+import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.astro";
+
+<ScenePowerToggle id="geometry-low-power-toggle" checked={false} />
+<ScenePowerToggle
+  id="geometry-antialias-toggle"
+  checked={true}
+  label="アンチエイリアス"
+  description="輪郭を滑らかにしますが、描画負荷と消費電力は増えます。"
+/>
+
+## 線分の平行移動で面を作る
+
+線分を平行に移動させると、その移動した軌跡によって1つの面が作られます。
+
+<MovingLineCreatesFlatPlane
+  linePositionControlId="moving-line-flat-plane-position"
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<SceneRangeControl
+  id="moving-line-flat-plane-position"
+  label=""
+  min={0.4}
+  max={2.4}
+  step={0.1}
+  value={1.2}
+  valueSuffix=""
+  description=""
+/>
+
+## 直線の回転で曲面を作る
+
+円柱や円錐すいの側面は、1つの線分が定直線（軸）のまわりに回転してできる曲面とみなせます。

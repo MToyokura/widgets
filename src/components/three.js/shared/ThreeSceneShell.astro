@@ -1,5 +1,10 @@
 ---
-const { id, lowPowerControlId = "", antialiasControlId = "" } = Astro.props;
+const {
+  id,
+  lowPowerControlId = "",
+  antialiasControlId = "",
+  ...wrapperProps
+} = Astro.props;
 ---
 
 <div class="viz-container" id={id}>
@@ -7,6 +12,7 @@ const { id, lowPowerControlId = "", antialiasControlId = "" } = Astro.props;
     class="threejs-viz"
     data-low-power-control-id={lowPowerControlId}
     data-antialias-control-id={antialiasControlId}
+    {...wrapperProps}
   >
     <slot />
   </div>

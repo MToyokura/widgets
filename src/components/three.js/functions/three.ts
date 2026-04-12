@@ -56,6 +56,25 @@ function getCheckboxControl(controlId: string) {
   return control;
 }
 
+function getRangeControl(controlId: string) {
+  const control = document.getElementById(controlId);
+
+  if (!(control instanceof HTMLInputElement) || control.type !== "range") {
+    return null;
+  }
+
+  return control;
+}
+
+function getNumericInputValue(
+  control: HTMLInputElement | null,
+  fallback: number,
+) {
+  const value = Number(control?.value ?? Number.NaN);
+
+  return Number.isFinite(value) ? value : fallback;
+}
+
 export function getThreeSceneWrapper(containerId: string) {
   const wrapper = document.querySelector(
     `#${containerId} ${THREE_SCENE_WRAPPER_CLASS}`,
@@ -86,6 +105,14 @@ export function isLowPowerEnabled(controlId = "") {
 
 export function isAntialiasEnabled(controlId = "") {
   return isCheckboxEnabled(controlId, true);
+}
+
+export function getRangeControlValue(controlId = "", fallback = 0) {
+  if (!controlId) {
+    return fallback;
+  }
+
+  return getNumericInputValue(getRangeControl(controlId), fallback);
 }
 
 export function setRendererPerformanceMode(
@@ -360,6 +387,29 @@ export function observeAntialiasPreference(
   onChange: (antialias: boolean) => void,
 ) {
   return observeCheckboxPreference(controlId, onChange);
+}
+
+export function observeRangePreference(
+  controlId: string,
+  onChange: (value: number) => void,
+) {
+  const control = getRangeControl(controlId);
+
+  if (!control) {
+    return null;
+  }
+
+  const handleChange = () => {
+    onChange(getNumericInputValue(control, 0));
+  };
+
+  control.addEventListener("input", handleChange);
+  control.addEventListener("change", handleChange);
+
+  return () => {
+    control.removeEventListener("input", handleChange);
+    control.removeEventListener("change", handleChange);
+  };
 }
 
 export function observeWrapperSize(
