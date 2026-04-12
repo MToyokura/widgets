@@ -7,6 +7,9 @@ sidebar:
 import MovingLineCreatesFlatPlane from "@/components/three.js/MovingLineCreatesFlatPlane.astro";
 import MovingLineCreatesCylindricalSurface from "@/components/three.js/MovingLineCreatesCylindricalSurface.astro";
 import MovingLineCreatesConicalSurface from "@/components/three.js/MovingLineCreatesConicalSurface.astro";
+import MovingTriangleCreatesTriangularPrism from "@/components/three.js/MovingTriangleCreatesTriangularPrism.astro";
+import RotatingSquareCreatesCylinder from "@/components/three.js/RotatingSquareCreatesCylinder.astro";
+import RotatingTriangleCreatesCone from "@/components/three.js/RotatingTriangleCreatesCone.astro";
 import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.astro";
 import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.astro";
 
@@ -20,7 +23,7 @@ import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.as
 
 ## Creating a Plane by Translating a Line Segment
 
-When a line segment is moved in parallel, a single plane is created by its trajectory.
+When a line segment is moved in parallel, the trace of its movement forms a single plane.
 
 <MovingLineCreatesFlatPlane
   linePositionControlId="moving-line-flat-plane-position"
@@ -41,7 +44,7 @@ When a line segment is moved in parallel, a single plane is created by its traje
 
 ## Creating a Curved Surface by Rotating a Line
 
-The lateral surfaces of a cylinder or cone can be considered as curved surfaces created by a single line segment rotating around a fixed line (axis).
+The sides of a cylinder or a cone can be considered as a curved surface created by a single line segment rotating around a fixed line (the axis).
 
 <MovingLineCreatesCylindricalSurface
   lowPowerControlId="geometry-low-power-toggle"
@@ -49,6 +52,41 @@ The lateral surfaces of a cylinder or cone can be considered as curved surfaces 
 />
 
 <MovingLineCreatesConicalSurface
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Creating a Solid by Translating a Plane Figure
+
+When a plane figure is moved in parallel, the trace of its movement forms a solid.
+
+<MovingTriangleCreatesTriangularPrism
+  heightControlId="moving-triangle-prism-height"
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<SceneRangeControl
+  id="moving-triangle-prism-height"
+  label="Adjust Height"
+  min={0}
+  max={2.4}
+  step={0.1}
+  value={0}
+  valueSuffix=""
+  description=""
+/>
+
+## Creating a Solid by Rotating a Plane Figure
+
+When a plane figure is rotated, the trace of its rotation forms a solid.
+
+<RotatingSquareCreatesCylinder
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<RotatingTriangleCreatesCone
   lowPowerControlId="geometry-low-power-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />

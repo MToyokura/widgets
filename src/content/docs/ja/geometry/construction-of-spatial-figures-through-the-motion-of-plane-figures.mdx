@@ -8,6 +8,8 @@ import MovingLineCreatesFlatPlane from "@/components/three.js/MovingLineCreatesF
 import MovingLineCreatesCylindricalSurface from "@/components/three.js/MovingLineCreatesCylindricalSurface.astro";
 import MovingLineCreatesConicalSurface from "@/components/three.js/MovingLineCreatesConicalSurface.astro";
 import MovingTriangleCreatesTriangularPrism from "@/components/three.js/MovingTriangleCreatesTriangularPrism.astro";
+import RotatingSquareCreatesCylinder from "@/components/three.js/RotatingSquareCreatesCylinder.astro";
+import RotatingTriangleCreatesCone from "@/components/three.js/RotatingTriangleCreatesCone.astro";
 import SceneRenderToggle from "@/components/three.js/shared/SceneRenderToggle.astro";
 import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.astro";
 
@@ -73,4 +75,18 @@ import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.as
   value={0}
   valueSuffix=""
   description=""
+/>
+
+## 面の回転で立体を作る
+
+面を回転させると、その回転した軌跡によって立体が作られます。
+
+<RotatingSquareCreatesCylinder
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<RotatingTriangleCreatesCone
+  lowPowerControlId="geometry-low-power-toggle"
+  antialiasControlId="geometry-antialias-toggle"
 />
