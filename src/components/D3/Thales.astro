@@ -1,4 +1,6 @@
 ---
+import WidgetContainer from "../WidgetContainer.astro";
+
 import {
   getAngleDegrees,
   getAngleLabelPosition,
@@ -35,10 +37,9 @@ const initialAngleLabelPosition = getAngleLabelPosition(p1, p3, p2);
 const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
 ---
 
-<div class="viz-container" id="thales-wrapper">
+<WidgetContainer id="thales-wrapper">
   <svg
     viewBox={`0 0 ${width} ${height}`}
-    style="display: block; margin: auto; background-color: #f3f4f6; border-radius: 8px;"
   >
     <circle
       cx={cx}
@@ -112,22 +113,20 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
       fill="#e74c3c"
       style="cursor: grab; touch-action: none;"></circle>
   </svg>
-  <p
-    style="margin-top: 0.75rem; text-align: center; color: var(--sl-color-text); font-size: 0.95rem;"
-  >
+  <p slot="caption">
     {text.helperText}
   </p>
-</div>
+</WidgetContainer>
 
 <script>
   import * as d3 from "d3";
-  import {
-    getAngleDegrees,
-    getAngleLabelPosition,
-    getPointOnCircle,
-    getRightAnglePath,
-    getTrianglePath,
-  } from "./functions/geometry";
+import {
+getAngleDegrees,
+getAngleLabelPosition,
+getPointOnCircle,
+getRightAnglePath,
+getTrianglePath,
+} from "./functions/geometry";
 
   function setupInteractivity() {
     const startHandle = d3.select<SVGCircleElement, unknown>(

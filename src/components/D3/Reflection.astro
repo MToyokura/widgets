@@ -1,4 +1,6 @@
 ---
+import WidgetContainer from "../WidgetContainer.astro";
+
 import {
   getLinePathThroughPoint,
   getPointOnCircle,
@@ -61,10 +63,9 @@ const initialLineHandle = getPointOnCircle(
 );
 ---
 
-<div class="viz-container" id="reflection-wrapper">
+<WidgetContainer id="reflection-wrapper">
   <svg
     viewBox={`0 0 ${width} ${height}`}
-    style="display: block; margin: auto; background-color: #f3f4f6; border-radius: 8px;"
   >
     {
       Array.from({ length: Math.floor(width / 40) + 1 }, (_, i) => i * 40).map(
@@ -143,21 +144,19 @@ const initialLineHandle = getPointOnCircle(
       fill="#2563eb"
       style="cursor: grab; touch-action: none;"></circle>
   </svg>
-  <p
-    style="margin-top: 0.75rem; text-align: center; color: var(--sl-color-text); font-size: 0.95rem;"
-  >
+  <p slot="caption">
     {text.helperText}
   </p>
-</div>
+</WidgetContainer>
 
 <script>
   import * as d3 from "d3";
-  import {
-    getLinePathThroughPoint,
-    getPointOnCircle,
-    getPolygonPath,
-    reflectPointAcrossLine,
-  } from "./functions/geometry";
+import {
+getLinePathThroughPoint,
+getPointOnCircle,
+getPolygonPath,
+reflectPointAcrossLine,
+} from "./functions/geometry";
 
   function getConnectorPath(
     originalPoints: { x: number; y: number }[],

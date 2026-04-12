@@ -1,4 +1,6 @@
 ---
+import WidgetContainer from "../WidgetContainer.astro";
+
 import {
   getAngleArcPath,
   getAngleDegrees,
@@ -77,10 +79,9 @@ const initialHighlightedArcPath = getCircleArcPath(
 );
 ---
 
-<div class="viz-container" id="central-angle-wrapper">
+<WidgetContainer id="central-angle-wrapper">
   <svg
     viewBox={`0 0 ${width} ${height}`}
-    style="display: block; margin: auto; background-color: #f3f4f6; border-radius: 8px;"
   >
     <circle
       cx={cx}
@@ -193,23 +194,21 @@ const initialHighlightedArcPath = getCircleArcPath(
       fill="#2563eb"
       style="cursor: grab; touch-action: none;"></circle>
   </svg>
-  <p
-    style="margin-top: 0.75rem; text-align: center; color: var(--sl-color-text); font-size: 0.95rem;"
-  >
+  <p slot="caption">
     {text.helperText}
   </p>
-</div>
+</WidgetContainer>
 
 <script>
   import * as d3 from "d3";
-  import {
-    getAngleArcPath,
-    getAngleDegrees,
-    getAngleLabelPosition,
-    getCircleArcPath,
-    getPointOnCircle,
-    getTrianglePath,
-  } from "./functions/geometry";
+import {
+getAngleArcPath,
+getAngleDegrees,
+getAngleLabelPosition,
+getCircleArcPath,
+getPointOnCircle,
+getTrianglePath,
+} from "./functions/geometry";
 
   function getSignedMinorDelta(startAngle: number, endAngle: number) {
     let delta = endAngle - startAngle;

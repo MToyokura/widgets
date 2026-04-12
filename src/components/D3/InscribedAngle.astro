@@ -1,4 +1,6 @@
 ---
+import WidgetContainer from "../WidgetContainer.astro";
+
 import {
   getAngleArcPath,
   getAngleDegrees,
@@ -47,10 +49,9 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
 );
 ---
 
-<div class="viz-container" id="inscribed-angle-wrapper">
+<WidgetContainer id="inscribed-angle-wrapper">
   <svg
     viewBox={`0 0 ${width} ${height}`}
-    style="display: block; margin: auto; background-color: #f3f4f6; border-radius: 8px;"
   >
     <circle
       cx={cx}
@@ -118,23 +119,21 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
       fill="#e74c3c"
       style="cursor: grab; touch-action: none;"></circle>
   </svg>
-  <p
-    style="margin-top: 0.75rem; text-align: center; color: var(--sl-color-text); font-size: 0.95rem;"
-  >
+  <p slot="caption">
     {text.helperText}
   </p>
-</div>
+</WidgetContainer>
 
 <script>
   import * as d3 from "d3";
-  import {
-    getAngleArcPath,
-    getAngleDegrees,
-    getAngleLabelPosition,
-    getCircleArcPathExcludingAngle,
-    getPointOnCircle,
-    getTrianglePath,
-  } from "./functions/geometry";
+import {
+getAngleArcPath,
+getAngleDegrees,
+getAngleLabelPosition,
+getCircleArcPathExcludingAngle,
+getPointOnCircle,
+getTrianglePath,
+} from "./functions/geometry";
 
   function setupInteractivity() {
     const handleA = d3.select<SVGCircleElement, unknown>(
