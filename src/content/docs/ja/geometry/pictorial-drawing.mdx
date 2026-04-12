@@ -14,7 +14,14 @@ import WidgetSliderController from "@/components/WidgetSliderController.astro";
   yScaleControlId="cube-pictorial-y-scale"
   zScaleControlId="cube-pictorial-z-scale"
 >
-  <div slot="controls">
+  <div
+    class="not-content"
+    slot="controls"
+    style={{
+      display: "flex",
+      gap: "1rem",
+    }}
+  >
     <div>
       <WidgetSliderController
         id="cube-pictorial-x-scale"
