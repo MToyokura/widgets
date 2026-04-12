@@ -11,20 +11,22 @@ const linePositionControlId = Astro.props.linePositionControlId ?? "";
   pixelRatioCapControlId={pixelRatioCapControlId}
   antialiasControlId={antialiasControlId}
   data-line-position-control-id={linePositionControlId}
-/>
+>
+  <slot name="controls" slot="controls" />
+</ThreeSceneShell>
 
 <script>
   import * as THREE from "three";
-  import { Line2 } from "three/addons/lines/Line2.js";
-  import { LineGeometry } from "three/addons/lines/LineGeometry.js";
-  import { LineMaterial } from "three/addons/lines/LineMaterial.js";
-  import {
-    addReferencePlane,
-    getRangeControlValue,
-    getThreeSceneWrapper,
-    mountManagedThreeScene,
-    observeRangePreference,
-  } from "./functions/three";
+import { Line2 } from "three/addons/lines/Line2.js";
+import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+import {
+addReferencePlane,
+getRangeControlValue,
+getThreeSceneWrapper,
+mountManagedThreeScene,
+observeRangePreference,
+} from "./functions/three";
 
   const DEFAULT_LINE_OFFSET = 0;
   const MIN_LINE_OFFSET = 0;
@@ -48,14 +50,7 @@ const linePositionControlId = Astro.props.linePositionControlId ?? "";
     mountManagedThreeScene(wrapper, {
       cameraPosition: [-6.6, 5.2, 0],
       cameraLookAt: [0, 0, 0],
-      setup: ({
-        scene,
-        camera,
-        controls,
-        addCleanup,
-        trackResolutionTarget,
-        render,
-      }) => {
+      setup: ({ scene, addCleanup, trackResolutionTarget, render }) => {
         addReferencePlane(scene, { opacity: 0.3 });
 
         const resolution = new THREE.Vector2(1, 1);

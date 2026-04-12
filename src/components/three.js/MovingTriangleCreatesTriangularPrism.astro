@@ -11,17 +11,19 @@ const heightControlId = Astro.props.heightControlId ?? "";
   pixelRatioCapControlId={pixelRatioCapControlId}
   antialiasControlId={antialiasControlId}
   data-height-control-id={heightControlId}
-/>
+>
+  <slot name="controls" slot="controls" />
+</ThreeSceneShell>
 
 <script>
   import * as THREE from "three";
-  import {
-    addReferencePlane,
-    getRangeControlValue,
-    getThreeSceneWrapper,
-    mountManagedThreeScene,
-    observeRangePreference,
-  } from "./functions/three";
+import {
+addReferencePlane,
+getRangeControlValue,
+getThreeSceneWrapper,
+mountManagedThreeScene,
+observeRangePreference,
+} from "./functions/three";
 
   const BASE_Y = 0;
   const REFERENCE_PLANE_Y = BASE_Y - 0.001;
