@@ -1,5 +1,6 @@
 ---
 import WidgetContainer from "../WidgetContainer.astro";
+import WidgetSliderController from "../WidgetSliderController.astro";
 
 type Point = {
   x: number;
@@ -42,9 +43,15 @@ const {
 const copy = {
   en: {
     title: "Pictorial drawing of a cuboid",
+    xLabel: "X axis",
+    yLabel: "Y axis",
+    zLabel: "Z axis",
   },
   ja: {
     title: "直方体の見取図",
+    xLabel: "X 方向",
+    yLabel: "Y 方向",
+    zLabel: "Z 方向",
   },
 } as const;
 const text = copy[locale as keyof typeof copy] ?? copy.ja;
@@ -126,7 +133,9 @@ const viewBoxHeight = maxY - minY;
 
 const baseId = `cube-pictorial-${crypto.randomUUID()}`;
 const titleId = `${baseId}-title`;
-const hasControlsSlot = Astro.slots.has("controls");
+const resolvedXScaleControlId = xScaleControlId ?? `${baseId}-x-scale`;
+const resolvedYScaleControlId = yScaleControlId ?? `${baseId}-y-scale`;
+const resolvedZScaleControlId = zScaleControlId ?? `${baseId}-z-scale`;
 ---
 
 <WidgetContainer
@@ -138,9 +147,9 @@ const hasControlsSlot = Astro.slots.has("controls");
     role="img"
     aria-labelledby={titleId}
     data-cube-pictorial-svg
-    data-x-scale-control-id={xScaleControlId}
-    data-y-scale-control-id={yScaleControlId}
-    data-z-scale-control-id={zScaleControlId}
+    data-x-scale-control-id={resolvedXScaleControlId}
+    data-y-scale-control-id={resolvedYScaleControlId}
+    data-z-scale-control-id={resolvedZScaleControlId}
     data-initial-x-scale={xScale}
     data-initial-y-scale={yScale}
     data-initial-z-scale={zScale}
@@ -192,10 +201,50 @@ const hasControlsSlot = Astro.slots.has("controls");
     }
   </svg>
 
-  {hasControlsSlot && <slot name="controls" slot="controls" />}
+  <div class="pictorial-drawing-controls not-content" slot="controls">
+    <div>
+      <WidgetSliderController
+        id={resolvedXScaleControlId}
+        label={text.xLabel}
+        min={0.5}
+        max={2.5}
+        step={0.1}
+        value={xScale}
+      />
+    </div>
+    <div>
+      <WidgetSliderController
+        id={resolvedYScaleControlId}
+        label={text.yLabel}
+        min={0.5}
+        max={2.5}
+        step={0.1}
+        value={yScale}
+      />
+    </div>
+    <div>
+      <WidgetSliderController
+        id={resolvedZScaleControlId}
+        label={text.zLabel}
+        min={0.5}
+        max={2.5}
+        step={0.1}
+        value={zScale}
+      />
+    </div>
+  </div>
 </WidgetContainer>
 
 <style>
+  .pictorial-drawing-controls {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .pictorial-drawing-controls > div {
+    flex: 1 1 0;
+  }
+
   .face {
     fill: none;
     stroke: none;
@@ -216,6 +265,12 @@ const hasControlsSlot = Astro.slots.has("controls");
     stroke: #64748b;
     stroke-width: 3;
     stroke-dasharray: 8 8;
+  }
+
+  @media (max-width: 30rem) {
+    .pictorial-drawing-controls {
+      flex-direction: column;
+    }
   }
 </style>
 

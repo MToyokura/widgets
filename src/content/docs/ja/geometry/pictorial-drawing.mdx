@@ -5,62 +5,7 @@ sidebar:
 ---
 
 import CuboidPictorialDrawing from "@/components/D3/CuboidPictorialDrawing.astro";
-import WidgetSliderController from "@/components/WidgetSliderController.astro";
-
-<style>{`
-  .pictorial-drawing-controls {
-    display: flex;
-    gap: 1rem;
-  }
-
-  .pictorial-drawing-controls > div {
-    flex: 1 1 0;
-  }
-
-  @media (max-width: 30rem) {
-    .pictorial-drawing-controls {
-      flex-direction: column;
-    }
-  }
-`}</style>
 
 ### 直方体の見取図
 
-<CuboidPictorialDrawing
-  xScaleControlId="cube-pictorial-x-scale"
-  yScaleControlId="cube-pictorial-y-scale"
-  zScaleControlId="cube-pictorial-z-scale"
->
-  <div class="pictorial-drawing-controls not-content" slot="controls">
-    <div>
-      <WidgetSliderController
-        id="cube-pictorial-x-scale"
-        label="X 方向"
-        min={0.5}
-        max={2.5}
-        step={0.1}
-        value={1}
-      />
-    </div>
-    <div>
-      <WidgetSliderController
-        id="cube-pictorial-y-scale"
-        label="Y 方向"
-        min={0.5}
-        max={2.5}
-        step={0.1}
-        value={1}
-      />
-    </div>
-    <div>
-      <WidgetSliderController
-        id="cube-pictorial-z-scale"
-        label="Z 方向"
-        min={0.5}
-        max={2.5}
-        step={0.1}
-        value={1}
-      />
-    </div>
-  </div>
-</CuboidPictorialDrawing>
+<CuboidPictorialDrawing />
