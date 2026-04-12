@@ -8,19 +8,6 @@ import {
   getTrianglePath,
 } from "./functions/geometry";
 
-const { locale = "en" } = Astro.props;
-const copy = {
-  en: {
-    helperText:
-      "Drag the endpoints of the diameter or the red point on the circle to see that the angle at the circumference stays 90 degrees.",
-  },
-  ja: {
-    helperText:
-      "直径の両端や円周上の赤い点を動かしても、円周角がいつも90度のままであることを確かめてみましょう。",
-  },
-} as const;
-const text = copy[locale as keyof typeof copy] ?? copy.en;
-
 // 1. SERVER-SIDE: Calculate initial state
 const width = 400;
 const height = 400;
@@ -113,9 +100,6 @@ const initialAngleDegrees = getAngleDegrees(p1, p3, p2);
       fill="#e74c3c"
       style="cursor: grab; touch-action: none;"></circle>
   </svg>
-  <p slot="caption">
-    {text.helperText}
-  </p>
 </WidgetContainer>
 
 <script>

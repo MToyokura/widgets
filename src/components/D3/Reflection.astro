@@ -8,19 +8,6 @@ import {
   reflectPointAcrossLine,
 } from "./functions/geometry";
 
-const { locale = "en" } = Astro.props;
-const copy = {
-  en: {
-    helperText:
-      "Drag the orange point to rotate the mirror line, or the blue dot to move the figure.",
-  },
-  ja: {
-    helperText:
-      "オレンジの点を動かすと軸の向きが変わり、青い点を動かすと図形が移動します。",
-  },
-} as const;
-const text = copy[locale as keyof typeof copy] ?? copy.en;
-
 const width = 400;
 const height = 400;
 const lineHandleDistance = 88;
@@ -144,9 +131,6 @@ const initialLineHandle = getPointOnCircle(
       fill="#2563eb"
       style="cursor: grab; touch-action: none;"></circle>
   </svg>
-  <p slot="caption">
-    {text.helperText}
-  </p>
 </WidgetContainer>
 
 <script>

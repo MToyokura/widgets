@@ -8,18 +8,6 @@ import {
   rotatePoint,
 } from "./functions/geometry";
 
-const { locale = "en" } = Astro.props;
-const copy = {
-  en: {
-    helperText:
-      "Drag the orange point to rotate the figure, or the blue dot to move it.",
-  },
-  ja: {
-    helperText: "オレンジの点を動かして回転、青い点を動かして移動させます。",
-  },
-} as const;
-const text = copy[locale as keyof typeof copy] ?? copy.en;
-
 const width = 400;
 const height = 400;
 const guideRadius = 72;
@@ -140,9 +128,6 @@ const initialAngleHandle = getPointOnCircle(
       fill="#2563eb"
       style="cursor: grab; touch-action: none;"></circle>
   </svg>
-  <p slot="caption">
-    {text.helperText}
-  </p>
 </WidgetContainer>
 
 <script>

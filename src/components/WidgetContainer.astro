@@ -12,7 +12,6 @@ const {
 } = Astro.props;
 
 const hasControlsSlot = Astro.slots.has("controls");
-const hasCaptionSlot = Astro.slots.has("caption");
 
 const containerStyle = [
 	`--widget-container-aspect-ratio: ${aspectRatio}`,
@@ -38,12 +37,6 @@ const containerStyle = [
 	{hasControlsSlot && (
 		<div class="widget-container__controls">
 			<slot name="controls" />
-		</div>
-	)}
-
-	{hasCaptionSlot && (
-		<div class="widget-container__caption">
-			<slot name="caption" />
 		</div>
 	)}
 </div>
@@ -74,18 +67,6 @@ const containerStyle = [
 	.widget-container__controls {
 		width: min(100%, var(--widget-container-max-width));
 		margin: 1.5rem auto 0;
-	}
-
-	.widget-container__caption {
-		width: min(100%, var(--widget-container-max-width));
-		margin: 0.75rem auto 0;
-	}
-
-	.widget-container__caption :global(*) {
-		margin: 0;
-		text-align: center;
-		color: var(--sl-color-text);
-		font-size: 0.95rem;
 	}
 	@media (max-width: 40rem) {
 		.widget-container__scene {

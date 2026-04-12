@@ -3,17 +3,6 @@ import WidgetContainer from "../WidgetContainer.astro";
 
 import { getPolygonPath, translatePoint } from "./functions/geometry";
 
-const { locale = "en" } = Astro.props;
-const copy = {
-  en: {
-    helperText: "Drag the orange point to change the translation.",
-  },
-  ja: {
-    helperText: "オレンジの点を動かして平行移動させてみましょう。",
-  },
-} as const;
-const text = copy[locale as keyof typeof copy] ?? copy.en;
-
 const width = 400;
 const height = 400;
 const gridSpacing = 40;
@@ -119,9 +108,6 @@ const initialTranslatedCentroid = translatePoint(
       fill="#f97316"
       style="cursor: grab; touch-action: none;"></circle>
   </svg>
-  <p slot="caption">
-    {text.helperText}
-  </p>
 </WidgetContainer>
 
 <script>

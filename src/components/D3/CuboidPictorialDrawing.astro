@@ -42,11 +42,9 @@ const {
 const copy = {
   en: {
     title: "Pictorial drawing of a cuboid",
-    caption: "Pictorial drawing of a cuboid."
   },
   ja: {
     title: "直方体の見取図",
-    caption: "直方体の見取図"
   },
 } as const;
 const text = copy[locale as keyof typeof copy] ?? copy.ja;
@@ -128,7 +126,6 @@ const viewBoxHeight = maxY - minY;
 
 const baseId = `cube-pictorial-${crypto.randomUUID()}`;
 const titleId = `${baseId}-title`;
-const descId = `${baseId}-desc`;
 const hasControlsSlot = Astro.slots.has("controls");
 ---
 
@@ -139,7 +136,7 @@ const hasControlsSlot = Astro.slots.has("controls");
   <svg
     viewBox={`${minX} ${minY} ${viewBoxWidth} ${viewBoxHeight}`}
     role="img"
-    aria-labelledby={`${titleId} ${descId}`}
+    aria-labelledby={titleId}
     data-cube-pictorial-svg
     data-x-scale-control-id={xScaleControlId}
     data-y-scale-control-id={yScaleControlId}
@@ -149,7 +146,6 @@ const hasControlsSlot = Astro.slots.has("controls");
     data-initial-z-scale={zScale}
   >
     <title id={titleId}>{text.title}</title>
-    <desc id={descId}>{text.caption}</desc>
 
     <path
       class="face"
@@ -197,10 +193,6 @@ const hasControlsSlot = Astro.slots.has("controls");
   </svg>
 
   {hasControlsSlot && <slot name="controls" slot="controls" />}
-
-  <p slot="caption">
-    {text.caption}
-  </p>
 </WidgetContainer>
 
 <style>
