@@ -1,4 +1,6 @@
 ---
+import WidgetContainer from "../../WidgetContainer.astro";
+
 const {
   id,
   pixelRatioCapControlId = "",
@@ -7,7 +9,7 @@ const {
 } = Astro.props;
 ---
 
-<div class="viz-container" id={id}>
+<WidgetContainer id={id} sceneClass="threejs-viz-shell" background="#e0e0e0">
   <div
     class="threejs-viz"
     data-pixel-ratio-cap-control-id={pixelRatioCapControlId}
@@ -16,18 +18,17 @@ const {
   >
     <slot />
   </div>
-</div>
+</WidgetContainer>
 
 <style>
+  .threejs-viz-shell {
+    padding: 0;
+  }
+
   .threejs-viz {
     width: 100%;
-    aspect-ratio: 1 / 1;
-    max-width: 720px;
-    min-height: 320px;
-    margin: 0 auto;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #e0e0e0;
+    height: 100%;
+    background: transparent;
   }
 
   .threejs-viz :global(canvas) {
