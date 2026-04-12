@@ -1,5 +1,5 @@
 ---
-title: 平面図形の運動による空間図形の構成
+title: Construction of Spatial Figures through the Motion of Plane Figures
 sidebar:
   order: 1040
 ---
@@ -14,13 +14,13 @@ import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.as
 <ScenePowerToggle
   id="geometry-antialias-toggle"
   checked={true}
-  label="アンチエイリアス"
-  description="輪郭を滑らかにしますが、描画負荷と消費電力は増えます。"
+  label="Antialiasing"
+  description="Smooths edges, but increases rendering load and power consumption."
 />
 
-## 線分の平行移動で面を作る
+## Creating a Plane by Translating a Line Segment
 
-線分を平行に移動させると、その移動した軌跡によって1つの面が作られます。
+When a line segment is moved in parallel, a single plane is created by its trajectory.
 
 <MovingLineCreatesFlatPlane
   linePositionControlId="moving-line-flat-plane-position"
@@ -39,9 +39,9 @@ import SceneRangeControl from "@/components/three.js/shared/SceneRangeControl.as
   description=""
 />
 
-## 直線の回転で曲面を作る
+## Creating a Curved Surface by Rotating a Line
 
-円柱や円錐すいの側面は、1つの線分が定直線（軸）のまわりに回転してできる曲面とみなせます。
+The lateral surfaces of a cylinder or cone can be considered as curved surfaces created by a single line segment rotating around a fixed line (axis).
 
 <MovingLineCreatesCylindricalSurface
   lowPowerControlId="geometry-low-power-toggle"
