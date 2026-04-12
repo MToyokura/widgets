@@ -1,33 +1,15 @@
 ---
+import ThreeSceneShell from "./shared/ThreeSceneShell.astro";
+
 const lowPowerControlId = Astro.props.lowPowerControlId ?? "";
 const antialiasControlId = Astro.props.antialiasControlId ?? "";
 ---
 
-<div class="viz-container" id="line-and-point-not-on-line-wrapper">
-  <div
-    class="threejs-viz"
-    data-low-power-control-id={lowPowerControlId}
-    data-antialias-control-id={antialiasControlId}
-  ></div>
-</div>
-
-<style>
-  .threejs-viz {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    max-width: 720px;
-    min-height: 320px;
-    margin: 0 auto;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #e0e0e0;
-  }
-  .threejs-viz :global(canvas) {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-</style>
+<ThreeSceneShell
+  id="line-and-point-not-on-line-wrapper"
+  lowPowerControlId={lowPowerControlId}
+  antialiasControlId={antialiasControlId}
+/>
 
 <script>
   import * as THREE from "three";
@@ -36,11 +18,10 @@ import { LineGeometry } from "three/addons/lines/LineGeometry.js";
 import { LineMaterial } from "three/addons/lines/LineMaterial.js";
 import {
 addReferencePlane,
+getThreeSceneWrapper,
 mountManagedThreeScene,
 } from "./functions/three";
-  const wrapper = document.querySelector(
-    "#line-and-point-not-on-line-wrapper .threejs-viz",
-  );
+  const wrapper = getThreeSceneWrapper("line-and-point-not-on-line-wrapper");
   if (wrapper instanceof HTMLDivElement) {
     mountManagedThreeScene(wrapper, {
       cameraPosition: [5, 4.5, 5],

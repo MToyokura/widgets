@@ -44,6 +44,8 @@ type ReferencePlaneOptions = {
   gridSecondaryColor?: THREE.ColorRepresentation;
 };
 
+const THREE_SCENE_WRAPPER_CLASS = ".threejs-viz";
+
 function getCheckboxControl(controlId: string) {
   const control = document.getElementById(controlId);
 
@@ -52,6 +54,22 @@ function getCheckboxControl(controlId: string) {
   }
 
   return control;
+}
+
+export function getThreeSceneWrapper(containerId: string) {
+  const wrapper = document.querySelector(
+    `#${containerId} ${THREE_SCENE_WRAPPER_CLASS}`,
+  );
+
+  return wrapper instanceof HTMLDivElement ? wrapper : null;
+}
+
+export function getThreeSceneWrappers(containerId: string) {
+  return Array.from(
+    document.querySelectorAll(`#${containerId} ${THREE_SCENE_WRAPPER_CLASS}`),
+  ).filter(
+    (wrapper): wrapper is HTMLDivElement => wrapper instanceof HTMLDivElement,
+  );
 }
 
 export function isCheckboxEnabled(controlId = "", fallback = false) {

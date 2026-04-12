@@ -1,51 +1,29 @@
 ---
+import ThreeSceneShell from "./shared/ThreeSceneShell.astro";
+
 const lowPowerControlId = Astro.props.lowPowerControlId ?? "";
 const antialiasControlId = Astro.props.antialiasControlId ?? "";
 ---
 
-<div class="viz-container" id="perpendicular-line-and-plane-wrapper">
-  <div
-    class="threejs-viz"
-    data-low-power-control-id={lowPowerControlId}
-    data-antialias-control-id={antialiasControlId}
-  ></div>
-</div>
-
-<style>
-  .threejs-viz {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    max-width: 720px;
-    min-height: 320px;
-    margin: 0 auto;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #e0e0e0;
-  }
-
-  .threejs-viz :global(canvas) {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-</style>
+<ThreeSceneShell
+  id="perpendicular-line-and-plane-wrapper"
+  lowPowerControlId={lowPowerControlId}
+  antialiasControlId={antialiasControlId}
+/>
 
 <script>
   import * as THREE from "three";
 import { Line2 } from "three/addons/lines/Line2.js";
 import { LineGeometry } from "three/addons/lines/LineGeometry.js";
 import { LineMaterial } from "three/addons/lines/LineMaterial.js";
-import { mountManagedThreeScene } from "./functions/three";
+import {
+getThreeSceneWrappers,
+mountManagedThreeScene,
+} from "./functions/three";
 
-  const wrappers = document.querySelectorAll(
-    "#perpendicular-line-and-plane-wrapper .threejs-viz",
-  );
+  const wrappers = getThreeSceneWrappers("perpendicular-line-and-plane-wrapper");
 
   for (const wrapper of wrappers) {
-    if (!(wrapper instanceof HTMLDivElement)) {
-      continue;
-    }
-
     mountManagedThreeScene(wrapper, {
       cameraPosition: [5, 3, 6],
       cameraLookAt: [0, 0, 0],
