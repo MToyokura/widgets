@@ -13,37 +13,37 @@ import WidgetSliderController from "@/components/WidgetSliderController.astro";
   xScaleControlId="cube-pictorial-x-scale"
   yScaleControlId="cube-pictorial-y-scale"
   zScaleControlId="cube-pictorial-z-scale"
-/>
-
-<div style="display: flex; flex-wrap: wrap; gap: 1rem;">
-  <div>
-    <WidgetSliderController
-      id="cube-pictorial-x-scale"
-      label="X 方向"
-      min={0.5}
-      max={2.5}
-      step={0.1}
-      value={1}
-    />
+>
+  <div slot="controls" style="display: flex; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <WidgetSliderController
+        id="cube-pictorial-x-scale"
+        label="X 方向"
+        min={0.5}
+        max={2.5}
+        step={0.1}
+        value={1}
+      />
+    </div>
+    <div>
+      <WidgetSliderController
+        id="cube-pictorial-y-scale"
+        label="Y 方向"
+        min={0.5}
+        max={2.5}
+        step={0.1}
+        value={1}
+      />
+    </div>
+    <div>
+      <WidgetSliderController
+        id="cube-pictorial-z-scale"
+        label="Z 方向"
+        min={0.5}
+        max={2.5}
+        step={0.1}
+        value={1}
+      />
+    </div>
   </div>
-  <div>
-    <WidgetSliderController
-      id="cube-pictorial-y-scale"
-      label="Y 方向"
-      min={0.5}
-      max={2.5}
-      step={0.1}
-      value={1}
-    />
-  </div>
-  <div>
-    <WidgetSliderController
-      id="cube-pictorial-z-scale"
-      label="Z 方向"
-      min={0.5}
-      max={2.5}
-      step={0.1}
-      value={1}
-    />
-  </div>
-</div>
+</CubePictorialDrawing>

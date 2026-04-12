@@ -129,6 +129,7 @@ const viewBoxHeight = maxY - minY;
 const baseId = `cube-pictorial-${crypto.randomUUID()}`;
 const titleId = `${baseId}-title`;
 const descId = `${baseId}-desc`;
+const hasControlsSlot = Astro.slots.has("controls");
 ---
 
 <WidgetContainer
@@ -194,6 +195,9 @@ const descId = `${baseId}-desc`;
       ))
     }
   </svg>
+
+  {hasControlsSlot && <slot name="controls" slot="controls" />}
+
   <p slot="caption">
     {text.caption}
   </p>
