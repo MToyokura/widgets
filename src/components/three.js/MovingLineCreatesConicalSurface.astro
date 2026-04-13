@@ -18,8 +18,10 @@ const antialiasControlId = Astro.props.antialiasControlId ?? "";
   import { LineMaterial } from "three/addons/lines/LineMaterial.js";
   import {
     addReferencePlane,
+    createCirclePoints,
     getThreeSceneWrapper,
     mountManagedThreeScene,
+    setSegment,
   } from "./functions/three";
 
   const BASE_RADIUS = 1.35;
@@ -27,31 +29,6 @@ const antialiasControlId = Astro.props.antialiasControlId ?? "";
   const HALF_HEIGHT = HEIGHT / 2;
   const APEX = new THREE.Vector3(0, HALF_HEIGHT, 0);
   const ANGULAR_SPEED = 0.55;
-
-  function setSegment(
-    geometry: LineGeometry,
-    start: THREE.Vector3,
-    end: THREE.Vector3,
-  ) {
-    geometry.setPositions([start.x, start.y, start.z, end.x, end.y, end.z]);
-  }
-
-  function createCirclePoints(radius: number, y: number, segments = 96) {
-    const points = [];
-
-    for (let index = 0; index < segments; index += 1) {
-      const angle = (index / segments) * Math.PI * 2;
-      points.push(
-        new THREE.Vector3(
-          Math.cos(angle) * radius,
-          y,
-          Math.sin(angle) * radius,
-        ),
-      );
-    }
-
-    return points;
-  }
 
   function getBasePoint(angle: number) {
     return new THREE.Vector3(

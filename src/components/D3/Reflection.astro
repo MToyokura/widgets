@@ -2,6 +2,8 @@
 import WidgetContainer from "../WidgetContainer.astro";
 
 import {
+  getCentroid,
+  getConnectorPath,
   getLinePathThroughPoint,
   getPointOnCircle,
   getPolygonPath,
@@ -17,28 +19,9 @@ const initialOriginalPoints = [
   { x: 90, y: 135 },
   { x: 175, y: 225 },
 ];
-const initialCentroid = {
-  x:
-    initialOriginalPoints.reduce((sum, p) => sum + p.x, 0) /
-    initialOriginalPoints.length,
-  y:
-    initialOriginalPoints.reduce((sum, p) => sum + p.y, 0) /
-    initialOriginalPoints.length,
-};
+const initialCentroid = getCentroid(initialOriginalPoints);
 const initialLinePoint = { x: 200, y: 200 };
 const initialLineAngle = -Math.PI / 2;
-
-function getConnectorPath(
-  originalPoints: { x: number; y: number }[],
-  transformedPoints: { x: number; y: number }[],
-) {
-  return originalPoints
-    .map(
-      (point, index) =>
-        `M ${point.x} ${point.y} L ${transformedPoints[index].x} ${transformedPoints[index].y}`,
-    )
-    .join(" ");
-}
 
 const initialReflectedPoints = initialOriginalPoints.map((point) =>
   reflectPointAcrossLine(point, initialLinePoint, initialLineAngle),
@@ -134,23 +117,13 @@ const initialLineHandle = getPointOnCircle(
 <script>
   import * as d3 from "d3";
   import {
+    getCentroid,
+    getConnectorPath,
     getLinePathThroughPoint,
     getPointOnCircle,
     getPolygonPath,
     reflectPointAcrossLine,
   } from "./functions/geometry";
-
-  function getConnectorPath(
-    originalPoints: { x: number; y: number }[],
-    transformedPoints: { x: number; y: number }[],
-  ) {
-    return originalPoints
-      .map(
-        (point, index) =>
-          `M ${point.x} ${point.y} L ${transformedPoints[index].x} ${transformedPoints[index].y}`,
-      )
-      .join(" ");
-  }
 
   function setupInteractivity() {
     const originalShape = d3.select<SVGPathElement, unknown>(
@@ -188,12 +161,7 @@ const initialLineHandle = getPointOnCircle(
       { x: 90, y: 135 },
       { x: 175, y: 225 },
     ];
-    let centroid = {
-      x:
-        originalPoints.reduce((sum, p) => sum + p.x, 0) / originalPoints.length,
-      y:
-        originalPoints.reduce((sum, p) => sum + p.y, 0) / originalPoints.length,
-    };
+    let centroid = getCentroid(originalPoints);
     const linePoint = { x: 200, y: 200 };
     let lineAngle = -Math.PI / 2;
 

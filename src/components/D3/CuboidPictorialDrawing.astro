@@ -1,6 +1,7 @@
 ---
 import WidgetContainer from "../WidgetContainer.astro";
 import WidgetSliderController from "../WidgetSliderController.astro";
+import { getPolygonPath } from "./functions/geometry";
 
 type Point = {
   x: number;
@@ -72,12 +73,6 @@ function addPoints(...points: Point[]): Point {
     (sum, point) => ({ x: sum.x + point.x, y: sum.y + point.y }),
     { x: 0, y: 0 },
   );
-}
-
-function getClosedPath(points: Point[]): string {
-  return `${points
-    .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`)
-    .join(" ")} Z`;
 }
 
 const frontTopLeft = origin;
@@ -165,9 +160,9 @@ const resolvedZScaleControlId = zScaleControlId ?? `${baseId}-z-scale`;
     >
       <title id={titleId}>{text.title}</title>
 
-      <path class="face" data-face="top" d={getClosedPath(topFace)}></path>
-      <path class="face" data-face="side" d={getClosedPath(sideFace)}></path>
-      <path class="face" data-face="front" d={getClosedPath(frontFace)}></path>
+      <path class="face" data-face="top" d={getPolygonPath(topFace)}></path>
+      <path class="face" data-face="side" d={getPolygonPath(sideFace)}></path>
+      <path class="face" data-face="front" d={getPolygonPath(frontFace)}></path>
 
       {
         hiddenEdges.map(([start, end], index) => (
@@ -273,6 +268,8 @@ const resolvedZScaleControlId = zScaleControlId ?? `${baseId}-z-scale`;
 </style>
 
 <script>
+  import { getPolygonPath } from "./functions/geometry";
+
   type Point = { x: number; y: number };
 
   const ORIGIN = { x: 108, y: 110 };
@@ -300,12 +297,6 @@ const resolvedZScaleControlId = zScaleControlId ?? `${baseId}-z-scale`;
       (sum, point) => ({ x: sum.x + point.x, y: sum.y + point.y }),
       { x: 0, y: 0 },
     );
-  }
-
-  function getClosedPath(points: Point[]) {
-    return `${points
-      .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`)
-      .join(" ")} Z`;
   }
 
   function getGeometry(xScale: number, yScale: number, zScale: number) {
@@ -441,9 +432,9 @@ const resolvedZScaleControlId = zScaleControlId ?? `${baseId}-z-scale`;
       );
 
       svg.setAttribute("viewBox", geometry.viewBox);
-      topFace.setAttribute("d", getClosedPath(geometry.topFace));
-      sideFace.setAttribute("d", getClosedPath(geometry.sideFace));
-      frontFace.setAttribute("d", getClosedPath(geometry.frontFace));
+      topFace.setAttribute("d", getPolygonPath(geometry.topFace));
+      sideFace.setAttribute("d", getPolygonPath(geometry.sideFace));
+      frontFace.setAttribute("d", getPolygonPath(geometry.frontFace));
 
       for (const [index, line] of visibleEdges.entries()) {
         if (line instanceof SVGLineElement) {

@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { LineGeometry } from "three/addons/lines/LineGeometry.js";
 
 const PERFORMANCE_PIXEL_RATIO_CAP = 1.25;
 const DEFAULT_PIXEL_RATIO_CAP = 2;
@@ -45,6 +46,27 @@ type ReferencePlaneOptions = {
 };
 
 const THREE_SCENE_WRAPPER_CLASS = ".threejs-viz";
+
+export function setSegment(
+  geometry: LineGeometry,
+  start: THREE.Vector3,
+  end: THREE.Vector3,
+) {
+  geometry.setPositions([start.x, start.y, start.z, end.x, end.y, end.z]);
+}
+
+export function createCirclePoints(radius: number, y: number, segments = 96) {
+  const points = [];
+
+  for (let index = 0; index < segments; index += 1) {
+    const angle = (index / segments) * Math.PI * 2;
+    points.push(
+      new THREE.Vector3(Math.cos(angle) * radius, y, Math.sin(angle) * radius),
+    );
+  }
+
+  return points;
+}
 
 function getCheckboxControl(controlId: string) {
   const control = document.getElementById(controlId);

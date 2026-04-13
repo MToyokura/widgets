@@ -5,8 +5,14 @@ import {
   getAngleArcPath,
   getAngleDegrees,
   getAngleLabelPosition,
+  getCentralAngleArcPath,
+  getCentralAngleDegrees,
+  getCentralAngleLabelPosition,
+  getCentralLinesPath,
   getCircleArcPathExcludingAngle,
+  getInscribedLinesPath,
   getPointOnCircle,
+  getSignedMinorAngleDelta,
 } from "./functions/geometry";
 
 const width = 400;
@@ -18,131 +24,22 @@ const center = { x: cx, y: cy };
 const initialAngleA = (3 * Math.PI) / 4;
 const initialAngleB = Math.PI / 4;
 
-function getSignedMinorDelta(startAngle: number, endAngle: number) {
-  let delta = endAngle - startAngle;
-
-  if (delta <= -Math.PI) delta += Math.PI * 2;
-  if (delta > Math.PI) delta -= Math.PI * 2;
-
-  return delta;
-}
-
-function normalizeAngle(angle: number) {
-  const fullTurn = Math.PI * 2;
-
-  return ((angle % fullTurn) + fullTurn) % fullTurn;
-}
-
-function getCounterclockwiseDelta(startAngle: number, endAngle: number) {
-  const fullTurn = Math.PI * 2;
-
-  return (
-    (normalizeAngle(endAngle) - normalizeAngle(startAngle) + fullTurn) %
-    fullTurn
-  );
-}
-
-function getArcSignedDeltaExcludingAngle(
-  startAngle: number,
-  endAngle: number,
-  excludedAngle: number,
-) {
-  const ccwDelta = getCounterclockwiseDelta(startAngle, endAngle);
-
-  if (ccwDelta < 0.01 || Math.abs(ccwDelta - Math.PI * 2) < 0.01) return 0;
-
-  const excludedDelta = getCounterclockwiseDelta(startAngle, excludedAngle);
-  const excludedOnCounterclockwiseArc =
-    excludedDelta > 0.01 && excludedDelta < ccwDelta - 0.01;
-
-  return excludedOnCounterclockwiseArc ? ccwDelta - Math.PI * 2 : ccwDelta;
-}
-
-function getCentralAngleArcPath(
-  startAngle: number,
-  endAngle: number,
-  excludedAngle: number,
-  markerRadius = 18,
-) {
-  const signedDelta = getArcSignedDeltaExcludingAngle(
-    startAngle,
-    endAngle,
-    excludedAngle,
-  );
-
-  if (Math.abs(signedDelta) < 0.01) return "";
-
-  const start = getPointOnCircle(center, markerRadius, startAngle);
-  const end = getPointOnCircle(center, markerRadius, endAngle);
-  const largeArcFlag = Math.abs(signedDelta) > Math.PI ? 1 : 0;
-  const sweepFlag = signedDelta > 0 ? 1 : 0;
-
-  return `M ${start.x} ${start.y} A ${markerRadius} ${markerRadius} 0 ${largeArcFlag} ${sweepFlag} ${end.x} ${end.y}`;
-}
-
-function getCentralAngleDegrees(
-  startAngle: number,
-  endAngle: number,
-  excludedAngle: number,
-) {
-  return (
-    (Math.abs(
-      getArcSignedDeltaExcludingAngle(startAngle, endAngle, excludedAngle),
-    ) *
-      180) /
-    Math.PI
-  );
-}
-
-function getCentralAngleLabelPosition(
-  startAngle: number,
-  endAngle: number,
-  excludedAngle: number,
-  distanceFromCenter = 44,
-) {
-  const signedDelta = getArcSignedDeltaExcludingAngle(
-    startAngle,
-    endAngle,
-    excludedAngle,
-  );
-  const midpointAngle = startAngle + signedDelta / 2;
-
-  return {
-    x: center.x + Math.cos(midpointAngle) * distanceFromCenter,
-    y: center.y + Math.sin(midpointAngle) * distanceFromCenter,
-  };
-}
-
-function getInscribedLinesPath(
-  a: { x: number; y: number },
-  b: { x: number; y: number },
-  vertex: { x: number; y: number },
-) {
-  return `M ${vertex.x} ${vertex.y} L ${a.x} ${a.y} M ${vertex.x} ${vertex.y} L ${b.x} ${b.y}`;
-}
-
-function getCentralLinesPath(
-  a: { x: number; y: number },
-  vertex: { x: number; y: number },
-  b: { x: number; y: number },
-) {
-  return `M ${a.x} ${a.y} L ${vertex.x} ${vertex.y} L ${b.x} ${b.y}`;
-}
-
 const initialAngleC =
   initialAngleA +
-  getSignedMinorDelta(initialAngleA, initialAngleB) / 2 +
+  getSignedMinorAngleDelta(initialAngleA, initialAngleB) / 2 +
   Math.PI;
 const p1 = getPointOnCircle(center, radius, initialAngleA);
 const p2 = getPointOnCircle(center, radius, initialAngleB);
 const p3 = getPointOnCircle(center, radius, initialAngleC);
 const initialPath = getCentralLinesPath(p1, center, p2);
 const initialCentralAngleArcPath = getCentralAngleArcPath(
+  center,
   initialAngleA,
   initialAngleB,
   initialAngleC,
 );
 const initialCentralAngleLabelPosition = getCentralAngleLabelPosition(
+  center,
   initialAngleA,
   initialAngleB,
   initialAngleC,
@@ -290,65 +187,15 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
     getAngleArcPath,
     getAngleDegrees,
     getAngleLabelPosition,
+    getCentralAngleArcPath,
+    getCentralAngleDegrees,
+    getCentralAngleLabelPosition,
+    getCentralLinesPath,
     getCircleArcPathExcludingAngle,
+    getInscribedLinesPath,
     getPointOnCircle,
+    getSignedMinorAngleDelta,
   } from "./functions/geometry";
-
-  function getSignedMinorDelta(startAngle: number, endAngle: number) {
-    let delta = endAngle - startAngle;
-
-    if (delta <= -Math.PI) delta += Math.PI * 2;
-    if (delta > Math.PI) delta -= Math.PI * 2;
-
-    return delta;
-  }
-
-  function normalizeAngle(angle: number) {
-    const fullTurn = Math.PI * 2;
-
-    return ((angle % fullTurn) + fullTurn) % fullTurn;
-  }
-
-  function getCounterclockwiseDelta(startAngle: number, endAngle: number) {
-    const fullTurn = Math.PI * 2;
-
-    return (
-      (normalizeAngle(endAngle) - normalizeAngle(startAngle) + fullTurn) %
-      fullTurn
-    );
-  }
-
-  function getArcSignedDeltaExcludingAngle(
-    startAngle: number,
-    endAngle: number,
-    excludedAngle: number,
-  ) {
-    const ccwDelta = getCounterclockwiseDelta(startAngle, endAngle);
-
-    if (ccwDelta < 0.01 || Math.abs(ccwDelta - Math.PI * 2) < 0.01) return 0;
-
-    const excludedDelta = getCounterclockwiseDelta(startAngle, excludedAngle);
-    const excludedOnCounterclockwiseArc =
-      excludedDelta > 0.01 && excludedDelta < ccwDelta - 0.01;
-
-    return excludedOnCounterclockwiseArc ? ccwDelta - Math.PI * 2 : ccwDelta;
-  }
-
-  function getInscribedLinesPath(
-    a: { x: number; y: number },
-    b: { x: number; y: number },
-    vertex: { x: number; y: number },
-  ) {
-    return `M ${vertex.x} ${vertex.y} L ${a.x} ${a.y} M ${vertex.x} ${vertex.y} L ${b.x} ${b.y}`;
-  }
-
-  function getCentralLinesPath(
-    a: { x: number; y: number },
-    vertex: { x: number; y: number },
-    b: { x: number; y: number },
-  ) {
-    return `M ${a.x} ${a.y} L ${vertex.x} ${vertex.y} L ${b.x} ${b.y}`;
-  }
 
   function setupInteractivity() {
     const handleA = d3.select<SVGCircleElement, unknown>(
@@ -403,62 +250,8 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
     const center = { x: cx, y: cy };
     let angleA = (3 * Math.PI) / 4;
     let angleB = Math.PI / 4;
-    let angleC = angleA + getSignedMinorDelta(angleA, angleB) / 2 + Math.PI;
-
-    function getCentralAngleArcPath(
-      startAngle: number,
-      endAngle: number,
-      excludedAngle: number,
-      markerRadius = 18,
-    ) {
-      const signedDelta = getArcSignedDeltaExcludingAngle(
-        startAngle,
-        endAngle,
-        excludedAngle,
-      );
-
-      if (Math.abs(signedDelta) < 0.01) return "";
-
-      const start = getPointOnCircle(center, markerRadius, startAngle);
-      const end = getPointOnCircle(center, markerRadius, endAngle);
-      const largeArcFlag = Math.abs(signedDelta) > Math.PI ? 1 : 0;
-      const sweepFlag = signedDelta > 0 ? 1 : 0;
-
-      return `M ${start.x} ${start.y} A ${markerRadius} ${markerRadius} 0 ${largeArcFlag} ${sweepFlag} ${end.x} ${end.y}`;
-    }
-
-    function getCentralAngleDegrees(
-      startAngle: number,
-      endAngle: number,
-      excludedAngle: number,
-    ) {
-      return (
-        (Math.abs(
-          getArcSignedDeltaExcludingAngle(startAngle, endAngle, excludedAngle),
-        ) *
-          180) /
-        Math.PI
-      );
-    }
-
-    function getCentralAngleLabelPosition(
-      startAngle: number,
-      endAngle: number,
-      excludedAngle: number,
-      distanceFromCenter = 44,
-    ) {
-      const signedDelta = getArcSignedDeltaExcludingAngle(
-        startAngle,
-        endAngle,
-        excludedAngle,
-      );
-      const midpointAngle = startAngle + signedDelta / 2;
-
-      return {
-        x: center.x + Math.cos(midpointAngle) * distanceFromCenter,
-        y: center.y + Math.sin(midpointAngle) * distanceFromCenter,
-      };
-    }
+    let angleC =
+      angleA + getSignedMinorAngleDelta(angleA, angleB) / 2 + Math.PI;
 
     function getPoints() {
       return {
@@ -485,6 +278,7 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
       );
       const inscribedAngleDegrees = getAngleDegrees(p1, p3, p2);
       const centralLabelPosition = getCentralAngleLabelPosition(
+        center,
         angleA,
         angleB,
         angleC,
@@ -500,7 +294,7 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
         getCircleArcPathExcludingAngle(center, radius, angleA, angleB, angleC),
       );
       inscribedLines.attr("d", getInscribedLinesPath(p1, p2, p3));
-      marker.attr("d", getCentralAngleArcPath(angleA, angleB, angleC));
+      marker.attr("d", getCentralAngleArcPath(center, angleA, angleB, angleC));
       inscribedMarker.attr("d", getAngleArcPath(p1, p3, p2));
       angleLabel
         .attr("x", centralLabelPosition.x)

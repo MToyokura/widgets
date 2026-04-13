@@ -2,6 +2,7 @@
 import WidgetContainer from "../WidgetContainer.astro";
 
 import {
+  getCentroid,
   getCircleArcPath,
   getPointOnCircle,
   getPolygonPath,
@@ -18,10 +19,7 @@ const originalPoints = [
   { x: 155, y: 130 },
   { x: 240, y: 230 },
 ];
-const centroid = {
-  x: originalPoints.reduce((sum, p) => sum + p.x, 0) / originalPoints.length,
-  y: originalPoints.reduce((sum, p) => sum + p.y, 0) / originalPoints.length,
-};
+const centroid = getCentroid(originalPoints);
 const initialRotatedPoints = originalPoints.map((point) =>
   rotatePoint(point, rotationCenter, rotationAngle),
 );
@@ -131,6 +129,7 @@ const initialAngleHandle = getPointOnCircle(
 <script>
   import * as d3 from "d3";
   import {
+    getCentroid,
     getCircleArcPath,
     getPointOnCircle,
     getPolygonPath,
@@ -156,12 +155,7 @@ const initialAngleHandle = getPointOnCircle(
       { x: 155, y: 130 },
       { x: 240, y: 230 },
     ];
-    let centroid = {
-      x:
-        originalPoints.reduce((sum, p) => sum + p.x, 0) / originalPoints.length,
-      y:
-        originalPoints.reduce((sum, p) => sum + p.y, 0) / originalPoints.length,
-    };
+    let centroid = getCentroid(originalPoints);
 
     const rotationCenter = { x: 210, y: 210 };
     const guideRadius = 72;

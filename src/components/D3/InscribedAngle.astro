@@ -6,6 +6,7 @@ import {
   getAngleDegrees,
   getAngleLabelPosition,
   getCircleArcPathExcludingAngle,
+  getInscribedLinesPath,
   getPointOnCircle,
 } from "./functions/geometry";
 
@@ -18,14 +19,6 @@ const center = { x: cx, y: cy };
 const initialAngleA = (3 * Math.PI) / 4;
 const initialAngleB = Math.PI / 4;
 const initialAngleC = -Math.PI / 2;
-
-function getInscribedLinesPath(
-  a: { x: number; y: number },
-  b: { x: number; y: number },
-  vertex: { x: number; y: number },
-) {
-  return `M ${vertex.x} ${vertex.y} L ${a.x} ${a.y} M ${vertex.x} ${vertex.y} L ${b.x} ${b.y}`;
-}
 
 const p1 = getPointOnCircle(center, radius, initialAngleA);
 const p2 = getPointOnCircle(center, radius, initialAngleB);
@@ -120,16 +113,9 @@ const initialHighlightedArcPath = getCircleArcPathExcludingAngle(
     getAngleDegrees,
     getAngleLabelPosition,
     getCircleArcPathExcludingAngle,
+    getInscribedLinesPath,
     getPointOnCircle,
   } from "./functions/geometry";
-
-  function getInscribedLinesPath(
-    a: { x: number; y: number },
-    b: { x: number; y: number },
-    vertex: { x: number; y: number },
-  ) {
-    return `M ${vertex.x} ${vertex.y} L ${a.x} ${a.y} M ${vertex.x} ${vertex.y} L ${b.x} ${b.y}`;
-  }
 
   function setupInteractivity() {
     const handleA = d3.select<SVGCircleElement, unknown>(

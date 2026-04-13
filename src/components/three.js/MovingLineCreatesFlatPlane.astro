@@ -48,6 +48,7 @@ const text = copy[locale as keyof typeof copy] ?? copy.ja;
     getThreeSceneWrapper,
     mountManagedThreeScene,
     observeRangePreference,
+    setSegment,
   } from "./functions/three";
 
   const DEFAULT_LINE_OFFSET = 0;
@@ -56,14 +57,6 @@ const text = copy[locale as keyof typeof copy] ?? copy.ja;
   const BASE_START = new THREE.Vector3(-1.6, 0.85, -1.1);
   const BASE_END = new THREE.Vector3(1.6, 0.85, -1.1);
   const TRANSLATION_VECTOR = new THREE.Vector3(0, 0, 1);
-
-  function setSegment(
-    geometry: LineGeometry,
-    start: THREE.Vector3,
-    end: THREE.Vector3,
-  ) {
-    geometry.setPositions([start.x, start.y, start.z, end.x, end.y, end.z]);
-  }
 
   const wrapper = getThreeSceneWrapper(
     "moving-line-creates-flat-plane-wrapper",

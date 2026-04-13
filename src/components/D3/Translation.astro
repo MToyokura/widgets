@@ -1,7 +1,12 @@
 ---
 import WidgetContainer from "../WidgetContainer.astro";
 
-import { getPolygonPath, translatePoint } from "./functions/geometry";
+import {
+  getCentroid,
+  getConnectorPath,
+  getPolygonPath,
+  translatePoint,
+} from "./functions/geometry";
 
 const width = 400;
 const height = 400;
@@ -20,25 +25,6 @@ const initialOriginalPoints = [
   { x: 205, y: 225 },
 ];
 const initialOffset = { x: 150, y: 0 };
-
-function getCentroid(points: { x: number; y: number }[]) {
-  return {
-    x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
-    y: points.reduce((sum, point) => sum + point.y, 0) / points.length,
-  };
-}
-
-function getConnectorPath(
-  originalPoints: { x: number; y: number }[],
-  transformedPoints: { x: number; y: number }[],
-) {
-  return originalPoints
-    .map(
-      (point, index) =>
-        `M ${point.x} ${point.y} L ${transformedPoints[index].x} ${transformedPoints[index].y}`,
-    )
-    .join(" ");
-}
 
 const initialTranslatedPoints = initialOriginalPoints.map((point) =>
   translatePoint(point, initialOffset),
@@ -110,26 +96,12 @@ const initialTranslatedCentroid = translatePoint(
 
 <script>
   import * as d3 from "d3";
-  import { getPolygonPath, translatePoint } from "./functions/geometry";
-
-  function getCentroid(points: { x: number; y: number }[]) {
-    return {
-      x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
-      y: points.reduce((sum, point) => sum + point.y, 0) / points.length,
-    };
-  }
-
-  function getConnectorPath(
-    originalPoints: { x: number; y: number }[],
-    transformedPoints: { x: number; y: number }[],
-  ) {
-    return originalPoints
-      .map(
-        (point, index) =>
-          `M ${point.x} ${point.y} L ${transformedPoints[index].x} ${transformedPoints[index].y}`,
-      )
-      .join(" ");
-  }
+  import {
+    getCentroid,
+    getConnectorPath,
+    getPolygonPath,
+    translatePoint,
+  } from "./functions/geometry";
 
   function clampPoint(point: { x: number; y: number }, margin = 18) {
     return {
