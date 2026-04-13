@@ -4,6 +4,7 @@ import WidgetContainer from "../WidgetContainer.astro";
 import {
   getAngleArcPath,
   getAngleDegrees,
+  getCircleArcPath,
   getAngleLabelPosition,
   getPointOnCircle,
   getTrianglePath,
@@ -62,18 +63,101 @@ function getDoubleAngleDotPositions(
   b: { x: number; y: number },
   distanceFromVertex = 22,
   spacing = 10,
+  dotRadius = 4,
 ) {
   const midpoint = getAngleLabelPosition(a, vertex, b, distanceFromVertex);
   const dx = midpoint.x - vertex.x;
   const dy = midpoint.y - vertex.y;
-  const length = Math.hypot(dx, dy) || 1;
-  const offsetX = (-dy / length) * (spacing / 2);
-  const offsetY = (dx / length) * (spacing / 2);
+  const midpointDistance = Math.hypot(dx, dy);
+  const directionLength = midpointDistance || 1;
+  const angleRadians = (getAngleDegrees(a, vertex, b) * Math.PI) / 180;
+  const availableWidth = midpointDistance * 2 * Math.sin(angleRadians / 2);
+  const minimumSpacing = Math.min(spacing, Math.max(3, dotRadius * 0.5));
+  const effectiveSpacing = Math.max(
+    minimumSpacing,
+    Math.min(spacing, availableWidth - dotRadius * 2),
+  );
+  const offsetX = (-dy / directionLength) * (effectiveSpacing / 2);
+  const offsetY = (dx / directionLength) * (effectiveSpacing / 2);
 
   return [
     { x: midpoint.x + offsetX, y: midpoint.y + offsetY },
     { x: midpoint.x - offsetX, y: midpoint.y - offsetY },
   ];
+}
+
+const insetAngleIndicatorCenter = { x: width - 54, y: height - 54 };
+const insetAngleIndicatorRadius = 30;
+const insetAngleIndicatorRayRadius = insetAngleIndicatorRadius;
+const insetAngleIndicatorArcRadius = insetAngleIndicatorRadius;
+const insetAngleIndicatorLayoutRadius = 34;
+const insetAngleIndicatorDotSpacing = 6;
+const insetAngleIndicatorDotGroupOffset = insetAngleIndicatorLayoutRadius * 0.5;
+
+function getInsetAngleIndicatorPaths(
+  angleDegrees: number,
+  side: "left" | "right",
+) {
+  const angleRadians = Math.max(
+    0,
+    Math.min(Math.PI, (angleDegrees * Math.PI) / 180),
+  );
+  const splitTop = {
+    x: insetAngleIndicatorCenter.x,
+    y: insetAngleIndicatorCenter.y - insetAngleIndicatorRadius,
+  };
+  const splitBottom = {
+    x: insetAngleIndicatorCenter.x,
+    y: insetAngleIndicatorCenter.y + insetAngleIndicatorRadius,
+  };
+  const sectorStart = getPointOnCircle(
+    insetAngleIndicatorCenter,
+    insetAngleIndicatorRayRadius,
+    Math.PI / 2,
+  );
+  const endAngle =
+    side === "left" ? Math.PI / 2 + angleRadians : Math.PI / 2 - angleRadians;
+  const sectorEnd = getPointOnCircle(
+    insetAngleIndicatorCenter,
+    insetAngleIndicatorRayRadius,
+    endAngle,
+  );
+  const hasVisibleAngle = angleRadians > 0.01;
+  const sweepFlag = side === "left" ? 1 : 0;
+  const dotBaseX =
+    insetAngleIndicatorCenter.x +
+    (side === "left"
+      ? -insetAngleIndicatorDotGroupOffset
+      : insetAngleIndicatorDotGroupOffset);
+  const dotY = insetAngleIndicatorCenter.y + insetAngleIndicatorLayoutRadius;
+
+  return {
+    splitPath: getLinePath(splitTop, splitBottom),
+    sectorPath: hasVisibleAngle
+      ? `M ${insetAngleIndicatorCenter.x} ${insetAngleIndicatorCenter.y} L ${sectorStart.x} ${sectorStart.y} A ${insetAngleIndicatorRayRadius} ${insetAngleIndicatorRayRadius} 0 0 ${sweepFlag} ${sectorEnd.x} ${sectorEnd.y} Z`
+      : "",
+    rayPath: hasVisibleAngle
+      ? getLinePath(insetAngleIndicatorCenter, sectorEnd)
+      : "",
+    arcPath: hasVisibleAngle
+      ? getCircleArcPath(
+          insetAngleIndicatorCenter,
+          insetAngleIndicatorArcRadius,
+          Math.PI / 2,
+          endAngle,
+        )
+      : "",
+    dotPositions: [
+      {
+        x: dotBaseX - insetAngleIndicatorDotSpacing / 2,
+        y: dotY,
+      },
+      {
+        x: dotBaseX + insetAngleIndicatorDotSpacing / 2,
+        y: dotY,
+      },
+    ],
+  };
 }
 
 const p4 = getOppositePoint(p3);
@@ -91,6 +175,14 @@ const initialAngleAodDotPositions = getDoubleAngleDotPositions(p1, center, p4);
 const initialAngleBodDotPositions = getDoubleAngleDotPositions(p2, center, p4);
 const initialAngleAodArcPath = getAngleArcPath(p1, center, p4, 38);
 const initialAngleBodArcPath = getAngleArcPath(p2, center, p4, 30);
+const initialAodInsetAngleIndicator = getInsetAngleIndicatorPaths(
+  getAngleDegrees(p1, center, p4),
+  "left",
+);
+const initialBodInsetAngleIndicator = getInsetAngleIndicatorPaths(
+  getAngleDegrees(p2, center, p4),
+  "right",
+);
 const initialAcoPath = getTrianglePath(p1, p3, center);
 const initialBcoPath = getTrianglePath(p2, p3, center);
 const initialShowAcoGroup =
@@ -123,6 +215,90 @@ const initialShowBcoGroup =
       stroke-dasharray="6 5"
       stroke-linecap="round"
       style="pointer-events: none;"></path>
+    <g style="pointer-events: none;">
+      <circle
+        cx={insetAngleIndicatorCenter.x}
+        cy={insetAngleIndicatorCenter.y}
+        r={insetAngleIndicatorRadius}
+        fill="white"
+        stroke="#9ca3af"
+        stroke-width="2"></circle>
+      <path
+        id="inscribed-angle-proof-case-center-outside-triangle-angle-aod-indicator-sector"
+        d={initialAodInsetAngleIndicator.sectorPath}
+        fill="rgba(250, 204, 21, 0.18)"
+        stroke="none"></path>
+      <path
+        id="inscribed-angle-proof-case-center-outside-triangle-angle-bod-indicator-sector"
+        d={initialBodInsetAngleIndicator.sectorPath}
+        fill="rgba(22, 163, 74, 0.16)"
+        stroke="none"></path>
+      <path
+        d={initialAodInsetAngleIndicator.splitPath}
+        fill="none"
+        stroke="#9ca3af"
+        stroke-width="2"></path>
+      <path
+        id="inscribed-angle-proof-case-center-outside-triangle-angle-aod-indicator-ray"
+        d={initialAodInsetAngleIndicator.rayPath}
+        fill="none"
+        stroke="#ca8a04"
+        stroke-width="2.5"
+        stroke-linecap="round"></path>
+      <path
+        id="inscribed-angle-proof-case-center-outside-triangle-angle-aod-indicator-arc"
+        d={initialAodInsetAngleIndicator.arcPath}
+        fill="none"
+        stroke="#facc15"
+        stroke-width="4"
+        stroke-linecap="round"></path>
+      <circle
+        id="inscribed-angle-proof-case-center-outside-triangle-angle-aod-indicator-dot-1"
+        cx={initialAodInsetAngleIndicator.dotPositions[0].x}
+        cy={initialAodInsetAngleIndicator.dotPositions[0].y}
+        r={3.5}
+        fill="#facc15"
+        stroke="#111827"
+        stroke-width="1.5"></circle>
+      <circle
+        id="inscribed-angle-proof-case-center-outside-triangle-angle-aod-indicator-dot-2"
+        cx={initialAodInsetAngleIndicator.dotPositions[1].x}
+        cy={initialAodInsetAngleIndicator.dotPositions[1].y}
+        r={3.5}
+        fill="#facc15"
+        stroke="#111827"
+        stroke-width="1.5"></circle>
+      <path
+        id="inscribed-angle-proof-case-center-outside-triangle-angle-bod-indicator-ray"
+        d={initialBodInsetAngleIndicator.rayPath}
+        fill="none"
+        stroke="#15803d"
+        stroke-width="2.5"
+        stroke-linecap="round"></path>
+      <path
+        id="inscribed-angle-proof-case-center-outside-triangle-angle-bod-indicator-arc"
+        d={initialBodInsetAngleIndicator.arcPath}
+        fill="none"
+        stroke="#16a34a"
+        stroke-width="4"
+        stroke-linecap="round"></path>
+      <circle
+        id="inscribed-angle-proof-case-center-outside-triangle-angle-bod-indicator-dot-1"
+        cx={initialBodInsetAngleIndicator.dotPositions[0].x}
+        cy={initialBodInsetAngleIndicator.dotPositions[0].y}
+        r={3.5}
+        fill="#16a34a"
+        stroke="#111827"
+        stroke-width="1.5"></circle>
+      <circle
+        id="inscribed-angle-proof-case-center-outside-triangle-angle-bod-indicator-dot-2"
+        cx={initialBodInsetAngleIndicator.dotPositions[1].x}
+        cy={initialBodInsetAngleIndicator.dotPositions[1].y}
+        r={3.5}
+        fill="#16a34a"
+        stroke="#111827"
+        stroke-width="1.5"></circle>
+    </g>
     <path
       id="inscribed-angle-proof-case-center-outside-triangle-aco-shape"
       d={initialAcoPath}
@@ -328,6 +504,7 @@ const initialShowBcoGroup =
     getAngleArcPath,
     getAngleDegrees,
     getAngleLabelPosition,
+    getCircleArcPath,
     getPointOnCircle,
     getTrianglePath,
   } from "./functions/geometry";
@@ -364,18 +541,93 @@ const initialShowBcoGroup =
     b: { x: number; y: number },
     distanceFromVertex = 22,
     spacing = 10,
+    dotRadius = 4,
   ) {
     const midpoint = getAngleLabelPosition(a, vertex, b, distanceFromVertex);
     const dx = midpoint.x - vertex.x;
     const dy = midpoint.y - vertex.y;
-    const length = Math.hypot(dx, dy) || 1;
-    const offsetX = (-dy / length) * (spacing / 2);
-    const offsetY = (dx / length) * (spacing / 2);
+    const midpointDistance = Math.hypot(dx, dy);
+    const directionLength = midpointDistance || 1;
+    const angleRadians = (getAngleDegrees(a, vertex, b) * Math.PI) / 180;
+    const availableWidth = midpointDistance * 2 * Math.sin(angleRadians / 2);
+    const minimumSpacing = Math.min(spacing, Math.max(3, dotRadius * 0.5));
+    const effectiveSpacing = Math.max(
+      minimumSpacing,
+      Math.min(spacing, availableWidth - dotRadius * 2),
+    );
+    const offsetX = (-dy / directionLength) * (effectiveSpacing / 2);
+    const offsetY = (dx / directionLength) * (effectiveSpacing / 2);
 
     return [
       { x: midpoint.x + offsetX, y: midpoint.y + offsetY },
       { x: midpoint.x - offsetX, y: midpoint.y - offsetY },
     ];
+  }
+
+  const insetAngleIndicatorCenter = { x: 400 - 54, y: 400 - 54 };
+  const insetAngleIndicatorRadius = 30;
+  const insetAngleIndicatorRayRadius = insetAngleIndicatorRadius;
+  const insetAngleIndicatorArcRadius = insetAngleIndicatorRadius;
+  const insetAngleIndicatorLayoutRadius = 34;
+  const insetAngleIndicatorDotSpacing = 6;
+  const insetAngleIndicatorDotGroupOffset =
+    insetAngleIndicatorLayoutRadius * 0.5;
+
+  function getInsetAngleIndicatorPaths(
+    angleDegrees: number,
+    side: "left" | "right",
+  ) {
+    const angleRadians = Math.max(
+      0,
+      Math.min(Math.PI, (angleDegrees * Math.PI) / 180),
+    );
+    const sectorStart = getPointOnCircle(
+      insetAngleIndicatorCenter,
+      insetAngleIndicatorRayRadius,
+      Math.PI / 2,
+    );
+    const endAngle =
+      side === "left" ? Math.PI / 2 + angleRadians : Math.PI / 2 - angleRadians;
+    const sectorEnd = getPointOnCircle(
+      insetAngleIndicatorCenter,
+      insetAngleIndicatorRayRadius,
+      endAngle,
+    );
+    const hasVisibleAngle = angleRadians > 0.01;
+    const sweepFlag = side === "left" ? 1 : 0;
+    const dotBaseX =
+      insetAngleIndicatorCenter.x +
+      (side === "left"
+        ? -insetAngleIndicatorDotGroupOffset
+        : insetAngleIndicatorDotGroupOffset);
+    const dotY = insetAngleIndicatorCenter.y + insetAngleIndicatorLayoutRadius;
+
+    return {
+      sectorPath: hasVisibleAngle
+        ? `M ${insetAngleIndicatorCenter.x} ${insetAngleIndicatorCenter.y} L ${sectorStart.x} ${sectorStart.y} A ${insetAngleIndicatorRayRadius} ${insetAngleIndicatorRayRadius} 0 0 ${sweepFlag} ${sectorEnd.x} ${sectorEnd.y} Z`
+        : "",
+      rayPath: hasVisibleAngle
+        ? getLinePath(insetAngleIndicatorCenter, sectorEnd)
+        : "",
+      arcPath: hasVisibleAngle
+        ? getCircleArcPath(
+            insetAngleIndicatorCenter,
+            insetAngleIndicatorArcRadius,
+            Math.PI / 2,
+            endAngle,
+          )
+        : "",
+      dotPositions: [
+        {
+          x: dotBaseX - insetAngleIndicatorDotSpacing / 2,
+          y: dotY,
+        },
+        {
+          x: dotBaseX + insetAngleIndicatorDotSpacing / 2,
+          y: dotY,
+        },
+      ],
+    };
   }
 
   function setupInteractivity() {
@@ -407,6 +659,36 @@ const initialShowBcoGroup =
     );
     const angleBodArc = d3.select<SVGPathElement, unknown>(
       "#inscribed-angle-proof-case-center-outside-triangle-angle-bod-arc",
+    );
+    const angleAodIndicatorSector = d3.select<SVGPathElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-aod-indicator-sector",
+    );
+    const angleBodIndicatorSector = d3.select<SVGPathElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-bod-indicator-sector",
+    );
+    const angleAodIndicatorRay = d3.select<SVGPathElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-aod-indicator-ray",
+    );
+    const angleAodIndicatorArc = d3.select<SVGPathElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-aod-indicator-arc",
+    );
+    const angleAodIndicatorDot1 = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-aod-indicator-dot-1",
+    );
+    const angleAodIndicatorDot2 = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-aod-indicator-dot-2",
+    );
+    const angleBodIndicatorRay = d3.select<SVGPathElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-bod-indicator-ray",
+    );
+    const angleBodIndicatorArc = d3.select<SVGPathElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-bod-indicator-arc",
+    );
+    const angleBodIndicatorDot1 = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-bod-indicator-dot-1",
+    );
+    const angleBodIndicatorDot2 = d3.select<SVGCircleElement, unknown>(
+      "#inscribed-angle-proof-case-center-outside-triangle-angle-bod-indicator-dot-2",
     );
     const diameter = d3.select<SVGPathElement, unknown>(
       "#inscribed-angle-proof-case-center-outside-triangle-diameter",
@@ -459,6 +741,16 @@ const initialShowBcoGroup =
       triangleBco.empty() ||
       angleAodArc.empty() ||
       angleBodArc.empty() ||
+      angleAodIndicatorSector.empty() ||
+      angleBodIndicatorSector.empty() ||
+      angleAodIndicatorRay.empty() ||
+      angleAodIndicatorArc.empty() ||
+      angleAodIndicatorDot1.empty() ||
+      angleAodIndicatorDot2.empty() ||
+      angleBodIndicatorRay.empty() ||
+      angleBodIndicatorArc.empty() ||
+      angleBodIndicatorDot1.empty() ||
+      angleBodIndicatorDot2.empty() ||
       diameter.empty() ||
       angleAcoDot.empty() ||
       angleCaoDot.empty() ||
@@ -525,6 +817,14 @@ const initialShowBcoGroup =
       const angleBodDotPositions = getDoubleAngleDotPositions(p2, center, p4);
       const angleAodArcPath = getAngleArcPath(p1, center, p4, 38);
       const angleBodArcPath = getAngleArcPath(p2, center, p4, 30);
+      const aodInsetAngleIndicator = getInsetAngleIndicatorPaths(
+        getAngleDegrees(p1, center, p4),
+        "left",
+      );
+      const bodInsetAngleIndicator = getInsetAngleIndicatorPaths(
+        getAngleDegrees(p2, center, p4),
+        "right",
+      );
       const showAcoGroup =
         getAngleDegrees(p1, p3, p4) > degenerateAngleThresholdDegrees;
       const showBcoGroup =
@@ -535,6 +835,24 @@ const initialShowBcoGroup =
       handleC.attr("cx", p3.x).attr("cy", p3.y);
       angleAodArc.attr("d", angleAodArcPath);
       angleBodArc.attr("d", angleBodArcPath);
+      angleAodIndicatorSector.attr("d", aodInsetAngleIndicator.sectorPath);
+      angleBodIndicatorSector.attr("d", bodInsetAngleIndicator.sectorPath);
+      angleAodIndicatorRay.attr("d", aodInsetAngleIndicator.rayPath);
+      angleAodIndicatorArc.attr("d", aodInsetAngleIndicator.arcPath);
+      angleAodIndicatorDot1
+        .attr("cx", aodInsetAngleIndicator.dotPositions[0].x)
+        .attr("cy", aodInsetAngleIndicator.dotPositions[0].y);
+      angleAodIndicatorDot2
+        .attr("cx", aodInsetAngleIndicator.dotPositions[1].x)
+        .attr("cy", aodInsetAngleIndicator.dotPositions[1].y);
+      angleBodIndicatorRay.attr("d", bodInsetAngleIndicator.rayPath);
+      angleBodIndicatorArc.attr("d", bodInsetAngleIndicator.arcPath);
+      angleBodIndicatorDot1
+        .attr("cx", bodInsetAngleIndicator.dotPositions[0].x)
+        .attr("cy", bodInsetAngleIndicator.dotPositions[0].y);
+      angleBodIndicatorDot2
+        .attr("cx", bodInsetAngleIndicator.dotPositions[1].x)
+        .attr("cy", bodInsetAngleIndicator.dotPositions[1].y);
       triangleAco.style("display", showAcoGroup ? "" : "none");
       triangleBco.style("display", showBcoGroup ? "" : "none");
       angleAodArc.style("display", showAcoGroup ? "" : "none");
