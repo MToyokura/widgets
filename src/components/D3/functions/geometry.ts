@@ -1,14 +1,21 @@
-export type Point = { x: number; y: number };
+export interface Point {
+  x: number;
+  y: number;
+}
 
 export const RIGHT_ANGLE_SIZE = 18;
+const TWO_PI = Math.PI * 2;
 
-export function distance(a: Point, b: Point) {
+// ==========================================
+// 1. Core Math & Vector Geometry
+// ==========================================
+
+export function distance(a: Point, b: Point): number {
   return Math.hypot(b.x - a.x, b.y - a.y);
 }
 
-export function unitVector(from: Point, to: Point) {
+export function unitVector(from: Point, to: Point): Point {
   const length = distance(from, to);
-
   if (length === 0) return { x: 0, y: 0 };
 
   return {
@@ -17,80 +24,29 @@ export function unitVector(from: Point, to: Point) {
   };
 }
 
-export function getTrianglePath(p1: Point, p2: Point, p3: Point) {
-  return `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y} L ${p3.x} ${p3.y} Z`;
+export function getCentroid(points: Point[]): Point {
+  const len = points.length;
+  if (len === 0) return { x: 0, y: 0 };
+
+  let x = 0;
+  let y = 0;
+
+  for (const point of points) {
+    x += point.x;
+    y += point.y;
+  }
+
+  return { x: x / len, y: y / len };
 }
 
-export function getLinePath(start: Point, end: Point) {
-  return `M ${start.x} ${start.y} L ${end.x} ${end.y}`;
-}
-
-export function getPolylinePath(points: Point[]) {
-  if (points.length === 0) return "";
-
-  return points
-    .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`)
-    .join(" ");
-}
-
-export function getPolygonPath(points: Point[]) {
-  if (points.length === 0) return "";
-
-  return (
-    points
-      .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`)
-      .join(" ") + " Z"
-  );
-}
-
-export function getPointOnCircle(
-  center: Point,
-  radius: number,
-  angle: number,
-): Point {
-  return {
-    x: center.x + radius * Math.cos(angle),
-    y: center.y + radius * Math.sin(angle),
-  };
-}
-
-export function projectPointToCircle(
-  center: Point,
-  radius: number,
-  point: Point,
-): Point {
-  const angle = Math.atan2(point.y - center.y, point.x - center.x);
-
-  return getPointOnCircle(center, radius, angle);
-}
+// ==========================================
+// 2. Transformations
+// ==========================================
 
 export function translatePoint(point: Point, offset: Point): Point {
   return {
     x: point.x + offset.x,
     y: point.y + offset.y,
-  };
-}
-
-export function getConnectorPath(
-  originalPoints: Point[],
-  transformedPoints: Point[],
-) {
-  return originalPoints
-    .map((point, index) => {
-      const transformedPoint = transformedPoints[index];
-
-      return transformedPoint ? getLinePath(point, transformedPoint) : "";
-    })
-    .filter(Boolean)
-    .join(" ");
-}
-
-export function getCentroid(points: Point[]): Point {
-  if (points.length === 0) return { x: 0, y: 0 };
-
-  return {
-    x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
-    y: points.reduce((sum, point) => sum + point.y, 0) / points.length,
   };
 }
 
@@ -111,25 +67,21 @@ export function reflectPointAcrossLine(
   linePoint: Point,
   lineAngle: number,
 ): Point {
-  const relativePoint = {
-    x: point.x - linePoint.x,
-    y: point.y - linePoint.y,
-  };
+  const dx = point.x - linePoint.x;
+  const dy = point.y - linePoint.y;
   const ux = Math.cos(lineAngle);
   const uy = Math.sin(lineAngle);
-  const parallelMagnitude = relativePoint.x * ux + relativePoint.y * uy;
-  const parallel = {
-    x: ux * parallelMagnitude,
-    y: uy * parallelMagnitude,
-  };
-  const perpendicular = {
-    x: relativePoint.x - parallel.x,
-    y: relativePoint.y - parallel.y,
-  };
+
+  const parallelMagnitude = dx * ux + dy * uy;
+  const parallelX = ux * parallelMagnitude;
+  const parallelY = uy * parallelMagnitude;
+
+  const perpendicularX = dx - parallelX;
+  const perpendicularY = dy - parallelY;
 
   return {
-    x: linePoint.x + parallel.x - perpendicular.x,
-    y: linePoint.y + parallel.y - perpendicular.y,
+    x: linePoint.x + parallelX - perpendicularX,
+    y: linePoint.y + parallelY - perpendicularY,
   };
 }
 
@@ -140,30 +92,139 @@ export function getOppositePoint(point: Point, center: Point): Point {
   };
 }
 
-export function getRadialLabelPosition(
-  point: Point,
-  center: Point,
-  offset = 24,
-): Point {
-  const dx = point.x - center.x;
-  const dy = point.y - center.y;
-  const length = Math.hypot(dx, dy) || 1;
+// ==========================================
+// 3. Simple SVG Path Generators
+// ==========================================
 
-  return {
-    x: point.x + (dx / length) * offset,
-    y: point.y + (dy / length) * offset,
-  };
+export function getLinePath(start: Point, end: Point): string {
+  return `M ${start.x} ${start.y} L ${end.x} ${end.y}`;
 }
 
 export function getLinePathThroughPoint(
   point: Point,
   angle: number,
   halfLength: number,
-) {
+): string {
   const dx = Math.cos(angle) * halfLength;
   const dy = Math.sin(angle) * halfLength;
 
-  return `M ${point.x - dx} ${point.y - dy} L ${point.x + dx} ${point.y + dy}`;
+  return getLinePath(
+    { x: point.x - dx, y: point.y - dy },
+    { x: point.x + dx, y: point.y + dy },
+  );
+}
+
+export function getPolylinePath(points: Point[]): string {
+  if (points.length === 0) return "";
+
+  return points
+    .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`)
+    .join(" ");
+}
+
+export function getPolygonPath(points: Point[]): string {
+  if (points.length === 0) return "";
+  return `${getPolylinePath(points)} Z`;
+}
+
+export function getTrianglePath(p1: Point, p2: Point, p3: Point): string {
+  return getPolygonPath([p1, p2, p3]);
+}
+
+export function getConnectorPath(
+  originalPoints: Point[],
+  transformedPoints: Point[],
+): string {
+  return originalPoints
+    .map((point, index) => {
+      const transformedPoint = transformedPoints[index];
+      return transformedPoint ? getLinePath(point, transformedPoint) : "";
+    })
+    .filter(Boolean)
+    .join(" ");
+}
+
+export function getInscribedLinesPath(
+  a: Point,
+  b: Point,
+  vertex: Point,
+): string {
+  return `${getLinePath(vertex, a)} ${getLinePath(vertex, b)}`;
+}
+
+export function getCentralLinesPath(a: Point, vertex: Point, b: Point): string {
+  return getPolylinePath([a, vertex, b]);
+}
+
+// ==========================================
+// 4. Arcs & Circles
+// ==========================================
+
+export function getPointOnCircle(
+  center: Point,
+  radius: number,
+  angle: number,
+): Point {
+  return {
+    x: center.x + radius * Math.cos(angle),
+    y: center.y + radius * Math.sin(angle),
+  };
+}
+
+export function projectPointToCircle(
+  center: Point,
+  radius: number,
+  point: Point,
+): Point {
+  const angle = Math.atan2(point.y - center.y, point.x - center.x);
+  return getPointOnCircle(center, radius, angle);
+}
+
+export function getSignedMinorAngleDelta(
+  startAngle: number,
+  endAngle: number,
+): number {
+  let delta = (endAngle - startAngle) % TWO_PI;
+  if (delta <= -Math.PI) delta += TWO_PI;
+  if (delta > Math.PI) delta -= TWO_PI;
+  return delta;
+}
+
+export function getCircleArcPath(
+  center: Point,
+  radius: number,
+  startAngle: number,
+  endAngle: number,
+): string {
+  const delta = getSignedMinorAngleDelta(startAngle, endAngle);
+
+  if (Math.abs(delta) < 0.01) return "";
+
+  const start = getPointOnCircle(center, radius, startAngle);
+  const end = getPointOnCircle(center, radius, endAngle);
+  const sweepFlag = delta > 0 ? 1 : 0;
+
+  return `M ${start.x} ${start.y} A ${radius} ${radius} 0 0 ${sweepFlag} ${end.x} ${end.y}`;
+}
+
+export function getAngleArcPath(
+  a: Point,
+  vertex: Point,
+  b: Point,
+  markerLimit = RIGHT_ANGLE_SIZE,
+): string {
+  const markerRadius = Math.min(
+    markerLimit,
+    distance(vertex, a) * 0.3,
+    distance(vertex, b) * 0.3,
+  );
+
+  if (markerRadius < 1) return "";
+
+  const startAngle = Math.atan2(a.y - vertex.y, a.x - vertex.x);
+  const endAngle = Math.atan2(b.y - vertex.y, b.x - vertex.x);
+
+  return getCircleArcPath(vertex, markerRadius, startAngle, endAngle);
 }
 
 export function getRightAnglePath(
@@ -171,7 +232,7 @@ export function getRightAnglePath(
   b: Point,
   vertex: Point,
   markerLimit = RIGHT_ANGLE_SIZE,
-) {
+): string {
   const markerSize = Math.min(
     markerLimit,
     distance(vertex, a) * 0.35,
@@ -198,73 +259,27 @@ export function getRightAnglePath(
   return `M ${cornerA.x} ${cornerA.y} L ${cornerB.x} ${cornerB.y} L ${cornerC.x} ${cornerC.y}`;
 }
 
-export function getAngleArcPath(
-  a: Point,
-  vertex: Point,
-  b: Point,
-  markerLimit = RIGHT_ANGLE_SIZE,
-) {
-  const markerRadius = Math.min(
-    markerLimit,
-    distance(vertex, a) * 0.3,
-    distance(vertex, b) * 0.3,
-  );
-
-  if (markerRadius < 1) return "";
-
-  const startAngle = Math.atan2(a.y - vertex.y, a.x - vertex.x);
-  const endAngle = Math.atan2(b.y - vertex.y, b.x - vertex.x);
-  let delta = endAngle - startAngle;
-
-  if (delta <= -Math.PI) delta += Math.PI * 2;
-  if (delta > Math.PI) delta -= Math.PI * 2;
-  if (Math.abs(delta) < 0.01) return "";
-
-  const start = {
-    x: vertex.x + Math.cos(startAngle) * markerRadius,
-    y: vertex.y + Math.sin(startAngle) * markerRadius,
-  };
-  const end = {
-    x: vertex.x + Math.cos(endAngle) * markerRadius,
-    y: vertex.y + Math.sin(endAngle) * markerRadius,
-  };
-  const sweepFlag = delta > 0 ? 1 : 0;
-
-  return `M ${start.x} ${start.y} A ${markerRadius} ${markerRadius} 0 0 ${sweepFlag} ${end.x} ${end.y}`;
-}
-
-export function getCircleArcPath(
-  center: Point,
-  radius: number,
+function getCounterclockwiseDelta(
   startAngle: number,
   endAngle: number,
-) {
-  let delta = endAngle - startAngle;
-
-  if (delta <= -Math.PI) delta += Math.PI * 2;
-  if (delta > Math.PI) delta -= Math.PI * 2;
-  if (Math.abs(delta) < 0.01) return "";
-
-  const start = getPointOnCircle(center, radius, startAngle);
-  const end = getPointOnCircle(center, radius, endAngle);
-  const sweepFlag = delta > 0 ? 1 : 0;
-
-  return `M ${start.x} ${start.y} A ${radius} ${radius} 0 0 ${sweepFlag} ${end.x} ${end.y}`;
+): number {
+  return (((endAngle - startAngle) % TWO_PI) + TWO_PI) % TWO_PI;
 }
 
-function normalizeAngle(angle: number) {
-  const fullTurn = Math.PI * 2;
+export function getArcSignedDeltaExcludingAngle(
+  startAngle: number,
+  endAngle: number,
+  excludedAngle: number,
+): number {
+  const ccwDelta = getCounterclockwiseDelta(startAngle, endAngle);
 
-  return ((angle % fullTurn) + fullTurn) % fullTurn;
-}
+  if (ccwDelta < 0.01 || Math.abs(ccwDelta - TWO_PI) < 0.01) return 0;
 
-function getCounterclockwiseDelta(startAngle: number, endAngle: number) {
-  const fullTurn = Math.PI * 2;
+  const excludedDelta = getCounterclockwiseDelta(startAngle, excludedAngle);
+  const excludedOnCounterclockwiseArc =
+    excludedDelta > 0.01 && excludedDelta < ccwDelta - 0.01;
 
-  return (
-    (normalizeAngle(endAngle) - normalizeAngle(startAngle) + fullTurn) %
-    fullTurn
-  );
+  return excludedOnCounterclockwiseArc ? ccwDelta - TWO_PI : ccwDelta;
 }
 
 export function getCircleArcPathExcludingAngle(
@@ -273,18 +288,15 @@ export function getCircleArcPathExcludingAngle(
   startAngle: number,
   endAngle: number,
   excludedAngle: number,
-) {
-  const ccwDelta = getCounterclockwiseDelta(startAngle, endAngle);
+): string {
+  const signedDelta = getArcSignedDeltaExcludingAngle(
+    startAngle,
+    endAngle,
+    excludedAngle,
+  );
 
-  if (ccwDelta < 0.01 || Math.abs(ccwDelta - Math.PI * 2) < 0.01) return "";
+  if (Math.abs(signedDelta) < 0.01) return "";
 
-  const excludedDelta = getCounterclockwiseDelta(startAngle, excludedAngle);
-  const excludedOnCounterclockwiseArc =
-    excludedDelta > 0.01 && excludedDelta < ccwDelta - 0.01;
-  const fullTurn = Math.PI * 2;
-  const signedDelta = excludedOnCounterclockwiseArc
-    ? ccwDelta - fullTurn
-    : ccwDelta;
   const start = getPointOnCircle(center, radius, startAngle);
   const end = getPointOnCircle(center, radius, endAngle);
   const largeArcFlag = Math.abs(signedDelta) > Math.PI ? 1 : 0;
@@ -299,7 +311,7 @@ export function getCentralAngleArcPath(
   endAngle: number,
   excludedAngle: number,
   markerRadius = RIGHT_ANGLE_SIZE,
-) {
+): string {
   return getCircleArcPathExcludingAngle(
     center,
     markerRadius,
@@ -309,36 +321,15 @@ export function getCentralAngleArcPath(
   );
 }
 
-export function getSignedMinorAngleDelta(startAngle: number, endAngle: number) {
-  let delta = endAngle - startAngle;
-
-  if (delta <= -Math.PI) delta += Math.PI * 2;
-  if (delta > Math.PI) delta -= Math.PI * 2;
-
-  return delta;
-}
-
-export function getArcSignedDeltaExcludingAngle(
-  startAngle: number,
-  endAngle: number,
-  excludedAngle: number,
-) {
-  const ccwDelta = getCounterclockwiseDelta(startAngle, endAngle);
-
-  if (ccwDelta < 0.01 || Math.abs(ccwDelta - Math.PI * 2) < 0.01) return 0;
-
-  const excludedDelta = getCounterclockwiseDelta(startAngle, excludedAngle);
-  const excludedOnCounterclockwiseArc =
-    excludedDelta > 0.01 && excludedDelta < ccwDelta - 0.01;
-
-  return excludedOnCounterclockwiseArc ? ccwDelta - Math.PI * 2 : ccwDelta;
-}
+// ==========================================
+// 5. Angle Utilities & Labels
+// ==========================================
 
 export function getCentralAngleDegrees(
   startAngle: number,
   endAngle: number,
   excludedAngle: number,
-) {
+): number {
   return (
     (Math.abs(
       getArcSignedDeltaExcludingAngle(startAngle, endAngle, excludedAngle),
@@ -346,6 +337,31 @@ export function getCentralAngleDegrees(
       180) /
     Math.PI
   );
+}
+
+export function getAngleDegrees(a: Point, vertex: Point, b: Point): number {
+  if (distance(vertex, a) === 0 || distance(vertex, b) === 0) return 0;
+
+  const vA = unitVector(vertex, a);
+  const vB = unitVector(vertex, b);
+  const cosine = vA.x * vB.x + vA.y * vB.y;
+
+  const clampedCosine = Math.max(-1, Math.min(1, cosine));
+
+  return (Math.acos(clampedCosine) * 180) / Math.PI;
+}
+
+export function getRadialLabelPosition(
+  point: Point,
+  center: Point,
+  offset = 24,
+): Point {
+  const direction = unitVector(center, point);
+
+  return {
+    x: point.x + direction.x * offset,
+    y: point.y + direction.y * offset,
+  };
 }
 
 export function getCentralAngleLabelPosition(
@@ -362,30 +378,7 @@ export function getCentralAngleLabelPosition(
   );
   const midpointAngle = startAngle + signedDelta / 2;
 
-  return {
-    x: center.x + Math.cos(midpointAngle) * distanceFromCenter,
-    y: center.y + Math.sin(midpointAngle) * distanceFromCenter,
-  };
-}
-
-export function getAngleDegrees(a: Point, vertex: Point, b: Point) {
-  const vectorA = {
-    x: a.x - vertex.x,
-    y: a.y - vertex.y,
-  };
-  const vectorB = {
-    x: b.x - vertex.x,
-    y: b.y - vertex.y,
-  };
-  const magnitude =
-    Math.hypot(vectorA.x, vectorA.y) * Math.hypot(vectorB.x, vectorB.y);
-
-  if (magnitude === 0) return 0;
-
-  const cosine = (vectorA.x * vectorB.x + vectorA.y * vectorB.y) / magnitude;
-  const clampedCosine = Math.max(-1, Math.min(1, cosine));
-
-  return (Math.acos(clampedCosine) * 180) / Math.PI;
+  return getPointOnCircle(center, distanceFromCenter, midpointAngle);
 }
 
 export function getAngleLabelPosition(
@@ -400,6 +393,7 @@ export function getAngleLabelPosition(
     x: toA.x + toB.x,
     y: toA.y + toB.y,
   };
+
   const length = Math.hypot(bisector.x, bisector.y);
 
   if (length === 0) {
@@ -426,15 +420,17 @@ export function getDoubleAngleDotPositions(
   const midpoint = getAngleLabelPosition(a, vertex, b, distanceFromVertex);
   const dx = midpoint.x - vertex.x;
   const dy = midpoint.y - vertex.y;
-  const midpointDistance = Math.hypot(dx, dy);
-  const directionLength = midpointDistance || 1;
+  const directionLength = Math.hypot(dx, dy) || 1;
+
   const angleRadians = (getAngleDegrees(a, vertex, b) * Math.PI) / 180;
-  const availableWidth = midpointDistance * 2 * Math.sin(angleRadians / 2);
+  const availableWidth = directionLength * 2 * Math.sin(angleRadians / 2);
   const minimumSpacing = Math.min(spacing, Math.max(3, dotRadius * 0.5));
+
   const effectiveSpacing = Math.max(
     minimumSpacing,
     Math.min(spacing, availableWidth - dotRadius * 2),
   );
+
   const offsetX = (-dy / directionLength) * (effectiveSpacing / 2);
   const offsetY = (dx / directionLength) * (effectiveSpacing / 2);
 
@@ -442,12 +438,4 @@ export function getDoubleAngleDotPositions(
     { x: midpoint.x + offsetX, y: midpoint.y + offsetY },
     { x: midpoint.x - offsetX, y: midpoint.y - offsetY },
   ];
-}
-
-export function getInscribedLinesPath(a: Point, b: Point, vertex: Point) {
-  return `${getLinePath(vertex, a)} ${getLinePath(vertex, b)}`;
-}
-
-export function getCentralLinesPath(a: Point, vertex: Point, b: Point) {
-  return getPolylinePath([a, vertex, b]);
 }
