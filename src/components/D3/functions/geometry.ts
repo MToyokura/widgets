@@ -3,7 +3,7 @@ export interface Point {
   y: number;
 }
 
-export const RIGHT_ANGLE_SIZE = 18;
+export const DEFAULT_ANGLE_MARKER_SIZE = 18;
 const TWO_PI = Math.PI * 2;
 
 // ==========================================
@@ -211,7 +211,7 @@ export function getAngleArcPath(
   a: Point,
   vertex: Point,
   b: Point,
-  markerLimit = RIGHT_ANGLE_SIZE,
+  markerLimit = DEFAULT_ANGLE_MARKER_SIZE,
 ): string {
   const markerRadius = Math.min(
     markerLimit,
@@ -231,7 +231,7 @@ export function getRightAnglePath(
   a: Point,
   b: Point,
   vertex: Point,
-  markerLimit = RIGHT_ANGLE_SIZE,
+  markerLimit = DEFAULT_ANGLE_MARKER_SIZE,
 ): string {
   const markerSize = Math.min(
     markerLimit,
@@ -310,7 +310,7 @@ export function getCentralAngleArcPath(
   startAngle: number,
   endAngle: number,
   excludedAngle: number,
-  markerRadius = RIGHT_ANGLE_SIZE,
+  markerRadius = DEFAULT_ANGLE_MARKER_SIZE,
 ): string {
   return getCircleArcPathExcludingAngle(
     center,
@@ -385,7 +385,7 @@ export function getAngleLabelPosition(
   a: Point,
   vertex: Point,
   b: Point,
-  distanceFromVertex = RIGHT_ANGLE_SIZE + 26,
+  distanceFromVertex = DEFAULT_ANGLE_MARKER_SIZE + 26,
 ): Point {
   const toA = unitVector(vertex, a);
   const toB = unitVector(vertex, b);
