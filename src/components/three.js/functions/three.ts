@@ -6,6 +6,7 @@ const PERFORMANCE_PIXEL_RATIO_CAP = 1.25;
 const DEFAULT_PIXEL_RATIO_CAP = 2;
 
 type Vector3Tuple = [x: number, y: number, z: number];
+type Vector3Input = Vector3Tuple | THREE.Vector3;
 
 type ResolutionTarget = {
   resolution: {
@@ -30,8 +31,8 @@ export type ManagedThreeSceneContext = {
 
 type ManagedThreeSceneOptions = {
   background?: THREE.ColorRepresentation;
-  cameraPosition: Vector3Tuple;
-  cameraLookAt?: Vector3Tuple;
+  cameraPosition: Vector3Input;
+  cameraLookAt?: Vector3Input;
   configureControls?: (controls: OrbitControls) => void;
   setup: (context: ManagedThreeSceneContext) => void;
 };
@@ -55,36 +56,28 @@ export function setSegment(
   geometry.setPositions([start.x, start.y, start.z, end.x, end.y, end.z]);
 }
 
+// Optimization: Pre-allocate array size for slightly better memory handling
 export function createCirclePoints(radius: number, y: number, segments = 96) {
-  const points = [];
+  const points = new Array<THREE.Vector3>(segments);
 
   for (let index = 0; index < segments; index += 1) {
     const angle = (index / segments) * Math.PI * 2;
-    points.push(
-      new THREE.Vector3(Math.cos(angle) * radius, y, Math.sin(angle) * radius),
+    points[index] = new THREE.Vector3(
+      Math.cos(angle) * radius,
+      y,
+      Math.sin(angle) * radius,
     );
   }
 
   return points;
 }
 
-function getCheckboxControl(controlId: string) {
+// Improvement: Generic control getter reduces code duplication
+function getControl(controlId: string, type: "checkbox" | "range") {
   const control = document.getElementById(controlId);
-
-  if (!(control instanceof HTMLInputElement) || control.type !== "checkbox") {
+  if (!(control instanceof HTMLInputElement) || control.type !== type) {
     return null;
   }
-
-  return control;
-}
-
-function getRangeControl(controlId: string) {
-  const control = document.getElementById(controlId);
-
-  if (!(control instanceof HTMLInputElement) || control.type !== "range") {
-    return null;
-  }
-
   return control;
 }
 
@@ -93,7 +86,6 @@ function getNumericInputValue(
   fallback: number,
 ) {
   const value = Number(control?.value ?? Number.NaN);
-
   return Number.isFinite(value) ? value : fallback;
 }
 
@@ -101,7 +93,6 @@ export function getThreeSceneWrapper(containerId: string) {
   const wrapper = document.querySelector(
     `#${containerId} ${THREE_SCENE_WRAPPER_CLASS}`,
   );
-
   return wrapper instanceof HTMLDivElement ? wrapper : null;
 }
 
@@ -114,11 +105,8 @@ export function getThreeSceneWrappers(containerId: string) {
 }
 
 export function isCheckboxEnabled(controlId = "", fallback = false) {
-  if (!controlId) {
-    return fallback;
-  }
-
-  return getCheckboxControl(controlId)?.checked ?? fallback;
+  if (!controlId) return fallback;
+  return getControl(controlId, "checkbox")?.checked ?? fallback;
 }
 
 export function isPixelRatioCapEnabled(controlId = "") {
@@ -130,11 +118,8 @@ export function isAntialiasEnabled(controlId = "") {
 }
 
 export function getRangeControlValue(controlId = "", fallback = 0) {
-  if (!controlId) {
-    return fallback;
-  }
-
-  return getNumericInputValue(getRangeControl(controlId), fallback);
+  if (!controlId) return fallback;
+  return getNumericInputValue(getControl(controlId, "range"), fallback);
 }
 
 export function setRendererPixelRatioCap(
@@ -159,9 +144,7 @@ export function initializeThreeScene(
   let cleanup: (() => void) | undefined;
 
   const start = () => {
-    if (wrapper.dataset.ready === "true") {
-      return;
-    }
+    if (wrapper.dataset.ready === "true") return;
 
     wrapper.dataset.ready = "true";
     observer?.disconnect();
@@ -190,9 +173,7 @@ export function initializeThreeScene(
     }
   };
 
-  if (wrapper.dataset.ready === "true") {
-    return { remount, destroy };
-  }
+  if (wrapper.dataset.ready === "true") return { remount, destroy };
 
   if (!("IntersectionObserver" in window)) {
     start();
@@ -201,9 +182,7 @@ export function initializeThreeScene(
 
   observer = new IntersectionObserver(
     (entries) => {
-      if (entries.some((entry) => entry.isIntersecting)) {
-        start();
-      }
+      if (entries.some((entry) => entry.isIntersecting)) start();
     },
     { rootMargin: "160px 0px" },
   );
@@ -220,6 +199,7 @@ export function createPreferenceAwareRenderer(
 ) {
   const pixelRatioCapEnabled = isPixelRatioCapEnabled(pixelRatioCapControlId);
   const antialiasEnabled = isAntialiasEnabled(antialiasControlId);
+
   const renderer = new THREE.WebGLRenderer({
     antialias: antialiasEnabled,
     powerPreference: pixelRatioCapEnabled ? "low-power" : "default",
@@ -261,6 +241,20 @@ export function addReferencePlane(
   return { plane, grid };
 }
 
+function applyVector3(
+  camera: THREE.PerspectiveCamera,
+  input: Vector3Input,
+  method: "set" | "lookAt",
+) {
+  if (Array.isArray(input)) {
+    if (method === "set") camera.position.set(...input);
+    else camera.lookAt(...input);
+  } else {
+    if (method === "set") camera.position.copy(input);
+    else camera.lookAt(input);
+  }
+}
+
 export function mountManagedThreeScene(
   wrapper: HTMLDivElement,
   options: ManagedThreeSceneOptions,
@@ -270,35 +264,40 @@ export function mountManagedThreeScene(
   const mountScene = () => {
     const pixelRatioCapControlId = wrapper.dataset.pixelRatioCapControlId || "";
     const antialiasControlId = wrapper.dataset.antialiasControlId || "";
-    const scene = new THREE.Scene();
 
+    const scene = new THREE.Scene();
     scene.background = new THREE.Color(options.background ?? 0xe0e0e0);
 
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    camera.position.set(...options.cameraPosition);
-
+    applyVector3(camera, options.cameraPosition, "set");
     if (options.cameraLookAt) {
-      camera.lookAt(...options.cameraLookAt);
+      applyVector3(camera, options.cameraLookAt, "lookAt");
     }
 
-    const renderer = createPreferenceAwareRenderer(
-      wrapper,
-      pixelRatioCapControlId,
-      antialiasControlId,
-    );
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = createPreferenceAwareRenderer(
+        wrapper,
+        pixelRatioCapControlId,
+        antialiasControlId,
+      );
+    } catch (error) {
+      console.warn("WebGL not supported or failed to initialize", error);
+      return () => {};
+    }
+
     const controls = new OrbitControls(camera, renderer.domElement);
-    const cleanupCallbacks: Array<() => void> = [];
-    const renderHooks: Array<() => void> = [];
-    const resizeHooks: Array<(width: number, height: number) => void> = [];
-    const resolutionTargets: ResolutionTarget[] = [];
+
+    // Improvement: Using Sets ensures no duplicate hook registrations
+    const cleanupCallbacks = new Set<() => void>();
+    const renderHooks = new Set<() => void>();
+    const resizeHooks = new Set<(width: number, height: number) => void>();
+    const resolutionTargets = new Set<ResolutionTarget>();
 
     options.configureControls?.(controls);
 
     const render = () => {
-      for (const renderHook of renderHooks) {
-        renderHook();
-      }
-
+      for (const renderHook of renderHooks) renderHook();
       renderer.render(scene, camera);
     };
 
@@ -310,17 +309,11 @@ export function mountManagedThreeScene(
       controls,
       pixelRatioCapControlId,
       antialiasControlId,
-      addCleanup: (cleanup) => {
-        cleanupCallbacks.push(cleanup);
-      },
-      addRenderHook: (renderHook) => {
-        renderHooks.push(renderHook);
-      },
-      addResizeHook: (resizeHook) => {
-        resizeHooks.push(resizeHook);
-      },
+      addCleanup: (cleanup) => cleanupCallbacks.add(cleanup),
+      addRenderHook: (renderHook) => renderHooks.add(renderHook),
+      addResizeHook: (resizeHook) => resizeHooks.add(resizeHook),
       trackResolutionTarget: (...targets) => {
-        resolutionTargets.push(...targets);
+        targets.forEach((t) => resolutionTargets.add(t));
       },
       render,
     });
@@ -333,11 +326,9 @@ export function mountManagedThreeScene(
       for (const target of resolutionTargets) {
         target.resolution.set(width, height);
       }
-
       for (const resizeHook of resizeHooks) {
         resizeHook(width, height);
       }
-
       render();
     };
 
@@ -350,12 +341,12 @@ export function mountManagedThreeScene(
         render();
       },
     );
+
     const stopAntialiasObserver = observeAntialiasPreference(
       antialiasControlId,
-      () => {
-        sceneHandle?.remount();
-      },
+      () => sceneHandle?.remount(),
     );
+
     const resizeObserver = observeWrapperSize(wrapper, resize);
 
     return () => {
@@ -364,9 +355,7 @@ export function mountManagedThreeScene(
       stopAntialiasObserver?.();
       resizeObserver.disconnect();
 
-      for (let index = cleanupCallbacks.length - 1; index >= 0; index -= 1) {
-        cleanupCallbacks[index]();
-      }
+      for (const cleanup of cleanupCallbacks) cleanup();
 
       disposeSceneResources(scene);
       disposeRenderer(renderer);
@@ -374,7 +363,6 @@ export function mountManagedThreeScene(
   };
 
   sceneHandle = initializeThreeScene(wrapper, mountScene);
-
   return sceneHandle;
 }
 
@@ -382,21 +370,13 @@ export function observeCheckboxPreference(
   controlId: string,
   onChange: (enabled: boolean) => void,
 ) {
-  const control = getCheckboxControl(controlId);
+  const control = getControl(controlId, "checkbox");
+  if (!control) return null;
 
-  if (!control) {
-    return null;
-  }
-
-  const handleChange = () => {
-    onChange(control.checked);
-  };
-
+  const handleChange = () => onChange(control.checked);
   control.addEventListener("change", handleChange);
 
-  return () => {
-    control.removeEventListener("change", handleChange);
-  };
+  return () => control.removeEventListener("change", handleChange);
 }
 
 export function observePixelRatioCapPreference(
@@ -417,16 +397,10 @@ export function observeRangePreference(
   controlId: string,
   onChange: (value: number) => void,
 ) {
-  const control = getRangeControl(controlId);
+  const control = getControl(controlId, "range");
+  if (!control) return null;
 
-  if (!control) {
-    return null;
-  }
-
-  const handleChange = () => {
-    onChange(getNumericInputValue(control, 0));
-  };
-
+  const handleChange = () => onChange(getNumericInputValue(control, 0));
   control.addEventListener("input", handleChange);
   control.addEventListener("change", handleChange);
 
@@ -443,49 +417,54 @@ export function observeWrapperSize(
   let previousWidth = 0;
   let previousHeight = 0;
 
-  const resize = () => {
-    const bounds = wrapper.getBoundingClientRect();
-    const width = Math.max(1, Math.round(bounds.width));
-    const height = Math.max(1, Math.round(bounds.height));
+  const resizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      // Using clientRect allows accurate CSS sub-pixel rendering considerations
+      const bounds = entry.target.getBoundingClientRect();
+      const width = Math.max(1, Math.round(bounds.width));
+      const height = Math.max(1, Math.round(bounds.height));
 
-    if (width === previousWidth && height === previousHeight) {
-      return;
+      if (width === previousWidth && height === previousHeight) return;
+
+      previousWidth = width;
+      previousHeight = height;
+      onResize(width, height);
     }
+  });
 
-    previousWidth = width;
-    previousHeight = height;
-    onResize(width, height);
-  };
-
-  const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(wrapper);
-  requestAnimationFrame(resize);
-
   return resizeObserver;
 }
 
 function disposeMaterial(
   material: THREE.Material | THREE.Material[] | undefined,
 ) {
-  if (Array.isArray(material)) {
-    for (const entry of material) {
-      entry.dispose();
-    }
-    return;
-  }
+  if (!material) return;
+  const materials = Array.isArray(material) ? material : [material];
 
-  material?.dispose();
+  for (const entry of materials) {
+    entry.dispose();
+
+    // Improvement: Also dispose of textures attached to the material (Prevents Memory Leaks)
+    for (const key in entry) {
+      const value = (entry as any)[key];
+      if (
+        value &&
+        typeof value === "object" &&
+        "minFilter" in value &&
+        value.dispose
+      ) {
+        value.dispose();
+      }
+    }
+  }
 }
 
 export function disposeSceneResources(scene: THREE.Scene) {
   scene.traverse((object) => {
-    const renderable = object as THREE.Object3D & {
-      geometry?: { dispose?: () => void };
-      material?: THREE.Material | THREE.Material[];
-    };
-
-    renderable.geometry?.dispose?.();
-    disposeMaterial(renderable.material);
+    const renderable = object as THREE.Mesh;
+    if (renderable.geometry) renderable.geometry.dispose();
+    if (renderable.material) disposeMaterial(renderable.material);
   });
 }
 
