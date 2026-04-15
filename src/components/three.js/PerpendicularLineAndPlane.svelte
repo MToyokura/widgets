@@ -1,0 +1,146 @@
+<svelte:options runes={true} />
+
+<script lang="ts">
+  import { onMount } from "svelte";
+  import * as THREE from "three";
+  import { Line2 } from "three/addons/lines/Line2.js";
+  import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+  import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+  import ThreeSceneShell from "./shared/ThreeSceneShell.svelte";
+  import {
+    getThreeSceneWrappers,
+    mountManagedThreeScene,
+  } from "./functions/three";
+
+  let {
+    pixelRatioCapControlId = "",
+    antialiasControlId = "",
+  }: {
+    pixelRatioCapControlId?: string;
+    antialiasControlId?: string;
+  } = $props();
+
+  const id = "perpendicular-line-and-plane-wrapper";
+
+  onMount(() => {
+    const wrappers = getThreeSceneWrappers(id);
+    const handles: any[] = [];
+
+    for (const wrapper of wrappers) {
+      wrapper.dataset.pixelRatioCapControlId = pixelRatioCapControlId;
+      wrapper.dataset.antialiasControlId = antialiasControlId;
+      const handle = mountManagedThreeScene(wrapper, {
+        cameraPosition: [5, 3, 6],
+        cameraLookAt: [0, 0, 0],
+        setup: ({ scene, camera, addRenderHook, trackResolutionTarget }) => {
+          const resolution = new THREE.Vector2(1, 1);
+          const unifiedThickness = 2.5;
+
+          const planeGeometry = new THREE.PlaneGeometry(4, 4);
+          const planeMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            side: THREE.DoubleSide,
+          });
+          const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+          plane.rotation.x = -Math.PI / 2;
+          scene.add(plane);
+          scene.add(new THREE.GridHelper(4, 8, 0x94a3b8, 0xcbd5e1));
+
+          const planeLineMaterial = new LineMaterial({
+            color: 0x6b7280,
+            linewidth: 3,
+            resolution,
+          });
+
+          const planeLine1Geom = new LineGeometry();
+          planeLine1Geom.setPositions([-1.5, -1.5, 0, 1.5, 1.5, 0]);
+          const planeLine1 = new Line2(planeLine1Geom, planeLineMaterial);
+          planeLine1.rotation.x = -Math.PI / 2;
+          scene.add(planeLine1);
+
+          const planeLine2Geom = new LineGeometry();
+          planeLine2Geom.setPositions([-1.5, 1.5, 0, 1.5, -1.5, 0]);
+          const planeLine2 = new Line2(planeLine2Geom, planeLineMaterial);
+          planeLine2.rotation.x = -Math.PI / 2;
+          scene.add(planeLine2);
+
+          const lineGeom = new LineGeometry();
+          lineGeom.setPositions([0, -3, 0, 0, 3, 0]);
+
+          const solidMat = new LineMaterial({
+            color: 0x000000,
+            linewidth: unifiedThickness,
+            resolution,
+          });
+          const solidLine = new Line2(lineGeom, solidMat);
+          solidLine.renderOrder = 1;
+          scene.add(solidLine);
+
+          const dashedMat = new LineMaterial({
+            color: 0x000000,
+            linewidth: unifiedThickness,
+            resolution,
+            dashed: true,
+            dashSize: 0.15,
+            gapSize: 0.15,
+            depthFunc: THREE.GreaterDepth,
+            depthWrite: false,
+          });
+          const dashedLine = new Line2(lineGeom, dashedMat);
+          dashedLine.computeLineDistances();
+          dashedLine.renderOrder = 2;
+          scene.add(dashedLine);
+
+          const s = 0.2;
+          const yOffset = 0.01;
+          const angleGeom = new LineGeometry();
+          angleGeom.setPositions([
+            0,
+            s + yOffset,
+            0,
+            s,
+            s + yOffset,
+            0,
+            s,
+            yOffset,
+            0,
+          ]);
+
+          const angleMat = new LineMaterial({
+            color: 0x000000,
+            linewidth: unifiedThickness,
+            resolution,
+          });
+          const angleSymbol = new Line2(angleGeom, angleMat);
+          angleSymbol.renderOrder = 3;
+          scene.add(angleSymbol);
+
+          addRenderHook(() => {
+            angleSymbol.rotation.y = Math.atan2(
+              camera.position.x,
+              camera.position.z,
+            );
+          });
+
+          trackResolutionTarget(
+            planeLineMaterial,
+            solidMat,
+            dashedMat,
+            angleMat,
+          );
+        },
+      });
+      handles.push(handle);
+    }
+
+    return () => {
+      handles.forEach((h) => h.destroy());
+    };
+  });
+</script>
+
+<ThreeSceneShell
+  {id}
+  {pixelRatioCapControlId}
+  {antialiasControlId}
+/>

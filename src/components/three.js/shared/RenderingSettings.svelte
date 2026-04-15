@@ -1,20 +1,22 @@
----
-import SceneRenderToggle from "./SceneRenderToggle.astro";
+<svelte:options runes={true} />
 
-const { locale = "en" } = Astro.props;
+<script lang="ts">
+  import SceneRenderToggle from "./SceneRenderToggle.svelte";
 
-const copy = {
-  en: {
-    label: "Rendering Settings",
-  },
-  ja: {
-    label: "レンダリング設定",
-  },
-} as const;
+  let { locale = "en" }: { locale?: string } = $props();
 
-const language = locale === "ja" ? "ja" : "en";
-const text = copy[language];
----
+  const copy = {
+    en: {
+      label: "Rendering Settings",
+    },
+    ja: {
+      label: "レンダリング設定",
+    },
+  } as const;
+
+  const language = $derived(locale === "ja" ? "ja" : "en");
+  const text = $derived(copy[language]);
+</script>
 
 <div class="not-content">
   <details class="rendering-settings">
@@ -25,12 +27,12 @@ const text = copy[language];
       <SceneRenderToggle
         id="geometry-pixel-ratio-cap-toggle"
         checked={false}
-        locale={locale}
+        {locale}
       />
       <SceneRenderToggle
         id="geometry-antialias-toggle"
         checked={true}
-        locale={locale}
+        {locale}
         kind="antialias"
       />
     </div>

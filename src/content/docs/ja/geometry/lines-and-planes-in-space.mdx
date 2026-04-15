@@ -4,15 +4,15 @@ sidebar:
   order: 1010
 ---
 
-import ThreePointsNotCollinear from "@/components/three.js/ThreePointsNotCollinear.astro";
-import LineAndPointNotOnLine from "@/components/three.js/LineAndPointNotOnLine.astro";
-import IntersectingLinesOnPlane from "@/components/three.js/IntersectingLinesOnPlane.astro";
-import IntersectingLinesAbovePlane from "@/components/three.js/IntersectingLinesAbovePlane.astro";
-import ParallelLines from "@/components/three.js/ParallelLines.astro";
-import SkewPosition from "@/components/three.js/SkewPosition.astro";
-import RenderingSettings from "@/components/three.js/shared/RenderingSettings.astro";
+import ThreePointsNotCollinear from "@/components/three.js/ThreePointsNotCollinear.svelte";
+import LineAndPointNotOnLine from "@/components/three.js/LineAndPointNotOnLine.svelte";
+import IntersectingLinesOnPlane from "@/components/three.js/IntersectingLinesOnPlane.svelte";
+import IntersectingLinesAbovePlane from "@/components/three.js/IntersectingLinesAbovePlane.svelte";
+import ParallelLines from "@/components/three.js/ParallelLines.svelte";
+import SkewPosition from "@/components/three.js/SkewPosition.svelte";
+import RenderingSettings from "@/components/three.js/shared/RenderingSettings.svelte";
 
-<RenderingSettings locale="ja" />
+<RenderingSettings locale="ja" client:visible />
 
 ## 平面の決定
 
@@ -25,7 +25,7 @@ import RenderingSettings from "@/components/three.js/shared/RenderingSettings.as
 ### 同一直線上にない3点
 
 <ThreePointsNotCollinear
-  locale="ja"
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
@@ -33,7 +33,7 @@ import RenderingSettings from "@/components/three.js/shared/RenderingSettings.as
 ### 一つの直線とその上にない1点
 
 <LineAndPointNotOnLine
-  locale="ja"
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
@@ -41,7 +41,7 @@ import RenderingSettings from "@/components/three.js/shared/RenderingSettings.as
 ### 交わる２直線
 
 <IntersectingLinesOnPlane
-  locale="ja"
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
@@ -51,7 +51,7 @@ import RenderingSettings from "@/components/three.js/shared/RenderingSettings.as
 ### 交わる場合
 
 <IntersectingLinesAbovePlane
-  locale="ja"
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
@@ -59,7 +59,7 @@ import RenderingSettings from "@/components/three.js/shared/RenderingSettings.as
 ### 交わらず、平行な場合
 
 <ParallelLines
-  locale="ja"
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
@@ -67,7 +67,7 @@ import RenderingSettings from "@/components/three.js/shared/RenderingSettings.as
 ### 交わらず、平行でない場合（ねじれの位置）
 
 <SkewPosition
-  locale="ja"
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />

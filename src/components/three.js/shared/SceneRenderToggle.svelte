@@ -1,0 +1,93 @@
+<svelte:options runes={true} />
+
+<script lang="ts">
+  let {
+    id,
+    locale = "en",
+    kind = "pixelRatioCap",
+    checked = true,
+    label,
+    description,
+  }: {
+    id: string;
+    locale?: string;
+    kind?: "pixelRatioCap" | "antialias";
+    checked?: boolean;
+    label?: string;
+    description?: string;
+  } = $props();
+
+  const copy = {
+    en: {
+      pixelRatioCap: {
+        label: "Pixel Ratio Cap",
+        description:
+          "Enable to cap render resolution for lower GPU load and smoother performance on slower devices. Disable for sharper output.",
+      },
+      antialias: {
+        label: "Antialiasing",
+        description: "Smooths jagged edges, but can increase rendering load.",
+      },
+    },
+    ja: {
+      pixelRatioCap: {
+        label: "ピクセル比の上限",
+        description:
+          "オンにすると描画解像度の上限を抑え、GPU負荷を下げて動作を安定させます。より鮮明な表示を優先する場合はオフにしてください。",
+      },
+      antialias: {
+        label: "アンチエイリアス",
+        description:
+          "輪郭のギザギザを滑らかにしますが、描画負荷が増えることがあります。",
+      },
+    },
+  } as const;
+
+  const language = $derived(locale === "ja" ? "ja" : "en");
+  const toggleKind = $derived(
+    kind === "antialias" ? "antialias" : "pixelRatioCap",
+  );
+  const text = $derived(copy[language][toggleKind]);
+</script>
+
+<label class="scene-render-toggle" for={id}>
+  <div class="scene-render-toggle__header">
+    <input {id} class="scene-render-toggle__input" type="checkbox" {checked} />
+    <span class="scene-render-toggle__title">{label ?? text.label}</span>
+  </div>
+  <p class="scene-render-toggle__description">
+    {description ?? text.description}
+  </p>
+</label>
+
+<style>
+  .scene-render-toggle {
+    display: block;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.75rem;
+    cursor: pointer;
+  }
+
+  .scene-render-toggle__header {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+
+  .scene-render-toggle__title {
+    color: var(--sl-color-text);
+    font-weight: 600;
+  }
+
+  .scene-render-toggle__input {
+    inline-size: 1rem;
+    block-size: 1rem;
+  }
+
+  .scene-render-toggle__description {
+    margin: 0.5rem 0 0;
+    font-size: 0.95rem;
+    color: var(--sl-color-text);
+  }
+</style>

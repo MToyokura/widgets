@@ -1,0 +1,149 @@
+<svelte:options runes={true} />
+
+<script lang="ts">
+  import { onMount } from "svelte";
+  import * as THREE from "three";
+  import { Line2 } from "three/addons/lines/Line2.js";
+  import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+  import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+  import ThreeSceneShell from "./shared/ThreeSceneShell.svelte";
+  import {
+    addReferencePlane,
+    getThreeSceneWrapper,
+    mountManagedThreeScene,
+  } from "./functions/three";
+
+  let {
+    pixelRatioCapControlId = "",
+    antialiasControlId = "",
+  }: {
+    pixelRatioCapControlId?: string;
+    antialiasControlId?: string;
+  } = $props();
+
+  const id = "intersecting-lines-above-wrapper";
+
+  onMount(() => {
+    const wrapper = getThreeSceneWrapper(id);
+    if (wrapper instanceof HTMLDivElement) {
+      const handle = mountManagedThreeScene(wrapper, {
+        cameraPosition: [3, 3, 7],
+        cameraLookAt: [0, 0, 0],
+        setup: ({ scene, trackResolutionTarget }) => {
+          addReferencePlane(scene);
+
+          const resolution = new THREE.Vector2(1, 1);
+
+          const height = 1.5;
+          const l1_base = [
+            new THREE.Vector3(-2, 0, 0),
+            new THREE.Vector3(2, 0, 0),
+          ];
+          const rotZ30 = new THREE.Matrix4().makeRotationZ(
+            THREE.MathUtils.degToRad(30),
+          );
+          const l1r = l1_base.map((v) =>
+            v
+              .clone()
+              .applyMatrix4(rotZ30)
+              .add(new THREE.Vector3(0, height, 0)),
+          );
+
+          const l2_base = [
+            new THREE.Vector3(0, 0, -2),
+            new THREE.Vector3(0, 0, 2),
+          ];
+          const rotX15 = new THREE.Matrix4().makeRotationX(
+            THREE.MathUtils.degToRad(15),
+          );
+          const rotY45 = new THREE.Matrix4().makeRotationY(
+            THREE.MathUtils.degToRad(45),
+          );
+          const l2r = l2_base.map((v) =>
+            v
+              .clone()
+              .applyMatrix4(rotX15)
+              .applyMatrix4(rotY45)
+              .add(new THREE.Vector3(0, height, 0)),
+          );
+
+          const g1 = new LineGeometry();
+          g1.setPositions([
+            l1r[0].x,
+            l1r[0].y,
+            l1r[0].z,
+            l1r[1].x,
+            l1r[1].y,
+            l1r[1].z,
+          ]);
+          const g2 = new LineGeometry();
+          g2.setPositions([
+            l2r[0].x,
+            l2r[0].y,
+            l2r[0].z,
+            l2r[1].x,
+            l2r[1].y,
+            l2r[1].z,
+          ]);
+
+          const line1 = new Line2(
+            g1,
+            new LineMaterial({ color: 0x111827, linewidth: 3, resolution }),
+          );
+          const line2 = new Line2(
+            g2,
+            new LineMaterial({ color: 0xef4444, linewidth: 3, resolution }),
+          );
+          scene.add(line1);
+          scene.add(line2);
+
+          // 1. Calculate the direction vectors of the two lines
+          const dir1 = new THREE.Vector3()
+            .subVectors(l1r[1], l1r[0])
+            .normalize();
+          const dir2 = new THREE.Vector3()
+            .subVectors(l2r[1], l2r[0])
+            .normalize();
+
+          // 2. Calculate the plane's normal using the cross product
+          // The cross product of the two directions gives the vector perpendicular to the plane
+          const planeNormal = new THREE.Vector3()
+            .crossVectors(dir1, dir2)
+            .normalize();
+
+          // 3. Create the translucent plane
+          const intersectionPlane = new THREE.Mesh(
+            new THREE.PlaneGeometry(4, 4),
+            new THREE.MeshBasicMaterial({
+              color: 0xffffff,
+              side: THREE.DoubleSide,
+              transparent: true,
+              opacity: 0.2,
+              depthWrite: false, // Helps lines stay visible clearly
+            }),
+          );
+
+          // 4. Position and Orient
+          // The lines intersect at (0, 1.5, 0), so we place the plane there
+          intersectionPlane.position.set(0, 1.5, 0);
+
+          // Orient the plane so it faces the calculated normal
+          // We point it toward the normal vector to align the plane's surface
+          intersectionPlane.lookAt(
+            new THREE.Vector3(0, 1.5, 0).add(planeNormal),
+          );
+
+          scene.add(intersectionPlane);
+
+          trackResolutionTarget(line1.material, line2.material);
+        },
+      });
+
+      return () => {
+        handle.destroy();
+      };
+    }
+  });
+</script>
+
+<ThreeSceneShell {id} {pixelRatioCapControlId} {antialiasControlId} />
