@@ -6,9 +6,9 @@ hero:
   tagline: 視覚的に学ぼう
 ---
 
-import LanguageSelector from "../../../components/LanguageSelector.astro";
-import LanguagePrompt from "../../../components/LanguagePrompt.astro";
+import LanguageSelector from "../../../components/LanguageSelector.svelte";
+import LanguagePrompt from "../../../components/LanguagePrompt.svelte";
 
-<LanguagePrompt />
+<LanguagePrompt client:load />
 
 <LanguageSelector />
