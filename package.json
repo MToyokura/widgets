@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "format": "prettier --write --cache ."
+    "format": "prettier --write --cache .",
+    "check": "astro check && svelte-check"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
@@ -28,6 +29,7 @@
     "@types/three": "^0.183.1",
     "prettier": "3.8.1",
     "prettier-plugin-astro": "0.14.1",
-    "prettier-plugin-svelte": "^3.5.1"
+    "prettier-plugin-svelte": "^3.5.1",
+    "svelte-check": "^4.4.6"
   }
 }
