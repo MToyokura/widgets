@@ -96,14 +96,6 @@ export function getThreeSceneWrapper(containerId: string) {
   return wrapper instanceof HTMLDivElement ? wrapper : null;
 }
 
-export function getThreeSceneWrappers(containerId: string) {
-  return Array.from(
-    document.querySelectorAll(`#${containerId} ${THREE_SCENE_WRAPPER_CLASS}`),
-  ).filter(
-    (wrapper): wrapper is HTMLDivElement => wrapper instanceof HTMLDivElement,
-  );
-}
-
 export function isCheckboxEnabled(controlId = "", fallback = false) {
   if (!controlId) return fallback;
   return getControl(controlId, "checkbox")?.checked ?? fallback;

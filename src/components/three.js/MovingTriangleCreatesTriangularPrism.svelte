@@ -7,7 +7,7 @@
   import {
     addReferencePlane,
     getRangeControlValue,
-    getThreeSceneWrappers,
+    getThreeSceneWrapper,
     mountManagedThreeScene,
     observeRangePreference,
   } from "./functions/three";
@@ -76,19 +76,13 @@
   }
 
   onMount(() => {
-    const wrappers = getThreeSceneWrappers(id);
-    const handles: Array<{ destroy: () => void }> = [];
-
-    for (const wrapper of wrappers) {
-      wrapper.dataset.pixelRatioCapControlId = pixelRatioCapControlId;
-      wrapper.dataset.antialiasControlId = antialiasControlId;
-      wrapper.dataset.heightControlId = resolvedHeightControlId;
-
+    const wrapper = getThreeSceneWrapper(id);
+    if (wrapper instanceof HTMLDivElement) {
       const handle = mountManagedThreeScene(wrapper, {
         cameraPosition: [6.3, 4.7, 6.8],
         cameraLookAt: [0, 1.2, 0],
         setup: ({ scene, addCleanup, render }) => {
-          const controlId = wrapper.dataset.heightControlId || "";
+          const controlId = resolvedHeightControlId;
 
           const { plane, grid } = addReferencePlane(scene, {
             size: 6.6,
@@ -295,12 +289,10 @@
         },
       });
 
-      handles.push(handle);
+      return () => {
+        handle.destroy();
+      };
     }
-
-    return () => {
-      handles.forEach((handle) => handle.destroy());
-    };
   });
 </script>
 

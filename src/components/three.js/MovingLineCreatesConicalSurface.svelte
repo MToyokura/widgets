@@ -9,7 +9,7 @@
   import {
     addReferencePlane,
     createCirclePoints,
-    getThreeSceneWrappers,
+    getThreeSceneWrapper,
     mountManagedThreeScene,
     setSegment,
   } from "./functions/three";
@@ -39,10 +39,9 @@
   }
 
   onMount(() => {
-    const wrappers = getThreeSceneWrappers(id);
-    const handles: Array<{ destroy: () => void }> = [];
+    const wrapper = getThreeSceneWrapper(id);
 
-    for (const wrapper of wrappers) {
+    if (wrapper instanceof HTMLDivElement) {
       wrapper.dataset.pixelRatioCapControlId = pixelRatioCapControlId;
       wrapper.dataset.antialiasControlId = antialiasControlId;
 
@@ -153,12 +152,10 @@
         },
       });
 
-      handles.push(handle);
+      return () => {
+        handle.destroy();
+      };
     }
-
-    return () => {
-      handles.forEach((handle) => handle.destroy());
-    };
   });
 </script>
 

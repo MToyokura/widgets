@@ -6,11 +6,11 @@
   import { Line2 } from "three/addons/lines/Line2.js";
   import { LineGeometry } from "three/addons/lines/LineGeometry.js";
   import { LineMaterial } from "three/addons/lines/LineMaterial.js";
-  import ThreeSceneShell from "./shared/ThreeSceneShell.svelte";
   import {
-    getThreeSceneWrappers,
+    getThreeSceneWrapper,
     mountManagedThreeScene,
   } from "./functions/three";
+  import ThreeSceneShell from "./shared/ThreeSceneShell.svelte";
 
   let {
     pixelRatioCapControlId = "",
@@ -23,12 +23,8 @@
   const id = "perpendicular-line-and-plane-wrapper";
 
   onMount(() => {
-    const wrappers = getThreeSceneWrappers(id);
-    const handles: any[] = [];
-
-    for (const wrapper of wrappers) {
-      wrapper.dataset.pixelRatioCapControlId = pixelRatioCapControlId;
-      wrapper.dataset.antialiasControlId = antialiasControlId;
+    const wrapper = getThreeSceneWrapper(id);
+    if (wrapper instanceof HTMLDivElement) {
       const handle = mountManagedThreeScene(wrapper, {
         cameraPosition: [5, 3, 6],
         cameraLookAt: [0, 0, 0],
@@ -130,17 +126,12 @@
           );
         },
       });
-      handles.push(handle);
-    }
 
-    return () => {
-      handles.forEach((h) => h.destroy());
-    };
+      return () => {
+        handle.destroy();
+      };
+    }
   });
 </script>
 
-<ThreeSceneShell
-  {id}
-  {pixelRatioCapControlId}
-  {antialiasControlId}
-/>
+<ThreeSceneShell {id} {pixelRatioCapControlId} {antialiasControlId} />

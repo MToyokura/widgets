@@ -10,7 +10,7 @@
   import {
     addReferencePlane,
     getRangeControlValue,
-    getThreeSceneWrappers,
+    getThreeSceneWrapper,
     mountManagedThreeScene,
     observeRangePreference,
     setSegment,
@@ -53,10 +53,9 @@
   const TRANSLATION_VECTOR = new THREE.Vector3(0, 0, 1);
 
   onMount(() => {
-    const wrappers = getThreeSceneWrappers(id);
-    const handles: Array<{ destroy: () => void }> = [];
+    const wrapper = getThreeSceneWrapper(id);
 
-    for (const wrapper of wrappers) {
+    if (wrapper instanceof HTMLDivElement) {
       wrapper.dataset.pixelRatioCapControlId = pixelRatioCapControlId;
       wrapper.dataset.antialiasControlId = antialiasControlId;
       wrapper.dataset.linePositionControlId = resolvedLinePositionControlId;
@@ -217,12 +216,10 @@
         },
       });
 
-      handles.push(handle);
+      return () => {
+        handle.destroy();
+      };
     }
-
-    return () => {
-      handles.forEach((handle) => handle.destroy());
-    };
   });
 </script>
 

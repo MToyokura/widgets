@@ -6,12 +6,12 @@
   import { Line2 } from "three/addons/lines/Line2.js";
   import { LineGeometry } from "three/addons/lines/LineGeometry.js";
   import { LineMaterial } from "three/addons/lines/LineMaterial.js";
-  import ThreeSceneShell from "./shared/ThreeSceneShell.svelte";
   import {
     addReferencePlane,
-    getThreeSceneWrappers,
+    getThreeSceneWrapper,
     mountManagedThreeScene,
   } from "./functions/three";
+  import ThreeSceneShell from "./shared/ThreeSceneShell.svelte";
 
   let {
     pixelRatioCapControlId = "",
@@ -24,10 +24,9 @@
   const id = "two-lines-perpendicular-to-same-line-wrapper";
 
   onMount(() => {
-    const wrappers = getThreeSceneWrappers(id);
-    const handles: any[] = [];
+    const wrapper = getThreeSceneWrapper(id);
 
-    for (const wrapper of wrappers) {
+    if (wrapper instanceof HTMLDivElement) {
       wrapper.dataset.pixelRatioCapControlId = pixelRatioCapControlId;
       wrapper.dataset.antialiasControlId = antialiasControlId;
       const handle = mountManagedThreeScene(wrapper, {
@@ -91,12 +90,11 @@
           );
         },
       });
-      handles.push(handle);
-    }
 
-    return () => {
-      handles.forEach((h) => h.destroy());
-    };
+      return () => {
+        handle.destroy();
+      };
+    }
   });
 </script>
 

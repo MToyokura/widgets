@@ -8,7 +8,7 @@
   import { LineMaterial } from "three/addons/lines/LineMaterial.js";
   import {
     addReferencePlane,
-    getThreeSceneWrappers,
+    getThreeSceneWrapper,
     mountManagedThreeScene,
   } from "./functions/three";
   import ThreeSceneShell from "./shared/ThreeSceneShell.svelte";
@@ -51,13 +51,8 @@
   }
 
   onMount(() => {
-    const wrappers = getThreeSceneWrappers(id);
-    const handles: Array<{ destroy: () => void }> = [];
-
-    for (const wrapper of wrappers) {
-      wrapper.dataset.pixelRatioCapControlId = pixelRatioCapControlId;
-      wrapper.dataset.antialiasControlId = antialiasControlId;
-
+    const wrapper = getThreeSceneWrapper(id);
+    if (wrapper instanceof HTMLDivElement) {
       const handle = mountManagedThreeScene(wrapper, {
         cameraPosition: [5.9, 3.8, 5.8],
         cameraLookAt: [0, 0.8, 0],
@@ -203,12 +198,10 @@
         },
       });
 
-      handles.push(handle);
+      return () => {
+        handle.destroy();
+      };
     }
-
-    return () => {
-      handles.forEach((handle) => handle.destroy());
-    };
   });
 </script>
 
