@@ -3,7 +3,7 @@ export type SupportedLocale = {
   label: string;
 };
 
-export type LanguagePromptTemplate = {
+type LanguagePromptTemplate = {
   message: string;
   linkText: string;
 };
@@ -63,7 +63,7 @@ export function buildLocalePath(pathname: string, locale: string) {
   return `/${locale}/${suffix}`;
 }
 
-export function getLanguagePromptTemplates(locale: string) {
+function getLanguagePromptTemplates(locale: string) {
   return (
     languagePromptTemplates[normalizeLocale(locale) ?? "en"] ??
     languagePromptTemplates.en

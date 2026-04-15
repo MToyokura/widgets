@@ -3,18 +3,18 @@ export interface Point {
   y: number;
 }
 
-export const DEFAULT_ANGLE_MARKER_SIZE = 18;
+const DEFAULT_ANGLE_MARKER_SIZE = 18;
 const TWO_PI = Math.PI * 2;
 
 // ==========================================
 // 1. Core Math & Vector Geometry
 // ==========================================
 
-export function distance(a: Point, b: Point): number {
+function distance(a: Point, b: Point): number {
   return Math.hypot(b.x - a.x, b.y - a.y);
 }
 
-export function unitVector(from: Point, to: Point): Point {
+function unitVector(from: Point, to: Point): Point {
   const length = distance(from, to);
   if (length === 0) return { x: 0, y: 0 };
 
@@ -114,7 +114,7 @@ export function getLinePathThroughPoint(
   );
 }
 
-export function getPolylinePath(points: Point[]): string {
+function getPolylinePath(points: Point[]): string {
   if (points.length === 0) return "";
 
   return points
@@ -171,7 +171,7 @@ export function getPointOnCircle(
   };
 }
 
-export function projectPointToCircle(
+function projectPointToCircle(
   center: Point,
   radius: number,
   point: Point,
@@ -266,7 +266,7 @@ function getCounterclockwiseDelta(
   return (((endAngle - startAngle) % TWO_PI) + TWO_PI) % TWO_PI;
 }
 
-export function getArcSignedDeltaExcludingAngle(
+function getArcSignedDeltaExcludingAngle(
   startAngle: number,
   endAngle: number,
   excludedAngle: number,

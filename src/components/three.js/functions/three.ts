@@ -14,7 +14,7 @@ type ResolutionTarget = {
   };
 };
 
-export type ManagedThreeSceneContext = {
+type ManagedThreeSceneContext = {
   wrapper: HTMLDivElement;
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
@@ -96,16 +96,16 @@ export function getThreeSceneWrapper(containerId: string) {
   return wrapper instanceof HTMLDivElement ? wrapper : null;
 }
 
-export function isCheckboxEnabled(controlId = "", fallback = false) {
+function isCheckboxEnabled(controlId = "", fallback = false) {
   if (!controlId) return fallback;
   return getControl(controlId, "checkbox")?.checked ?? fallback;
 }
 
-export function isPixelRatioCapEnabled(controlId = "") {
+function isPixelRatioCapEnabled(controlId = "") {
   return isCheckboxEnabled(controlId, false);
 }
 
-export function isAntialiasEnabled(controlId = "") {
+function isAntialiasEnabled(controlId = "") {
   return isCheckboxEnabled(controlId, true);
 }
 
@@ -114,7 +114,7 @@ export function getRangeControlValue(controlId = "", fallback = 0) {
   return getNumericInputValue(getControl(controlId, "range"), fallback);
 }
 
-export function setRendererPixelRatioCap(
+function setRendererPixelRatioCap(
   renderer: THREE.WebGLRenderer,
   pixelRatioCapEnabled: boolean,
 ) {
@@ -128,7 +128,7 @@ export function setRendererPixelRatioCap(
   );
 }
 
-export function initializeThreeScene(
+function initializeThreeScene(
   wrapper: HTMLDivElement,
   setup: () => void | (() => void),
 ) {
@@ -184,7 +184,7 @@ export function initializeThreeScene(
   return { remount, destroy };
 }
 
-export function createPreferenceAwareRenderer(
+function createPreferenceAwareRenderer(
   wrapper: HTMLDivElement,
   pixelRatioCapControlId = "",
   antialiasControlId = "",
@@ -358,7 +358,7 @@ export function mountManagedThreeScene(
   return sceneHandle;
 }
 
-export function observeCheckboxPreference(
+function observeCheckboxPreference(
   controlId: string,
   onChange: (enabled: boolean) => void,
 ) {
@@ -371,14 +371,14 @@ export function observeCheckboxPreference(
   return () => control.removeEventListener("change", handleChange);
 }
 
-export function observePixelRatioCapPreference(
+function observePixelRatioCapPreference(
   controlId: string,
   onChange: (pixelRatioCapEnabled: boolean) => void,
 ) {
   return observeCheckboxPreference(controlId, onChange);
 }
 
-export function observeAntialiasPreference(
+function observeAntialiasPreference(
   controlId: string,
   onChange: (antialias: boolean) => void,
 ) {
@@ -402,7 +402,7 @@ export function observeRangePreference(
   };
 }
 
-export function observeWrapperSize(
+function observeWrapperSize(
   wrapper: HTMLDivElement,
   onResize: (width: number, height: number) => void,
 ) {
@@ -452,7 +452,7 @@ function disposeMaterial(
   }
 }
 
-export function disposeSceneResources(scene: THREE.Scene) {
+function disposeSceneResources(scene: THREE.Scene) {
   scene.traverse((object) => {
     const renderable = object as THREE.Mesh;
     if (renderable.geometry) renderable.geometry.dispose();
@@ -460,7 +460,7 @@ export function disposeSceneResources(scene: THREE.Scene) {
   });
 }
 
-export function disposeRenderer(renderer: THREE.WebGLRenderer) {
+function disposeRenderer(renderer: THREE.WebGLRenderer) {
   renderer.dispose();
   renderer.forceContextLoss();
   renderer.domElement.remove();
