@@ -4,19 +4,19 @@ sidebar:
   order: 1030
 ---
 
-import PerpendicularLineAndPlane from "@/components/three.js/PerpendicularLineAndPlane.astro";
-import TwoLinesParallelToSameLine from "@/components/three.js/TwoLinesParallelToSameLine.astro";
-import TwoLinesPerpendicularToSameLine from "@/components/three.js/TwoLinesPerpendicularToSameLine.astro";
-import RenderingSettings from "@/components/three.js/shared/RenderingSettings.astro";
+import PerpendicularLineAndPlane from "@/components/three.js/PerpendicularLineAndPlane.svelte";
+import TwoLinesParallelToSameLine from "@/components/three.js/TwoLinesParallelToSameLine.svelte";
+import TwoLinesPerpendicularToSameLine from "@/components/three.js/TwoLinesPerpendicularToSameLine.svelte";
+import RenderingSettings from "@/components/three.js/shared/RenderingSettings.svelte";
 
-<RenderingSettings locale="ja" />
+<RenderingSettings locale="ja" client:visible />
 
 ## 平面に垂直な直線
 
 直線が平面と垂直であると言い切るためには、その平面上の交わる2直線と垂直であることを示すだけで十分です。一度この条件が満たされれば、その直線は平面全体と垂直であるといえます。特に、垂線の足を通る平面上のどの直線とも90度の角をなします。
 
 <PerpendicularLineAndPlane
-  locale="ja"
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
@@ -26,6 +26,7 @@ import RenderingSettings from "@/components/three.js/shared/RenderingSettings.as
 一つの直線に平行な二つの直線は、互いに平行になります。
 
 <TwoLinesParallelToSameLine
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
@@ -35,6 +36,7 @@ import RenderingSettings from "@/components/three.js/shared/RenderingSettings.as
 空間では、同じ直線に垂直であっても互いに平行とは限りません。
 
 <TwoLinesPerpendicularToSameLine
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
