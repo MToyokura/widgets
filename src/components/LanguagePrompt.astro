@@ -1,0 +1,102 @@
+---
+import {
+  buildLocalePath,
+  getPathLocale,
+  languagePromptTemplates,
+  normalizeLocale,
+  supportedLocales,
+} from "../i18n/languages";
+import type { SupportedLocale } from "../i18n/languages";
+
+const {
+  currentLocale: currentLocaleProp,
+  pathname = Astro.url.pathname,
+  locales = supportedLocales,
+} = Astro.props;
+
+const currentLocale =
+  normalizeLocale(currentLocaleProp) ?? getPathLocale(pathname) ?? supportedLocales[0]?.code ?? "en";
+const localeList = (Array.isArray(locales) ? locales : supportedLocales) as SupportedLocale[];
+const alternateLocales = localeList
+  .filter((locale) => locale.code !== currentLocale)
+  .map((locale) => ({
+    code: locale.code,
+    label: locale.label,
+    href: buildLocalePath(pathname, locale.code),
+  }));
+---
+
+<div class="language-prompt" role="note" aria-live="polite" data-language-prompt hidden>
+  <span data-language-prompt-message></span>
+  <a data-language-prompt-link href="#"></a>
+</div>
+
+<script
+  is:inline
+  define:vars={{ alternateLocales, languagePromptTemplates }}
+>
+  const prompt = document.querySelector("[data-language-prompt]");
+  const message = prompt?.querySelector("[data-language-prompt-message]");
+  const link = prompt?.querySelector("[data-language-prompt-link]");
+
+  const normalizeBrowserLocale = (locale) => {
+    if (typeof locale !== "string") {
+      return null;
+    }
+
+    const normalized = locale.trim().toLowerCase();
+
+    if (!normalized) {
+      return null;
+    }
+
+    return normalized.split("-")[0] ?? null;
+  };
+
+  const preferredLocales = Array.from(
+    new Set((navigator.languages ?? [navigator.language]).map(normalizeBrowserLocale).filter(Boolean)),
+  );
+
+  const matchingLocale = preferredLocales
+    .map((preferredLocale) =>
+      alternateLocales.find(({ code }) => code === preferredLocale),
+    )
+    .find(Boolean);
+
+  if (prompt && message && link && matchingLocale) {
+    const promptLocale =
+      preferredLocales.find((preferredLocale) => languagePromptTemplates[preferredLocale]) ??
+      matchingLocale.code;
+    const promptTemplates = languagePromptTemplates[promptLocale] ?? languagePromptTemplates.en;
+    const displayNames =
+      typeof Intl.DisplayNames === "function"
+        ? new Intl.DisplayNames([promptLocale], { type: "language" })
+        : null;
+    const languageLabel = displayNames?.of(matchingLocale.code) ?? matchingLocale.label;
+
+    message.textContent = promptTemplates.message.replace("{language}", languageLabel);
+    link.textContent = promptTemplates.linkText.replace("{language}", languageLabel);
+    link.href = matchingLocale.href;
+    prompt.hidden = false;
+  }
+</script>
+
+<style>
+  .language-prompt {
+    margin: 0 auto 1.5rem;
+    max-width: 800px;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.75rem;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-gray-2);
+    text-align: center;
+  }
+
+  .language-prompt a {
+    margin-left: 0.4rem;
+    color: var(--sl-color-accent-high);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>
