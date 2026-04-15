@@ -4,27 +4,27 @@ sidebar:
   order: 1000
 ---
 
-import Translation from "@/components/D3/Translation.astro";
-import Rotation from "@/components/D3/Rotation.astro";
-import Reflection from "@/components/D3/Reflection.astro";
+import Translation from "@/components/D3/Translation.svelte";
+import Rotation from "@/components/D3/Rotation.svelte";
+import Reflection from "@/components/D3/Reflection.svelte";
 
 ## Translation
 
 A translation slides every point of a figure by the same amount in the same direction. The size, shape,
 and orientation stay the same; only the position changes.
 
-<Translation />
+<Translation client:visible />
 
 ## Rotation
 
 A rotation turns a figure around a fixed center through a given angle. Distances
 from the center stay constant, so the image remains congruent to the original.
 
-<Rotation />
+<Rotation client:visible />
 
 ## Reflection
 
 A reflection flips a figure across a mirror line. Each point and its image are the
 same distance from the line, and the segment joining them is perpendicular to it.
 
-<Reflection />
+<Reflection client:visible />
