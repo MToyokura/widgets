@@ -4,21 +4,22 @@ sidebar:
   order: 1040
 ---
 
-import MovingLineCreatesFlatPlane from "@/components/three.js/MovingLineCreatesFlatPlane.astro";
-import MovingLineCreatesCylindricalSurface from "@/components/three.js/MovingLineCreatesCylindricalSurface.astro";
-import MovingLineCreatesConicalSurface from "@/components/three.js/MovingLineCreatesConicalSurface.astro";
-import MovingTriangleCreatesTriangularPrism from "@/components/three.js/MovingTriangleCreatesTriangularPrism.astro";
-import RotatingSquareCreatesCylinder from "@/components/three.js/RotatingSquareCreatesCylinder.astro";
-import RotatingTriangleCreatesCone from "@/components/three.js/RotatingTriangleCreatesCone.astro";
-import RenderingSettings from "@/components/three.js/shared/RenderingSettings.astro";
+import MovingLineCreatesFlatPlane from "@/components/three.js/MovingLineCreatesFlatPlane.svelte";
+import MovingLineCreatesCylindricalSurface from "@/components/three.js/MovingLineCreatesCylindricalSurface.svelte";
+import MovingLineCreatesConicalSurface from "@/components/three.js/MovingLineCreatesConicalSurface.svelte";
+import MovingTriangleCreatesTriangularPrism from "@/components/three.js/MovingTriangleCreatesTriangularPrism.svelte";
+import RotatingSquareCreatesCylinder from "@/components/three.js/RotatingSquareCreatesCylinder.svelte";
+import RotatingTriangleCreatesCone from "@/components/three.js/RotatingTriangleCreatesCone.svelte";
+import RenderingSettings from "@/components/three.js/shared/RenderingSettings.svelte";
 
-<RenderingSettings locale="ja" />
+<RenderingSettings locale="ja" client:visible />
 
 ## 線分の平行移動で面を作る
 
 線分を平行に移動させると、その移動した軌跡によって1つの面が作られます。
 
 <MovingLineCreatesFlatPlane
+  client:visible
   locale="ja"
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
@@ -29,11 +30,13 @@ import RenderingSettings from "@/components/three.js/shared/RenderingSettings.as
 円柱や円錐の側面は、1つの線分が定直線（軸）のまわりに回転してできる曲面とみなせます。
 
 <MovingLineCreatesCylindricalSurface
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
 <MovingLineCreatesConicalSurface
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
@@ -43,6 +46,7 @@ import RenderingSettings from "@/components/three.js/shared/RenderingSettings.as
 平面図形を平行移動させると、その移動した軌跡によって立体が作られます。
 
 <MovingTriangleCreatesTriangularPrism
+  client:visible
   locale="ja"
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
@@ -53,11 +57,13 @@ import RenderingSettings from "@/components/three.js/shared/RenderingSettings.as
 平面図形を回転させると、その回転した軌跡によって立体が作られます。
 
 <RotatingSquareCreatesCylinder
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
 
 <RotatingTriangleCreatesCone
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />

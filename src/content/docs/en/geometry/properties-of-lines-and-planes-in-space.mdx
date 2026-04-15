@@ -4,18 +4,19 @@ sidebar:
   order: 1020
 ---
 
-import PerpendicularLineAndPlane from "@/components/three.js/PerpendicularLineAndPlane.astro";
-import TwoLinesParallelToSameLine from "@/components/three.js/TwoLinesParallelToSameLine.astro";
-import TwoLinesPerpendicularToSameLine from "@/components/three.js/TwoLinesPerpendicularToSameLine.astro";
-import RenderingSettings from "@/components/three.js/shared/RenderingSettings.astro";
+import PerpendicularLineAndPlane from "@/components/three.js/PerpendicularLineAndPlane.svelte";
+import TwoLinesParallelToSameLine from "@/components/three.js/TwoLinesParallelToSameLine.svelte";
+import TwoLinesPerpendicularToSameLine from "@/components/three.js/TwoLinesPerpendicularToSameLine.svelte";
+import RenderingSettings from "@/components/three.js/shared/RenderingSettings.svelte";
 
-<RenderingSettings locale="en" />
+<RenderingSettings locale="en" client:visible />
 
 ## A line perpendicular to a plane
 
 To say that a line is perpendicular to a plane, it is sufficient to show that it is perpendicular to two intersecting lines on that plane. Once this condition is met, the line is defined as perpendicular to the entire plane, and as a result, the angle it makes with every line existing on the plane is 90 degrees.
 
 <PerpendicularLineAndPlane
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
@@ -25,6 +26,7 @@ To say that a line is perpendicular to a plane, it is sufficient to show that it
 Two lines parallel to the same line are parallel to each other.
 
 <TwoLinesParallelToSameLine
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
@@ -34,6 +36,7 @@ Two lines parallel to the same line are parallel to each other.
 In space, two lines perpendicular to the same line are not necessarily parallel to each other.
 
 <TwoLinesPerpendicularToSameLine
+  client:visible
   pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
   antialiasControlId="geometry-antialias-toggle"
 />
