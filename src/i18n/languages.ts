@@ -62,10 +62,3 @@ export function buildLocalePath(pathname: string, locale: string) {
 
   return `/${locale}/${suffix}`;
 }
-
-function getLanguagePromptTemplates(locale: string) {
-  return (
-    languagePromptTemplates[normalizeLocale(locale) ?? "en"] ??
-    languagePromptTemplates.en
-  );
-}
