@@ -63,9 +63,7 @@
     zScaleControlId || `${baseId}-z-scale`,
   );
   const geometry = $derived(getGeometry(xScale, yScale, zScale));
-  const aspectRatio = $derived(
-    `${geometry.viewBoxWidth} / ${geometry.viewBoxHeight}`,
-  );
+  const aspectRatio = "125 / 113";
 
   $effect(() => {
     xScale = getPositiveNumber(rawXScale, 1);
