@@ -10,7 +10,8 @@
     "astro": "astro",
     "format": "prettier --write --cache .",
     "check": "astro check && svelte-check",
-    "knip": "knip --fix --allow-remove-files"
+    "knip": "knip --fix --allow-remove-files",
+    "fix": "npm run format && npm run knip"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
