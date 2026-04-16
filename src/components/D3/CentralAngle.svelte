@@ -14,6 +14,7 @@
     getCircleArcPathExcludingAngle,
     getInscribedLinesPath,
     getPointOnCircle,
+    getPointerAngle,
     getSignedMinorAngleDelta,
   } from "./functions/geometry";
 
@@ -78,10 +79,6 @@
       : `${roundedAngle.toFixed(1)}°`;
   }
 
-  function getPointerAngle(x: number, y: number) {
-    return Math.atan2(y - cy, x - cx);
-  }
-
   function createAngleDrag(updateAngle: (angle: number) => void) {
     return (node: SVGCircleElement) => {
       const drag = d3
@@ -90,7 +87,7 @@
           isDragging = true;
         })
         .on("drag", (event) => {
-          updateAngle(getPointerAngle(event.x, event.y));
+          updateAngle(getPointerAngle({ x: event.x, y: event.y }, center));
         })
         .on("end", () => {
           isDragging = false;

@@ -39,6 +39,13 @@ export function getCentroid(points: Point[]): Point {
   return { x: x / len, y: y / len };
 }
 
+export function addPoints(...points: Point[]): Point {
+  return points.reduce(
+    (sum, point) => ({ x: sum.x + point.x, y: sum.y + point.y }),
+    { x: 0, y: 0 },
+  );
+}
+
 // ==========================================
 // 2. Transformations
 // ==========================================
@@ -48,6 +55,10 @@ export function translatePoint(point: Point, offset: Point): Point {
     x: point.x + offset.x,
     y: point.y + offset.y,
   };
+}
+
+export function getPointerAngle(point: Point, center: Point): number {
+  return Math.atan2(point.y - center.y, point.x - center.x);
 }
 
 export function rotatePoint(point: Point, center: Point, angle: number): Point {
@@ -169,15 +180,6 @@ export function getPointOnCircle(
     x: center.x + radius * Math.cos(angle),
     y: center.y + radius * Math.sin(angle),
   };
-}
-
-function projectPointToCircle(
-  center: Point,
-  radius: number,
-  point: Point,
-): Point {
-  const angle = Math.atan2(point.y - center.y, point.x - center.x);
-  return getPointOnCircle(center, radius, angle);
 }
 
 export function getSignedMinorAngleDelta(

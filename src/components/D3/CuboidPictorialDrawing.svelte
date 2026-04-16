@@ -3,7 +3,7 @@
 <script lang="ts">
   import WidgetContainer from "../WidgetContainer.svelte";
   import WidgetSliderController from "../WidgetSliderController.svelte";
-  import { getPolygonPath } from "./functions/geometry";
+  import { addPoints, getPolygonPath } from "./functions/geometry";
 
   type Point = {
     x: number;
@@ -88,13 +88,6 @@
     }
 
     return fallback;
-  }
-
-  function addPoints(...points: Point[]): Point {
-    return points.reduce(
-      (sum, point) => ({ x: sum.x + point.x, y: sum.y + point.y }),
-      { x: 0, y: 0 },
-    );
   }
 
   function getGeometry(xScale: number, yScale: number, zScale: number) {
