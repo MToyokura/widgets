@@ -8,6 +8,7 @@
   import { LineMaterial } from "three/addons/lines/LineMaterial.js";
   import {
     addReferencePlane,
+    createCirclePoints,
     getThreeSceneWrapper,
     mountManagedThreeScene,
   } from "./functions/three";
@@ -28,23 +29,6 @@
   const ANGULAR_SPEED = 0.55;
   const OUTLINE_WIDTH = 3.8;
   const REFERENCE_PLANE_Y = -0.001;
-
-  function createRingPoints(radius: number, y: number, segments = 96) {
-    const points = [];
-
-    for (let index = 0; index < segments; index += 1) {
-      const angle = (index / segments) * Math.PI * 2;
-      points.push(
-        new THREE.Vector3(
-          Math.cos(angle) * radius,
-          y,
-          Math.sin(angle) * radius,
-        ),
-      );
-    }
-
-    return points;
-  }
 
   function createTriangleShape() {
     const shape = new THREE.Shape();
@@ -95,7 +79,7 @@
 
           const baseRing = new THREE.LineLoop(
             new THREE.BufferGeometry().setFromPoints(
-              createRingPoints(BASE_RADIUS, 0),
+              createCirclePoints(BASE_RADIUS, 0),
             ),
             new THREE.LineBasicMaterial({
               color: 0xdc2626,
