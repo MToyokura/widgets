@@ -1,3 +1,5 @@
+<svelte:options runes={true} />
+
 <script lang="ts">
   import * as d3 from "d3";
   import WidgetContainer from "../WidgetContainer.svelte";
@@ -23,24 +25,27 @@
     (_, i) => i * gridSpacing,
   );
 
-  // 2. Reactive State
-  let originalPoints: Point[] = [
+  // 2. Reactive State (Svelte 5 Runes)
+  let originalPoints = $state<Point[]>([
     { x: 60, y: 265 },
     { x: 125, y: 135 },
     { x: 205, y: 225 },
-  ];
-  let offset: Point = { x: 150, y: 0 };
-  let isDragging = false;
+  ]);
+  let offset = $state<Point>({ x: 150, y: 0 });
+  let isDragging = $state(false);
 
-  // 3. Derived State (Reactive Declarations)
-  // These update automatically whenever 'originalPoints' or 'offset' change.
-  $: transformedPoints = originalPoints.map((p) => translatePoint(p, offset));
-  $: centroid = getCentroid(originalPoints);
-  $: handlePos = translatePoint(centroid, offset);
+  // 3. Derived State
+  let transformedPoints = $derived(
+    originalPoints.map((p) => translatePoint(p, offset)),
+  );
+  let centroid = $derived(getCentroid(originalPoints));
+  let handlePos = $derived(translatePoint(centroid, offset));
 
-  $: connectorsPath = getConnectorPath(originalPoints, transformedPoints);
-  $: originalPath = getPolygonPath(originalPoints);
-  $: transformedPath = getPolygonPath(transformedPoints);
+  let connectorsPath = $derived(
+    getConnectorPath(originalPoints, transformedPoints),
+  );
+  let originalPath = $derived(getPolygonPath(originalPoints));
+  let transformedPath = $derived(getPolygonPath(transformedPoints));
 
   // 4. Logic
   function clampPoint(point: Point, margin = 18): Point {
@@ -50,13 +55,14 @@
     };
   }
 
-  // D3 Drag action for Svelte
+  // D3 Drag action
   function dragAction(node: SVGCircleElement) {
     const drag = d3
       .drag<SVGCircleElement, unknown>()
       .on("start", () => (isDragging = true))
       .on("drag", (event) => {
         const handlePoint = clampPoint({ x: event.x, y: event.y });
+        // Update the state object to trigger reactivity
         offset = {
           x: handlePoint.x - centroid.x,
           y: handlePoint.y - centroid.y,
@@ -120,3 +126,13 @@
     />
   </svg>
 </WidgetContainer>
+
+<style>
+  /* Optional: Add any specific styles here */
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    background-color: #f8fafc;
+  }
+</style>
