@@ -415,7 +415,7 @@ export function getDoubleAngleDotPositions(
   a: Point,
   vertex: Point,
   b: Point,
-  distanceFromVertex = 22,
+  distanceFromVertex = 18,
   spacing = 10,
   dotRadius = 4,
 ): [Point, Point] {
@@ -424,17 +424,10 @@ export function getDoubleAngleDotPositions(
   const dy = midpoint.y - vertex.y;
   const directionLength = Math.hypot(dx, dy) || 1;
 
-  const angleRadians = (getAngleDegrees(a, vertex, b) * Math.PI) / 180;
-  const availableWidth = directionLength * 2 * Math.sin(angleRadians / 2);
   const minimumSpacing = Math.min(spacing, Math.max(3, dotRadius * 0.5));
 
-  const effectiveSpacing = Math.max(
-    minimumSpacing,
-    Math.min(spacing, availableWidth - dotRadius * 2),
-  );
-
-  const offsetX = (-dy / directionLength) * (effectiveSpacing / 2);
-  const offsetY = (dx / directionLength) * (effectiveSpacing / 2);
+  const offsetX = (dx / directionLength) * minimumSpacing;
+  const offsetY = (dy / directionLength) * minimumSpacing;
 
   return [
     { x: midpoint.x + offsetX, y: midpoint.y + offsetY },
