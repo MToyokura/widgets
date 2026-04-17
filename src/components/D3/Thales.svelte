@@ -98,18 +98,20 @@
       y2={endPoint.y}
       stroke="#666"
       stroke-dasharray="4"
+      stroke-width="2.5"
+      stroke-linecap="round"
     />
     <path
       d={trianglePath}
       fill="rgba(52, 152, 219, 0.3)"
       stroke="#3498db"
-      stroke-width="3"
+      stroke-width="2.5"
     />
     <path
       d={rightAnglePath}
       fill="none"
       stroke="#1f2937"
-      stroke-width="3"
+      stroke-width="2.5"
       stroke-linecap="round"
       stroke-linejoin="round"
       style="pointer-events: none;"

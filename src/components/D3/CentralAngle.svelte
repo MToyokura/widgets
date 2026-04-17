@@ -123,7 +123,7 @@
       d={highlightedArcPath}
       fill="none"
       stroke="#f59e0b"
-      stroke-width="8"
+      stroke-width="5"
       stroke-linecap="round"
       opacity="0.85"
       style="pointer-events: none;"
@@ -132,7 +132,7 @@
       d={sectorPath}
       fill="none"
       stroke="#3498db"
-      stroke-width="3"
+      stroke-width="2.5"
       style="pointer-events: none;"
     />
     <path
@@ -148,7 +148,7 @@
       d={centralAngleMarkerPath}
       fill="none"
       stroke="#1f2937"
-      stroke-width="3"
+      stroke-width="5"
       stroke-linecap="round"
       style="pointer-events: none;"
     />
@@ -156,7 +156,7 @@
       d={inscribedAngleMarkerPath}
       fill="none"
       stroke="#15803d"
-      stroke-width="3"
+      stroke-width="5"
       stroke-linecap="round"
       style="pointer-events: none;"
     />
