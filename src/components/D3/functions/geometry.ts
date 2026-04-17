@@ -383,14 +383,18 @@ export function getCentralAngleLabelPosition(
   return getPointOnCircle(center, distanceFromCenter, midpointAngle);
 }
 
-export function getAngleLabelPosition(
+/**
+ * Calculates the unit vector of the angle bisector at a vertex.
+ * Returns a fallback vector if the points are collinear or overlapping.
+ */
+export function getAngleBisectorUnitVector(
   a: Point,
   vertex: Point,
   b: Point,
-  distanceFromVertex = DEFAULT_ANGLE_MARKER_SIZE + 26,
 ): Point {
   const toA = unitVector(vertex, a);
   const toB = unitVector(vertex, b);
+
   const bisector = {
     x: toA.x + toB.x,
     y: toA.y + toB.y,
@@ -398,16 +402,28 @@ export function getAngleLabelPosition(
 
   const length = Math.hypot(bisector.x, bisector.y);
 
+  // Handle the case where points are collinear/opposite (angle is 180 or 0)
   if (length === 0) {
-    return {
-      x: vertex.x,
-      y: vertex.y + distanceFromVertex,
-    };
+    return { x: 0, y: 1 }; // Default "down" direction or handle as needed
   }
 
   return {
-    x: vertex.x + (bisector.x / length) * distanceFromVertex,
-    y: vertex.y + (bisector.y / length) * distanceFromVertex,
+    x: bisector.x / length,
+    y: bisector.y / length,
+  };
+}
+
+export function getAngleLabelPosition(
+  a: Point,
+  vertex: Point,
+  b: Point,
+  distanceFromVertex = DEFAULT_ANGLE_MARKER_SIZE + 26,
+): Point {
+  const unitBisector = getAngleBisectorUnitVector(a, vertex, b);
+
+  return {
+    x: vertex.x + unitBisector.x * distanceFromVertex,
+    y: vertex.y + unitBisector.y * distanceFromVertex,
   };
 }
 
