@@ -1,0 +1,215 @@
+<svelte:options runes={true} />
+
+<script lang="ts">
+  import WidgetContainer from "../WidgetContainer.svelte";
+  import WidgetSliderController from "../WidgetSliderController.svelte";
+  import {
+    getDoubleAngleDotPositions,
+    getLinePathThroughPoint,
+    type Point,
+  } from "./functions/geometry";
+
+  const width = 400;
+  const height = 400;
+  const gridSpacing = 40;
+  const linePadding = 40;
+
+  const gridXs = Array.from(
+    { length: Math.floor(width / gridSpacing) + 1 },
+    (_, i) => i * gridSpacing,
+  );
+  const gridYs = Array.from(
+    { length: Math.floor(height / gridSpacing) + 1 },
+    (_, i) => i * gridSpacing,
+  );
+
+  const center: Point = { x: width / 2, y: height / 2 };
+  const topY = height * 0.3;
+  const bottomY = height * 0.7;
+  const horizontalLinesY = [topY, bottomY];
+  const markerRadius = 35;
+  const baseId = `parallel-lines-alt-${crypto.randomUUID()}`;
+
+  let angleDeg = $state(135);
+
+  let angleRad = $derived(Math.PI - (angleDeg * Math.PI) / 180);
+
+  const transversalPath = $derived(
+    getLinePathThroughPoint(center, angleRad, 1000),
+  );
+
+  function getIntersectionData(yLine: number, currentAngle: number) {
+    const sin = Math.sin(currentAngle);
+    const cos = Math.cos(currentAngle);
+    const safeSin = Math.abs(sin) < 1e-6 ? (sin >= 0 ? 1e-6 : -1e-6) : sin;
+    const t = (yLine - center.y) / safeSin;
+    const pt = { x: center.x + t * cos, y: yLine };
+
+    const pRight = { x: pt.x + markerRadius, y: pt.y };
+    const pLeft = { x: pt.x - markerRadius, y: pt.y };
+    const pTransversal = {
+      x: pt.x + Math.cos(currentAngle) * markerRadius,
+      y: pt.y + Math.sin(currentAngle) * markerRadius,
+    };
+    const pTransversalOpp = {
+      x: pt.x - Math.cos(currentAngle) * markerRadius,
+      y: pt.y - Math.sin(currentAngle) * markerRadius,
+    };
+
+    return {
+      point: pt,
+      rightDotsFwd: getDoubleAngleDotPositions(pRight, pt, pTransversal),
+      leftDotsFwd: getDoubleAngleDotPositions(pLeft, pt, pTransversal),
+      rightDotsBack: getDoubleAngleDotPositions(pRight, pt, pTransversalOpp),
+      leftDotsBack: getDoubleAngleDotPositions(pLeft, pt, pTransversalOpp),
+    };
+  }
+
+  const intersections = $derived(
+    horizontalLinesY.map((y) => getIntersectionData(y, angleRad)),
+  );
+
+  function chooseInteriorDot(a: Point, b: Point) {
+    const within = (p: Point) => p.y > topY - 1 && p.y < bottomY + 1;
+    if (within(a)) return a;
+    if (within(b)) return b;
+    return a;
+  }
+</script>
+
+<WidgetContainer id="parallel-lines-alternate-wrapper">
+  <svg
+    viewBox="0 0 {width} {height}"
+    aria-label="Parallel lines and alternate interior angles"
+  >
+    {#each gridXs as x}
+      <line
+        x1={x}
+        y1="0"
+        x2={x}
+        y2={height}
+        stroke="#d7dde5"
+        stroke-width="1"
+      />
+    {/each}
+    {#each gridYs as y}
+      <line x1="0" y1={y} x2={width} y2={y} stroke="#d7dde5" stroke-width="1" />
+    {/each}
+
+    <defs>
+      <marker
+        id="arrow-alt"
+        viewBox="0 0 10 10"
+        refX="5"
+        refY="5"
+        markerWidth="4"
+        markerHeight="4"
+        orient="auto-start-reverse"
+      >
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#374151" />
+      </marker>
+    </defs>
+
+    <!-- Horizontal Lines -->
+    {#each horizontalLinesY as y}
+      <line
+        x1={linePadding}
+        x2={width - linePadding}
+        y1={y}
+        y2={y}
+        stroke="#374151"
+        stroke-width="3"
+        marker-start="url(#arrow-alt)"
+        marker-end="url(#arrow-alt)"
+      />
+    {/each}
+
+    <!-- Transversal -->
+    <path d={transversalPath} fill="none" stroke="#2563eb" stroke-width="3" />
+
+    <!-- Alternate Interior Angle Markers -->
+    <g style="pointer-events: none;">
+      {#if intersections && intersections.length >= 2}
+        <!-- Pair A: top.left & bottom.right (yellow -> switched to green) -->
+        <circle
+          cx={chooseInteriorDot(
+            intersections[0].leftDotsFwd[1],
+            intersections[0].leftDotsBack[1],
+          ).x}
+          cy={chooseInteriorDot(
+            intersections[0].leftDotsFwd[1],
+            intersections[0].leftDotsBack[1],
+          ).y}
+          r="4.5"
+          fill="#16a34a"
+          stroke="#111827"
+          stroke-width="1.5"
+        />
+        <circle
+          cx={chooseInteriorDot(
+            intersections[1].rightDotsFwd[1],
+            intersections[1].rightDotsBack[1],
+          ).x}
+          cy={chooseInteriorDot(
+            intersections[1].rightDotsFwd[1],
+            intersections[1].rightDotsBack[1],
+          ).y}
+          r="4.5"
+          fill="#16a34a"
+          stroke="#111827"
+          stroke-width="1.5"
+        />
+
+        <!-- Pair B: top.right & bottom.left (green -> switched to yellow) -->
+        <circle
+          cx={chooseInteriorDot(
+            intersections[0].rightDotsFwd[1],
+            intersections[0].rightDotsBack[1],
+          ).x}
+          cy={chooseInteriorDot(
+            intersections[0].rightDotsFwd[1],
+            intersections[0].rightDotsBack[1],
+          ).y}
+          r="4.5"
+          fill="#facc15"
+          stroke="#111827"
+          stroke-width="1.5"
+        />
+        <circle
+          cx={chooseInteriorDot(
+            intersections[1].leftDotsFwd[1],
+            intersections[1].leftDotsBack[1],
+          ).x}
+          cy={chooseInteriorDot(
+            intersections[1].leftDotsFwd[1],
+            intersections[1].leftDotsBack[1],
+          ).y}
+          r="4.5"
+          fill="#facc15"
+          stroke="#111827"
+          stroke-width="1.5"
+        />
+      {/if}
+    </g>
+  </svg>
+
+  {#snippet controls()}
+    <WidgetSliderController
+      id={`${baseId}-angle`}
+      label="Angle"
+      min={20}
+      max={160}
+      step={1}
+      bind:value={angleDeg}
+    />
+  {/snippet}
+</WidgetContainer>
+
+<style>
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: #f8fafc;
+  }
+</style>

@@ -1,13 +1,20 @@
 ---
-title: 平行線や角の性質
+title: 線と角の性質
 sidebar:
   order: 2000
 ---
 
-import ParallelLinesWithTransversal from "@/components/D3/ParallelLinesWithTransversal.svelte";
+import ParallelLinesCorrespondingAngles from "@/components/D3/ParallelLinesCorrespondingAngles.svelte";
+import ParallelLinesAlternateAngles from "@/components/D3/ParallelLinesAlternateAngles.svelte";
 
-## 平行な2直線と同位角
+## 同位角
 
-平行な2直線に他の直線が交わったときにできるは等しい
+平行な2直線に他の直線が交わったときにできる同位角は等しい
 
-<ParallelLinesWithTransversal client:load />
+<ParallelLinesCorrespondingAngles client:load />
+
+## 錯角
+
+平行な2直線に他の直線が交わったときにできる錯角は等しい
+
+<ParallelLinesAlternateAngles client:load />
