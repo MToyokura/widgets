@@ -71,7 +71,7 @@
     viewBox="0 0 {width} {height}"
     aria-label="Parallel lines and transversal diagram"
   >
-    {#each gridXs as x}
+    {#each gridXs as x (x)}
       <line
         x1={x}
         y1="0"
@@ -81,7 +81,7 @@
         stroke-width="1"
       />
     {/each}
-    {#each gridYs as y}
+    {#each gridYs as y (y)}
       <line x1="0" y1={y} x2={width} y2={y} stroke="#d7dde5" stroke-width="1" />
     {/each}
 
@@ -100,7 +100,7 @@
     </defs>
 
     <!-- Horizontal Lines -->
-    {#each horizontalLinesY as y}
+    {#each horizontalLinesY as y (y)}
       <line
         x1={linePadding}
         x2={width - linePadding}
@@ -118,7 +118,7 @@
 
     <!-- Angle Markers -->
     <g style="pointer-events: none;">
-      {#each intersections as inter}
+      {#each intersections as inter, i (i)}
         <circle
           cx={inter.rightDots[1].x}
           cy={inter.rightDots[1].y}

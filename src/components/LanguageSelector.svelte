@@ -16,7 +16,7 @@
 </script>
 
 <div class="language-selector">
-  {#each options as option}
+  {#each options as option (option.href)}
     <a href={option.href} class="card">
       <span class="label">{option.label}</span>
       <span class="description">{option.description}</span>

@@ -6,7 +6,6 @@
   import {
     getAngleBisectorUnitVector,
     getAngleLabelPosition,
-    getDoubleAngleDotPositions,
     getLinePath,
     getTrianglePath,
     type Point,
@@ -20,9 +19,6 @@
   let pointC = $state<Point>({ x: 350, y: 300 });
 
   const trianglePath = $derived(getTrianglePath(pointA, pointC, pointB));
-  const bisectorUnit = $derived(
-    getAngleBisectorUnitVector(pointC, pointA, pointB),
-  );
 
   function getBisectorIntersection(a: Point, b: Point, c: Point) {
     const dir = getAngleBisectorUnitVector(b, a, c);
@@ -58,9 +54,6 @@
   const pointD = $derived(getBisectorIntersection(pointA, pointC, pointB));
 
   const bisectorPath = $derived(getLinePath(pointA, pointD));
-
-  const cadDots = $derived(getDoubleAngleDotPositions(pointB, pointA, pointD));
-  const badDots = $derived(getDoubleAngleDotPositions(pointC, pointA, pointD));
 
   const badDot = $derived(getAngleLabelPosition(pointB, pointA, pointD, 18));
   const cadDot = $derived(getAngleLabelPosition(pointC, pointA, pointD, 18));

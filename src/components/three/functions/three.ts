@@ -251,8 +251,6 @@ export function mountManagedThreeScene(
   wrapper: HTMLDivElement,
   options: ManagedThreeSceneOptions,
 ) {
-  let sceneHandle: ReturnType<typeof initializeThreeScene> | undefined;
-
   const mountScene = () => {
     const pixelRatioCapControlId = wrapper.dataset.pixelRatioCapControlId || "";
     const antialiasControlId = wrapper.dataset.antialiasControlId || "";
@@ -354,7 +352,7 @@ export function mountManagedThreeScene(
     };
   };
 
-  sceneHandle = initializeThreeScene(wrapper, mountScene);
+  const sceneHandle = initializeThreeScene(wrapper, mountScene);
   return sceneHandle;
 }
 
@@ -439,14 +437,14 @@ function disposeMaterial(
 
     // Improvement: Also dispose of textures attached to the material (Prevents Memory Leaks)
     for (const key in entry) {
-      const value = (entry as any)[key];
+      const value = (entry as Record<string, unknown>)[key];
       if (
         value &&
         typeof value === "object" &&
         "minFilter" in value &&
-        value.dispose
+        typeof (value as { dispose?: unknown }).dispose === "function"
       ) {
-        value.dispose();
+        (value as { dispose: () => void }).dispose();
       }
     }
   }

@@ -53,7 +53,9 @@
               .add(planeNormal.clone().multiplyScalar(-0.6)),
           ];
           const colors = [0x111827, 0xef4444, 0xef4444];
-          const materials: any[] = [];
+          const materials: Array<{
+            resolution: { set: (width: number, height: number) => void };
+          }> = [];
 
           for (let index = 0; index < centers.length; index += 1) {
             const geometry = new LineGeometry();

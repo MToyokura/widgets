@@ -100,10 +100,10 @@
     style="display: block; width: 100%; height: auto;"
   >
     <g class="grid" stroke="#d7dde5" stroke-width="1">
-      {#each gridXs as x}
+      {#each gridXs as x (x)}
         <line x1={x} y1="0" x2={x} y2={height} />
       {/each}
-      {#each gridYs as y}
+      {#each gridYs as y (y)}
         <line x1="0" y1={y} x2={width} y2={y} />
       {/each}
     </g>

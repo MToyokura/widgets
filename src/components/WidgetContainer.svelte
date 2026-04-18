@@ -26,13 +26,6 @@
     children?: Snippet;
     controls?: Snippet;
   } = $props();
-
-  const containerStyles = $derived({
-    "--widget-container-aspect-ratio": aspectRatio,
-    "--widget-container-max-width": maxWidth,
-    "--widget-container-min-height": minHeight,
-    "--widget-container-background": background,
-  });
 </script>
 
 <div

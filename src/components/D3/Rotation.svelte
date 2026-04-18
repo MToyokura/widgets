@@ -94,7 +94,7 @@
 
 <WidgetContainer id="rotation-wrapper">
   <svg viewBox={`0 0 ${width} ${height}`} aria-label="Rotation diagram">
-    {#each gridXs as x}
+    {#each gridXs as x (x)}
       <line
         x1={x}
         y1="0"
@@ -104,7 +104,7 @@
         stroke-width="1"
       />
     {/each}
-    {#each gridYs as y}
+    {#each gridYs as y (y)}
       <line x1="0" y1={y} x2={width} y2={y} stroke="#d7dde5" stroke-width="1" />
     {/each}
 
@@ -125,7 +125,7 @@
       stroke-width="3"
     />
 
-    {#each vertexPaths as d}
+    {#each vertexPaths as d, i (i)}
       <path
         {d}
         fill="none"

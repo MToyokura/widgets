@@ -5,11 +5,6 @@
   import WidgetSliderController from "../WidgetSliderController.svelte";
   import { addPoints, getPolygonPath } from "./functions/geometry";
 
-  type Point = {
-    x: number;
-    y: number;
-  };
-
   let {
     locale = "ja",
     xScale: rawXScale = 1,
@@ -180,7 +175,7 @@
         d={getPolygonPath(geometry.frontFace)}
       />
 
-      {#each geometry.hiddenEdges as [start, end]}
+      {#each geometry.hiddenEdges as [start, end], i (i)}
         <line
           class="edge edge-hidden"
           x1={start.x}
@@ -190,7 +185,7 @@
         />
       {/each}
 
-      {#each geometry.visibleEdges as [start, end]}
+      {#each geometry.visibleEdges as [start, end], i (i)}
         <line
           class="edge edge-visible"
           x1={start.x}
