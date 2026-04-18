@@ -437,14 +437,12 @@ function disposeMaterial(
 
     // Improvement: Also dispose of textures attached to the material (Prevents Memory Leaks)
     for (const key in entry) {
-      const value = (entry as Record<string, unknown>)[key];
-      if (
-        value &&
-        typeof value === "object" &&
-        "minFilter" in value &&
-        typeof (value as { dispose?: unknown }).dispose === "function"
-      ) {
-        (value as { dispose: () => void }).dispose();
+      const value = (entry as unknown as Record<string, unknown>)[key];
+      if (value && typeof value === "object" && "minFilter" in value) {
+        const disposable = value as unknown as { dispose?: () => void };
+        if (typeof disposable.dispose === "function") {
+          disposable.dispose();
+        }
       }
     }
   }

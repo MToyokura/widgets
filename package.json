@@ -9,11 +9,10 @@
     "preview": "astro preview",
     "astro": "astro",
     "format": "prettier --write --cache .",
-    "check": "astro check && svelte-check",
+    "check": "astro check && svelte-check && eslint .",
     "knip": "knip --fix --allow-remove-files",
     "fix": "npm run lint:fix && npm run format && npm run knip",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint": "eslint . --fix"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
