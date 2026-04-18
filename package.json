@@ -11,7 +11,9 @@
     "format": "prettier --write --cache .",
     "check": "astro check && svelte-check",
     "knip": "knip --fix --allow-remove-files",
-    "fix": "npm run format && npm run knip"
+    "fix": "npm run lint:fix && npm run format && npm run knip",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
@@ -26,14 +28,21 @@
     "node": "24.14.1"
   },
   "devDependencies": {
+    "@eslint/compat": "^2.0.4",
+    "@eslint/js": "^10.0.1",
     "@types/d3": "^7.4.3",
-    "@types/node": "^25.5.2",
+    "@types/node": "^24",
     "@types/three": "^0.183.1",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-svelte": "^3.17.0",
+    "globals": "^17.4.0",
     "knip": "^6.3.1",
     "prettier": "3.8.1",
     "prettier-plugin-astro": "0.14.1",
     "prettier-plugin-svelte": "^3.5.1",
     "svelte-check": "^4.4.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.58.1"
   }
 }
