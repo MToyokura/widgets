@@ -1,0 +1,84 @@
+---
+title: Líneas y planos en el espacio
+sidebar:
+  order: 1010
+---
+
+import PerpendicularLineAndPlane from "@/components/three/PerpendicularLineAndPlane.svelte";
+import ThreePointsNotCollinear from "@/components/three/ThreePointsNotCollinear.svelte";
+import LineAndPointNotOnLine from "@/components/three/LineAndPointNotOnLine.svelte";
+import IntersectingLinesOnPlane from "@/components/three/IntersectingLinesOnPlane.svelte";
+import IntersectingLinesAbovePlane from "@/components/three/IntersectingLinesAbovePlane.svelte";
+import ParallelLines from "@/components/three/ParallelLines.svelte";
+import SkewPosition from "@/components/three/SkewPosition.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="es" client:visible />
+
+## Determinación de un plano
+
+Un plano está determinado cuando satisface cualquiera de las siguientes condiciones:
+
+- Tres puntos que no están en la misma recta
+- Una línea y un punto que no está en esa línea
+- Dos líneas que se intersectan
+
+### Tres puntos que no están en la misma recta
+
+<ThreePointsNotCollinear
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### Una línea y un punto que no está en esa línea
+
+<LineAndPointNotOnLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### Dos líneas que se intersectan
+
+<IntersectingLinesOnPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Relación posicional entre dos líneas
+
+### Intersección
+
+<IntersectingLinesAbovePlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### Paralelas (no se intersectan)
+
+<ParallelLines
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### Posición oblicua (ni intersección ni paralelas)
+
+<SkewPosition
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Una línea perpendicular a un plano
+
+Para afirmar que una línea es perpendicular a un plano, es suficiente mostrar que es perpendicular a dos líneas que se intersectan en ese plano. Una vez cumplida esta condición, la línea se define como perpendicular a todo el plano, y por lo tanto, el ángulo que forma con cualquier línea sobre el plano será de 90 grados.
+
+<PerpendicularLineAndPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

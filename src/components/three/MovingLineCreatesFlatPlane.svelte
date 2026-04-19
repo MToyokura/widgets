@@ -23,7 +23,7 @@
     antialiasControlId = "",
     linePositionControlId = "",
   }: {
-    locale?: "en" | "ja";
+    locale?: "en" | "ja" | "pt" | "hi" | "bn" | "es" | "ru";
     pixelRatioCapControlId?: string;
     antialiasControlId?: string;
     linePositionControlId?: string;
@@ -38,12 +38,30 @@
     ja: {
       linePositionLabel: "動かす",
     },
+    pt: {
+      linePositionLabel: "Quantidade da translação",
+    },
+    hi: {
+      linePositionLabel: "स्थानांतरण की मात्रा",
+    },
+    bn: {
+      linePositionLabel: "স্থানান্তরের পরিমাণ",
+    },
+    es: {
+      linePositionLabel: "Cantidad de traslación",
+    },
+    ru: {
+      linePositionLabel: "Величина переноса",
+    },
   } as const;
 
   const resolvedLinePositionControlId = $derived(
     linePositionControlId || `${baseId}-line-position`,
   );
-  const text = $derived(copy[locale === "en" ? "en" : "ja"]);
+  const language = $derived(
+    locale in copy ? (locale as keyof typeof copy) : "en",
+  );
+  const text = $derived(copy[language]);
 
   const DEFAULT_LINE_OFFSET = 0;
   const MIN_LINE_OFFSET = 0;

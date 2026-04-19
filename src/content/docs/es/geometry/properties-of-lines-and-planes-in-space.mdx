@@ -1,0 +1,42 @@
+---
+title: Propiedades de líneas y planos en el espacio
+sidebar:
+  order: 1030
+---
+
+import PerpendicularLineAndPlane from "@/components/three/PerpendicularLineAndPlane.svelte";
+import TwoLinesParallelToSameLine from "@/components/three/TwoLinesParallelToSameLine.svelte";
+import TwoLinesPerpendicularToSameLine from "@/components/three/TwoLinesPerpendicularToSameLine.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="es" client:visible />
+
+## Una línea perpendicular a un plano
+
+Para decir que una línea es perpendicular a un plano, es suficiente mostrar que es perpendicular a dos líneas que se intersectan en ese plano. Una vez que se cumple esta condición, la línea se define como perpendicular al plano completo, y por tanto, el ángulo que forma con cualquier línea en el plano será de 90 grados.
+
+<PerpendicularLineAndPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Dos líneas paralelas a la misma línea
+
+Dos líneas paralelas a la misma línea son paralelas entre sí.
+
+<TwoLinesParallelToSameLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Dos líneas perpendiculares a la misma línea
+
+En el espacio, dos líneas perpendiculares a la misma línea no son necesariamente paralelas entre sí.
+
+<TwoLinesPerpendicularToSameLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

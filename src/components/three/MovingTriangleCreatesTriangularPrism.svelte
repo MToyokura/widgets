@@ -19,7 +19,7 @@
     antialiasControlId = "",
     heightControlId = "",
   }: {
-    locale?: "en" | "ja";
+    locale?: "en" | "ja" | "pt" | "hi" | "bn" | "es" | "ru";
     pixelRatioCapControlId?: string;
     antialiasControlId?: string;
     heightControlId?: string;
@@ -34,12 +34,30 @@
     ja: {
       heightLabel: "高さ",
     },
+    pt: {
+      heightLabel: "Altura",
+    },
+    hi: {
+      heightLabel: "ऊँचाई",
+    },
+    bn: {
+      heightLabel: "উচ্চতা",
+    },
+    es: {
+      heightLabel: "Altura",
+    },
+    ru: {
+      heightLabel: "Высота",
+    },
   } as const;
 
   const resolvedHeightControlId = $derived(
     heightControlId || `${baseId}-height`,
   );
-  const text = $derived(copy[locale === "en" ? "en" : "ja"]);
+  const language = $derived(
+    locale in copy ? (locale as keyof typeof copy) : "en",
+  );
+  const text = $derived(copy[language]);
 
   const BASE_Y = 0;
   const REFERENCE_PLANE_Y = BASE_Y - 0.001;

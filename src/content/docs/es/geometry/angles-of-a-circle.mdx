@@ -1,0 +1,36 @@
+---
+title: Ángulos de un círculo
+sidebar:
+  order: 3050
+---
+
+import Thales from "@/components/D3/Thales.svelte";
+import InscribedAngle from "@/components/D3/InscribedAngle.svelte";
+import CentralAngle from "@/components/D3/CentralAngle.svelte";
+import InscribedAngleProof from "@/components/D3/InscribedAngleProof.svelte";
+
+## Ángulo inscrito
+
+Un ángulo inscrito tiene su vértice en la circunferencia de un círculo. Los ángulos inscritos que subtienen el mismo arco son iguales.
+
+<InscribedAngle client:load />
+
+## Ángulo central
+
+Un ángulo central tiene su vértice en el centro del círculo. Un ángulo central que subtiende un arco dado es el doble del ángulo inscrito que subtiende el mismo arco.
+
+<CentralAngle client:load />
+
+## Teorema de Thales
+
+El teorema de Thales establece que un ángulo inscrito en un semicírculo es un ángulo recto. En otras palabras, un triángulo que tiene un diámetro como lado es siempre un triángulo rectángulo.
+
+<Thales client:load />
+
+## Demostración del teorema del ángulo inscrito
+
+El teorema del ángulo inscrito establece que los ángulos inscritos que subtienden el mismo arco son iguales y miden la mitad del ángulo central correspondiente.
+
+Se puede demostrar usando la propiedad del triángulo de que un ángulo exterior es igual a la suma de los dos ángulos interiores opuestos.
+
+<InscribedAngleProof client:load />

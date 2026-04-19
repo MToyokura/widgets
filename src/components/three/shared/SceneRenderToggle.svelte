@@ -41,9 +41,71 @@
           "輪郭のギザギザを滑らかにしますが、描画負荷が増えることがあります。",
       },
     },
+    hi: {
+      pixelRatioCap: {
+        label: "पिक्सेल अनुपात सीमा",
+        description:
+          "निम्न GPU लोड और धीमे उपकरणों पर बेहतर प्रदर्शन के लिए रेंडर रिज़ॉल्यूशन सीमित करें। अधिक स्पष्ट आउटपुट के लिए इसे बंद करें।",
+      },
+      antialias: {
+        label: "एंटी-अलियासिंग",
+        description:
+          "किनारों की खुरदराहट को चिकना करती है, लेकिन रेंडरिंग लोड बढ़ा सकती है।",
+      },
+    },
+    pt: {
+      pixelRatioCap: {
+        label: "Limite da proporção de pixels",
+        description:
+          "Ative para limitar a resolução de renderização, reduzindo a carga da GPU e melhorando o desempenho em dispositivos mais lentos. Desative para obter uma saída mais nítida.",
+      },
+      antialias: {
+        label: "Suavização de serrilhado",
+        description:
+          "Suaviza bordas serrilhadas, mas pode aumentar a carga de renderização.",
+      },
+    },
+    bn: {
+      pixelRatioCap: {
+        label: "পিক্সেল অনুপাত সীমা",
+        description:
+          "ধীর ডিভাইসে GPU লোড কমিয়ে মসৃণ কর্মক্ষমতার জন্য রেন্ডার রেজোলিউশন সীমিত করুন। আরও তীক্ষ্ণ আউটপুটের জন্য এটি বন্ধ করুন।",
+      },
+      antialias: {
+        label: "অ্যান্টি-অ্যালিয়াসিং",
+        description:
+          "খাঁজকাটা প্রান্ত মসৃণ করে, তবে রেন্ডারিং লোড বাড়তে পারে।",
+      },
+    },
+    es: {
+      pixelRatioCap: {
+        label: "Límite de proporción de píxeles",
+        description:
+          "Actívalo para limitar la resolución de renderizado, reducir la carga de la GPU y mejorar el rendimiento en dispositivos más lentos. Desactívalo para obtener una imagen más nítida.",
+      },
+      antialias: {
+        label: "Suavizado de bordes",
+        description:
+          "Suaviza los bordes dentados, pero puede aumentar la carga de renderizado.",
+      },
+    },
+    ru: {
+      pixelRatioCap: {
+        label: "Ограничение соотношения пикселей",
+        description:
+          "Включите, чтобы ограничить разрешение рендеринга, снизить нагрузку на GPU и улучшить производительность на более медленных устройствах. Отключите для более чёткого изображения.",
+      },
+      antialias: {
+        label: "Сглаживание",
+        description:
+          "Сглаживает зубчатые края, но может увеличить нагрузку рендеринга.",
+      },
+    },
   } as const;
 
-  const language = $derived(locale === "ja" ? "ja" : "en");
+  const language = $derived(
+    locale in copy ? (locale as keyof typeof copy) : "en",
+  );
   const toggleKind = $derived(
     kind === "antialias" ? "antialias" : "pixelRatioCap",
   );

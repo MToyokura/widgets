@@ -1,0 +1,42 @@
+---
+title: Propriedades de Retas e Planos no Espaço
+sidebar:
+  order: 1030
+---
+
+import PerpendicularLineAndPlane from "@/components/three/PerpendicularLineAndPlane.svelte";
+import TwoLinesParallelToSameLine from "@/components/three/TwoLinesParallelToSameLine.svelte";
+import TwoLinesPerpendicularToSameLine from "@/components/three/TwoLinesPerpendicularToSameLine.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="pt" client:visible />
+
+## Uma reta perpendicular a um plano
+
+Dizer que uma reta é perpendicular a um plano basta mostrar que ela é perpendicular a duas retas secantes nesse plano. Uma vez satisfeita essa condição, a reta é definida como perpendicular a todo o plano e, como resultado, o ângulo que ela forma com qualquer reta existente no plano é de 90 graus.
+
+<PerpendicularLineAndPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Duas retas paralelas à mesma reta
+
+Duas retas paralelas à mesma reta são paralelas entre si.
+
+<TwoLinesParallelToSameLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Duas retas perpendiculares à mesma reta
+
+No espaço, duas retas perpendiculares à mesma reta não são necessariamente paralelas entre si.
+
+<TwoLinesPerpendicularToSameLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

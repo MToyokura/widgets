@@ -32,19 +32,8 @@
   let linkText = $state("");
   let linkHref = $state("#");
 
-  const normalizeBrowserLocale = (locale: string | null | undefined) => {
-    if (typeof locale !== "string") {
-      return null;
-    }
-
-    const normalized = locale.trim().toLowerCase();
-
-    if (!normalized) {
-      return null;
-    }
-
-    return normalized.split("-")[0] ?? null;
-  };
+  const normalizeBrowserLocale = (locale: string | null | undefined) =>
+    normalizeLocale(locale);
 
   const getAlternateLocales = (
     currentPathname: string,

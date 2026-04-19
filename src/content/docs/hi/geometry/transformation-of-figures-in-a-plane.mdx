@@ -1,0 +1,27 @@
+---
+title: समतल में आकृतियों का रूपांतरण
+sidebar:
+  order: 1000
+---
+
+import Translation from "@/components/D3/Translation.svelte";
+import Rotation from "@/components/D3/Rotation.svelte";
+import Reflection from "@/components/D3/Reflection.svelte";
+
+## स्थानांतरण
+
+स्थानांतरण किसी आकृति के हर बिंदु को समान मात्रा में एक ही दिशा में खिसकाता है। आकार, माप और दिशा वही रहते हैं; केवल स्थिति बदलती है।
+
+<Translation client:visible />
+
+## घूर्णन
+
+घूर्णन किसी आकृति को एक नियत केंद्र के चारों ओर दिए गए कोण से घुमाता है। केंद्र से दूरियाँ स्थिर रहती हैं, इसलिए आकृति मूल आकृति के सर्वांगसम बनी रहती है।
+
+<Rotation client:visible />
+
+## प्रतिबिंब
+
+प्रतिबिंब किसी आकृति को दर्पण रेखा के पार उलट देता है। प्रत्येक बिंदु और उसका प्रतिबिंब रेखा से समान दूरी पर होते हैं, और उन्हें जोड़ने वाला रेखाखंड उस रेखा के लंबवत होता है।
+
+<Reflection client:visible />

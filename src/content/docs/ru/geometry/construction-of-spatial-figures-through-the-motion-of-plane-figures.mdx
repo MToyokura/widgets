@@ -1,0 +1,69 @@
+---
+title: Построение пространственных фигур движением плоских фигур
+sidebar:
+  order: 1040
+---
+
+import MovingLineCreatesFlatPlane from "@/components/three/MovingLineCreatesFlatPlane.svelte";
+import MovingLineCreatesCylindricalSurface from "@/components/three/MovingLineCreatesCylindricalSurface.svelte";
+import MovingLineCreatesConicalSurface from "@/components/three/MovingLineCreatesConicalSurface.svelte";
+import MovingTriangleCreatesTriangularPrism from "@/components/three/MovingTriangleCreatesTriangularPrism.svelte";
+import RotatingSquareCreatesCylinder from "@/components/three/RotatingSquareCreatesCylinder.svelte";
+import RotatingTriangleCreatesCone from "@/components/three/RotatingTriangleCreatesCone.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="ru" client:visible />
+
+## Создание плоскости перемещением отрезка
+
+Когда отрезок движется параллельно самому себе, след его движения образует плоскость.
+
+<MovingLineCreatesFlatPlane
+  client:visible
+  locale="ru"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Создание кривой поверхности вращением отрезка
+
+Боковые поверхности цилиндра или конуса можно представить как криволинейную поверхность, образованную вращением одного отрезка вокруг фиксированной прямой (оси).
+
+<MovingLineCreatesCylindricalSurface
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<MovingLineCreatesConicalSurface
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Создание тела перемещением плоской фигуры
+
+Когда плоская фигура движется параллельно самой себе, след её движения образует тело.
+
+<MovingTriangleCreatesTriangularPrism
+  client:visible
+  locale="ru"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Создание тела вращением плоской фигуры
+
+Когда плоская фигура вращается, след её вращения образует тело.
+
+<RotatingSquareCreatesCylinder
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<RotatingTriangleCreatesCone
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

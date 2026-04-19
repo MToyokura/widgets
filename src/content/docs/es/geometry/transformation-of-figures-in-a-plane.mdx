@@ -1,0 +1,27 @@
+---
+title: Transformación de figuras en un plano
+sidebar:
+  order: 1000
+---
+
+import Translation from "@/components/D3/Translation.svelte";
+import Rotation from "@/components/D3/Rotation.svelte";
+import Reflection from "@/components/D3/Reflection.svelte";
+
+## Traslación
+
+Una traslación desliza cada punto de una figura la misma distancia en la misma dirección. El tamaño, la forma, y la orientación permanecen iguales; solo cambia la posición.
+
+<Translation client:visible />
+
+## Rotación
+
+Una rotación gira una figura alrededor de un centro fijo por un ángulo dado. Las distancias desde el centro permanecen constantes, por lo que la imagen sigue siendo congruente con la original.
+
+<Rotation client:visible />
+
+## Reflexión
+
+Una reflexión invierte una figura respecto a una línea espejo. Cada punto y su imagen están a la misma distancia de la línea, y el segmento que los une es perpendicular a ella.
+
+<Reflection client:visible />

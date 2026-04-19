@@ -1,0 +1,84 @@
+---
+title: স্থানিক রেখা ও সমতল
+sidebar:
+  order: 1010
+---
+
+import PerpendicularLineAndPlane from "@/components/three/PerpendicularLineAndPlane.svelte";
+import ThreePointsNotCollinear from "@/components/three/ThreePointsNotCollinear.svelte";
+import LineAndPointNotOnLine from "@/components/three/LineAndPointNotOnLine.svelte";
+import IntersectingLinesOnPlane from "@/components/three/IntersectingLinesOnPlane.svelte";
+import IntersectingLinesAbovePlane from "@/components/three/IntersectingLinesAbovePlane.svelte";
+import ParallelLines from "@/components/three/ParallelLines.svelte";
+import SkewPosition from "@/components/three/SkewPosition.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="bn" client:visible />
+
+## সমতল নির্ধারণ
+
+নিচের যেকোনো শর্ত পূরণ হলে একটি সমতল নির্ধারিত হয়:
+
+- একই রেখায় না থাকা তিনটি বিন্দু
+- একটি রেখা এবং সেই রেখার উপর না থাকা একটি বিন্দু
+- দুইটি ছেদকারী রেখা
+
+### একই রেখায় না থাকা তিনটি বিন্দু
+
+<ThreePointsNotCollinear
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### একটি রেখা এবং সেই রেখার উপর না থাকা একটি বিন্দু
+
+<LineAndPointNotOnLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### দুইটি ছেদকারী রেখা
+
+<IntersectingLinesOnPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## দুইটি রেখার অবস্থাগত সম্পর্ক
+
+### ছেদকারী
+
+<IntersectingLinesAbovePlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### সমান্তরাল (ছেদকারী নয়)
+
+<ParallelLines
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### স্কিউ (না ছেদ, না সমান্তরাল)
+
+<SkewPosition
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## একটি রেখা সমতলের প্রতি লম্ব
+
+কোনও রেখাকে সমতলের প্রতি লম্ব বলা হলে, সাধারণত পর্যাপ্ত যে সেটি সমতলের উপর থাকা দুইটি ছেদকারী রেখার প্রতি লম্ব হয়। এই শর্ত পূরণ হলে সেই রেখাকে পুরো সমতলের প্রতি লম্ব হিসেবে সংজ্ঞায়িত করা যায়, এবং ফলে সমতলের ওপর থাকা যেকোনো রেখার সাথে তার গঠিত কোণ ৯০° হবে।
+
+<PerpendicularLineAndPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

@@ -12,9 +12,26 @@
     ja: {
       label: "レンダリング設定",
     },
+    pt: {
+      label: "Configurações de renderização",
+    },
+    hi: {
+      label: "प्रतिपादन सेटिंग्स",
+    },
+    bn: {
+      label: "রেন্ডারিং সেটিংস",
+    },
+    es: {
+      label: "Configuración de renderizado",
+    },
+    ru: {
+      label: "Параметры рендеринга",
+    },
   } as const;
 
-  const language = $derived(locale === "ja" ? "ja" : "en");
+  const language = $derived(
+    locale in copy ? (locale as keyof typeof copy) : "en",
+  );
   const text = $derived(copy[language]);
 </script>
 

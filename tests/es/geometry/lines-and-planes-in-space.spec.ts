@@ -1,0 +1,38 @@
+import { expect, test } from "@playwright/test";
+
+const BASE = process.env.BASE_URL ?? "http://localhost:3000";
+const PATH = "/es/geometry/lines-and-planes-in-space/";
+
+test.describe("Líneas y planos en el espacio (es)", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(`${BASE}${PATH}`);
+  });
+
+  test("debe tener el título correcto", async ({ page }) => {
+    await expect(page).toHaveTitle(/Líneas y planos en el espacio/);
+    await expect(
+      page.getByRole("heading", {
+        name: "Líneas y planos en el espacio",
+        level: 1,
+      }),
+    ).toBeVisible();
+  });
+
+  test("debe tener visualizaciones Three.js", async ({ page }) => {
+    const wrappers = [
+      "#three-points-not-collinear-wrapper",
+      "#line-and-point-not-on-line-wrapper",
+      "#intersecting-lines-wrapper",
+      "#intersecting-lines-above-wrapper",
+      "#parallel-lines-wrapper",
+      "#skew-position-wrapper",
+    ];
+
+    for (const id of wrappers) {
+      const wrapper = page.locator(id);
+      await wrapper.scrollIntoViewIfNeeded();
+      await expect(wrapper).toBeVisible();
+      await expect(wrapper.locator("canvas")).toBeVisible();
+    }
+  });
+});

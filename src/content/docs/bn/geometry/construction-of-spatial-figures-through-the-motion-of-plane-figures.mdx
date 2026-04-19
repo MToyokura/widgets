@@ -1,0 +1,69 @@
+---
+title: সমতল চিত্রের গতি দ্বারা স্থানিক আকার নির্মাণ
+sidebar:
+  order: 1040
+---
+
+import MovingLineCreatesFlatPlane from "@/components/three/MovingLineCreatesFlatPlane.svelte";
+import MovingLineCreatesCylindricalSurface from "@/components/three/MovingLineCreatesCylindricalSurface.svelte";
+import MovingLineCreatesConicalSurface from "@/components/three/MovingLineCreatesConicalSurface.svelte";
+import MovingTriangleCreatesTriangularPrism from "@/components/three/MovingTriangleCreatesTriangularPrism.svelte";
+import RotatingSquareCreatesCylinder from "@/components/three/RotatingSquareCreatesCylinder.svelte";
+import RotatingTriangleCreatesCone from "@/components/three/RotatingTriangleCreatesCone.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="bn" client:visible />
+
+## রেখাংশকে সমান্তর করে সমতল সৃষ্টি করা
+
+যখন একটি রেখাংশকে সমান্তরভাবে সরানো হয়, তার চলনের পথ একটি সমতল গঠন করে।
+
+<MovingLineCreatesFlatPlane
+  client:visible
+  locale="bn"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## রেখাকে ঘোরিয়ে বক্র পৃষ্ঠ সৃষ্টি করা
+
+সিলিন্ডার বা শঙ্কুর বাহ্যিক পৃষ্ঠকে একটি রেখাংশকে একটি স্থির রেখা (অক্ষ) এর চারপাশে ঘোরালে সৃষ্ট বক্র পৃষ্ঠ হিসেবে ধরা যায়।
+
+<MovingLineCreatesCylindricalSurface
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<MovingLineCreatesConicalSurface
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## সমতল চিত্রকে সমান্তর করে ঘনবস্তু সৃষ্টি করা
+
+যখন একটি সমতল চিত্রকে সমান্তর করে সরানো হয়, তার চলনের পথ একটি ঘনবস্তু গঠন করে।
+
+<MovingTriangleCreatesTriangularPrism
+  client:visible
+  locale="bn"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## সমতল চিত্রকে ঘোরিয়ে ঘনবস্তু সৃষ্টি করা
+
+যখন একটি সমতল চিত্রকে ঘোরানো হয়, তার ঘূর্ণনের পথে একটি ঘনবস্তু তৈরি হয়।
+
+<RotatingSquareCreatesCylinder
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<RotatingTriangleCreatesCone
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

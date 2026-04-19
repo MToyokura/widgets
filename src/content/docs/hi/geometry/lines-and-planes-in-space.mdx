@@ -1,0 +1,84 @@
+---
+title: अंतरिक्ष में रेखाएँ और समतल
+sidebar:
+  order: 1010
+---
+
+import PerpendicularLineAndPlane from "@/components/three/PerpendicularLineAndPlane.svelte";
+import ThreePointsNotCollinear from "@/components/three/ThreePointsNotCollinear.svelte";
+import LineAndPointNotOnLine from "@/components/three/LineAndPointNotOnLine.svelte";
+import IntersectingLinesOnPlane from "@/components/three/IntersectingLinesOnPlane.svelte";
+import IntersectingLinesAbovePlane from "@/components/three/IntersectingLinesAbovePlane.svelte";
+import ParallelLines from "@/components/three/ParallelLines.svelte";
+import SkewPosition from "@/components/three/SkewPosition.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="hi" client:visible />
+
+## एक समतल का निर्धारण
+
+एक समतल का निर्धारण निम्न में से किसी भी शर्त के पूरा होने पर हो जाता है:
+
+- एक ही रेखा पर न स्थित तीन बिंदु
+- उस रेखा पर न स्थित एक बिंदु सहित एक रेखा
+- दो प्रतिच्छेदी रेखाएँ
+
+### एक ही रेखा पर न स्थित तीन बिंदु
+
+<ThreePointsNotCollinear
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### उस रेखा पर न स्थित एक बिंदु सहित एक रेखा
+
+<LineAndPointNotOnLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### दो प्रतिच्छेदी रेखाएँ
+
+<IntersectingLinesOnPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## दो रेखाओं के बीच पारस्परिक संबंध
+
+### प्रतिच्छेदी
+
+<IntersectingLinesAbovePlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### समानांतर (प्रतिच्छेद नहीं करतीं)
+
+<ParallelLines
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### तिर्यक स्थिति (न प्रतिच्छेदी, न समानांतर)
+
+<SkewPosition
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## एक समतल के लंबवत एक रेखा
+
+यह दिखाने के लिए कि कोई रेखा किसी समतल के लंबवत है, इतना पर्याप्त है कि वह उस समतल की दो प्रतिच्छेदी रेखाओं के लंबवत हो। यह शर्त पूरी होते ही रेखा को पूरे समतल के लंबवत माना जाता है, और परिणामस्वरूप समतल की हर रेखा के साथ बनने वाला कोण 90 डिग्री होता है।
+
+<PerpendicularLineAndPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

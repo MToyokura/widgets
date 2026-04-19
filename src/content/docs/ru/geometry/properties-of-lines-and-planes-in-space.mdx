@@ -1,0 +1,42 @@
+---
+title: Свойства прямых и плоскостей в пространстве
+sidebar:
+  order: 1030
+---
+
+import PerpendicularLineAndPlane from "@/components/three/PerpendicularLineAndPlane.svelte";
+import TwoLinesParallelToSameLine from "@/components/three/TwoLinesParallelToSameLine.svelte";
+import TwoLinesPerpendicularToSameLine from "@/components/three/TwoLinesPerpendicularToSameLine.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="ru" client:visible />
+
+## Прямая, перпендикулярная плоскости
+
+Чтобы сказать, что прямая перпендикулярна плоскости, достаточно показать, что она перпендикулярна двум пересекающимся прямым на этой плоскости. При выполнении этого условия прямая определяется как перпендикулярная всей плоскости, и, следовательно, угол между ней и любой прямой на плоскости равен 90 градусам.
+
+<PerpendicularLineAndPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Две прямые, параллельные одной и той же прямой
+
+Две прямые, параллельные одной и той же прямой, параллельны между собой.
+
+<TwoLinesParallelToSameLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Две прямые, перпендикулярные одной и той же прямой
+
+В пространстве две прямые, перпендикулярные одной и той же прямой, не обязательно параллельны друг другу.
+
+<TwoLinesPerpendicularToSameLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

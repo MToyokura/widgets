@@ -1,0 +1,69 @@
+---
+title: समतल आकृतियों की गति से स्थानिक आकृतियों का निर्माण
+sidebar:
+  order: 1040
+---
+
+import MovingLineCreatesFlatPlane from "@/components/three/MovingLineCreatesFlatPlane.svelte";
+import MovingLineCreatesCylindricalSurface from "@/components/three/MovingLineCreatesCylindricalSurface.svelte";
+import MovingLineCreatesConicalSurface from "@/components/three/MovingLineCreatesConicalSurface.svelte";
+import MovingTriangleCreatesTriangularPrism from "@/components/three/MovingTriangleCreatesTriangularPrism.svelte";
+import RotatingSquareCreatesCylinder from "@/components/three/RotatingSquareCreatesCylinder.svelte";
+import RotatingTriangleCreatesCone from "@/components/three/RotatingTriangleCreatesCone.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="hi" client:visible />
+
+## एक रेखाखंड के स्थानांतरण से तल का निर्माण
+
+जब किसी रेखाखंड को समानांतर रूप से खिसकाया जाता है, तो उसकी गति का पथ एक तल बनाता है।
+
+<MovingLineCreatesFlatPlane
+  client:visible
+  locale="hi"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## एक रेखा के घूर्णन से वक्र पृष्ठ का निर्माण
+
+सिलिंडर या शंकु के पार्श्व भाग को एक ऐसी वक्र सतह के रूप में देखा जा सकता है, जो एक निश्चित रेखा (अक्ष) के चारों ओर एक रेखाखंड के घूमने से बनती है।
+
+<MovingLineCreatesCylindricalSurface
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<MovingLineCreatesConicalSurface
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## एक समतल आकृति के स्थानांतरण से ठोस का निर्माण
+
+जब किसी समतल आकृति को समानांतर रूप से खिसकाया जाता है, तो उसकी गति का पथ एक ठोस बनाता है।
+
+<MovingTriangleCreatesTriangularPrism
+  client:visible
+  locale="hi"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## एक समतल आकृति के घूर्णन से ठोस का निर्माण
+
+जब किसी समतल आकृति को घुमाया जाता है, तो उसके घूर्णन का पथ एक ठोस बनाता है।
+
+<RotatingSquareCreatesCylinder
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<RotatingTriangleCreatesCone
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

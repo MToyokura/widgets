@@ -1,0 +1,84 @@
+---
+title: Retas e Planos no Espaço
+sidebar:
+  order: 1010
+---
+
+import PerpendicularLineAndPlane from "@/components/three/PerpendicularLineAndPlane.svelte";
+import ThreePointsNotCollinear from "@/components/three/ThreePointsNotCollinear.svelte";
+import LineAndPointNotOnLine from "@/components/three/LineAndPointNotOnLine.svelte";
+import IntersectingLinesOnPlane from "@/components/three/IntersectingLinesOnPlane.svelte";
+import IntersectingLinesAbovePlane from "@/components/three/IntersectingLinesAbovePlane.svelte";
+import ParallelLines from "@/components/three/ParallelLines.svelte";
+import SkewPosition from "@/components/three/SkewPosition.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="pt" client:visible />
+
+## Determinação de um plano
+
+Um plano é determinado quando satisfaz qualquer uma das seguintes condições:
+
+- Três pontos não colineares
+- Uma reta e um ponto fora dela
+- Duas retas secantes
+
+### Três pontos não colineares
+
+<ThreePointsNotCollinear
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### Uma reta e um ponto fora dela
+
+<LineAndPointNotOnLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### Duas retas secantes
+
+<IntersectingLinesOnPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Relação posicional entre duas retas
+
+### Secantes
+
+<IntersectingLinesAbovePlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### Paralelas (não secantes)
+
+<ParallelLines
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### Reversas (nem secantes nem paralelas)
+
+<SkewPosition
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Uma reta perpendicular a um plano
+
+Para afirmar que uma reta é perpendicular a um plano, basta mostrar que ela é perpendicular a duas retas secantes nesse plano. Uma vez satisfeita essa condição, a reta é definida como perpendicular a todo o plano e, como resultado, o ângulo que ela forma com qualquer reta existente no plano será de 90 graus.
+
+<PerpendicularLineAndPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

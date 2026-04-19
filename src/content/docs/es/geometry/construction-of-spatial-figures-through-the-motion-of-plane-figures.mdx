@@ -1,0 +1,68 @@
+---
+title: Construcción de figuras espaciales mediante el movimiento de figuras planas
+sidebar:
+  order: 1040
+---
+
+import MovingLineCreatesFlatPlane from "@/components/three/MovingLineCreatesFlatPlane.svelte";
+import MovingLineCreatesCylindricalSurface from "@/components/three/MovingLineCreatesCylindricalSurface.svelte";
+import MovingLineCreatesConicalSurface from "@/components/three/MovingLineCreatesConicalSurface.svelte";
+import MovingTriangleCreatesTriangularPrism from "@/components/three/MovingTriangleCreatesTriangularPrism.svelte";
+import RotatingSquareCreatesCylinder from "@/components/three/RotatingSquareCreatesCylinder.svelte";
+import RotatingTriangleCreatesCone from "@/components/three/RotatingTriangleCreatesCone.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="es" client:visible />
+
+## Creación de un plano mediante la traslación de un segmento
+
+Cuando un segmento de recta se mueve en paralelo, la traza de su movimiento forma un único plano.
+
+<MovingLineCreatesFlatPlane
+  client:visible
+  locale="es"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Creación de una superficie curva al rotar una recta
+
+Los lados de un cilindro o un cono pueden considerarse como una superficie curva creada por un único segmento de recta que rota alrededor de una línea fija (el eje).
+
+<MovingLineCreatesCylindricalSurface
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<MovingLineCreatesConicalSurface
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Creación de un sólido mediante la traslación de una figura plana
+
+Cuando una figura plana se mueve en paralelo, la traza de su movimiento forma un sólido.
+
+<MovingTriangleCreatesTriangularPrism
+  client:visible
+  locale="es"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## Creación de un sólido mediante la rotación de una figura plana
+
+Cuando una figura plana gira, la traza de su rotación forma un sólido.
+
+<RotatingSquareCreatesCylinder
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+<RotatingTriangleCreatesCone
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

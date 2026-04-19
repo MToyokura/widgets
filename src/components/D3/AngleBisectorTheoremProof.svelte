@@ -19,7 +19,13 @@
     type Point,
   } from "./functions/geometry";
 
-  let { steps = $bindable(0) }: { steps?: number } = $props();
+  let {
+    steps = $bindable(0),
+    locale = "en",
+  }: {
+    steps?: number;
+    locale?: "en" | "ja" | "pt" | "es" | "hi" | "ru" | "bn";
+  } = $props();
 
   const width = 400;
   const height = 400;
@@ -30,6 +36,44 @@
       ? crypto.randomUUID()
       : Math.random().toString(36).slice(2)
   }`;
+
+  const copy = {
+    en: {
+      diagramLabel: "Angle bisector theorem proof diagram",
+      stepsLabel: "Step",
+    },
+    ja: {
+      diagramLabel: "角の二等分線定理の証明図",
+      stepsLabel: "ステップ",
+    },
+    pt: {
+      diagramLabel:
+        "Diagrama da demonstração do teorema da bissetriz do ângulo",
+      stepsLabel: "Passo",
+    },
+    es: {
+      diagramLabel:
+        "Diagrama de la demostración del teorema de la bisectriz del ángulo",
+      stepsLabel: "Paso",
+    },
+    hi: {
+      diagramLabel: "कोण समद्विभाजक प्रमेय के प्रमाण का आरेख",
+      stepsLabel: "चरण",
+    },
+    ru: {
+      diagramLabel: "Схема доказательства теоремы о биссектрисе угла",
+      stepsLabel: "Шаг",
+    },
+    bn: {
+      diagramLabel: "কোণ দ্বিভাজক উপপাদ্যের প্রমাণের চিত্র",
+      stepsLabel: "ধাপ",
+    },
+  } as const;
+
+  const language = $derived(
+    locale in copy ? (locale as keyof typeof copy) : "en",
+  );
+  const text = $derived(copy[language]);
 
   // --- Svelte 5 Tween for Declarative Animations ---
   const stepTwoProgress = new Tween(steps >= 2 ? 1 : 0, {
@@ -263,7 +307,7 @@
   <svg
     viewBox={`0 0 ${width} ${height}`}
     role="img"
-    aria-label="Angle bisector theorem proof diagram"
+    aria-label={text.diagramLabel}
   >
     <!-- Background Triangles -->
     {#if steps < 3}
@@ -424,7 +468,7 @@
   {#snippet controls()}
     <WidgetSliderController
       id={`${baseId}-steps`}
-      label={`Step ${steps}`}
+      label={`${text.stepsLabel} ${steps}`}
       min={0}
       max={4}
       step={1}

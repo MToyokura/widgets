@@ -1,0 +1,42 @@
+---
+title: अंतरिक्ष में रेखाओं और समतलों के गुणधर्म
+sidebar:
+  order: 1030
+---
+
+import PerpendicularLineAndPlane from "@/components/three/PerpendicularLineAndPlane.svelte";
+import TwoLinesParallelToSameLine from "@/components/three/TwoLinesParallelToSameLine.svelte";
+import TwoLinesPerpendicularToSameLine from "@/components/three/TwoLinesPerpendicularToSameLine.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="hi" client:visible />
+
+## एक समतल के लंबवत एक रेखा
+
+किसी रेखा के किसी समतल के लंबवत होने के लिए, इतना पर्याप्त है कि वह उस समतल की दो प्रतिच्छेदी रेखाओं के लंबवत हो। यह शर्त पूरी होते ही रेखा को पूरे समतल के लंबवत माना जाता है, और परिणामस्वरूप समतल की हर रेखा के साथ बनने वाला कोण 90 डिग्री होता है।
+
+<PerpendicularLineAndPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## एक ही रेखा के समानांतर दो रेखाएँ
+
+एक ही रेखा के समानांतर दो रेखाएँ आपस में समानांतर होती हैं।
+
+<TwoLinesParallelToSameLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## एक ही रेखा के लंबवत दो रेखाएँ
+
+अंतरिक्ष में, एक ही रेखा के लंबवत दो रेखाएँ आवश्यक नहीं कि आपस में समानांतर हों।
+
+<TwoLinesPerpendicularToSameLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

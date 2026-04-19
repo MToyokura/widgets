@@ -1,0 +1,36 @@
+---
+title: Ângulos de uma Circunferência
+sidebar:
+  order: 3050
+---
+
+import Thales from "@/components/D3/Thales.svelte";
+import InscribedAngle from "@/components/D3/InscribedAngle.svelte";
+import CentralAngle from "@/components/D3/CentralAngle.svelte";
+import InscribedAngleProof from "@/components/D3/InscribedAngleProof.svelte";
+
+## Ângulo inscrito
+
+Um ângulo inscrito tem seu vértice na circunferência de um círculo. Ângulos inscritos que subtendem o mesmo arco são iguais.
+
+<InscribedAngle client:load />
+
+## Ângulo central
+
+Um ângulo central tem seu vértice no centro do círculo. Um ângulo central que subtende um determinado arco é o dobro do ângulo inscrito que subtende o mesmo arco.
+
+<CentralAngle client:load />
+
+## Teorema de Tales
+
+O teorema de Tales afirma que um ângulo inscrito em uma semicircunferência é um ângulo reto. Em outras palavras, um triângulo que tem um diâmetro como um de seus lados é sempre retângulo.
+
+<Thales client:load />
+
+## Demonstração do teorema do ângulo inscrito
+
+O teorema do ângulo inscrito afirma que ângulos inscritos que subtendem o mesmo arco são iguais e medem metade do ângulo central correspondente.
+
+Isso pode ser provado usando a propriedade do triângulo de que um ângulo externo é igual à soma dos dois ângulos internos não adjacentes.
+
+<InscribedAngleProof client:load />

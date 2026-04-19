@@ -1,0 +1,32 @@
+import { expect, test } from "@playwright/test";
+
+const BASE = process.env.BASE_URL ?? "http://localhost:3000";
+const PATH = "/pt/geometry/pictorial-drawing/";
+
+test.describe("Desenho em Perspectiva (pt)", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(`${BASE}${PATH}`);
+  });
+
+  test("should have the correct title", async ({ page }) => {
+    await expect(page).toHaveTitle(/Desenho em Perspectiva/);
+    await expect(
+      page.getByRole("heading", { name: "Desenho em Perspectiva", level: 1 }),
+    ).toBeVisible();
+  });
+
+  test("should have the cuboid pictorial drawing", async ({ page }) => {
+    const svg = page.locator("svg[aria-labelledby*='cube-pictorial']");
+    await expect(svg).toBeVisible();
+  });
+
+  test("should have sliders to control scales", async ({ page }) => {
+    const xSlider = page.getByRole("slider", { name: /Eixo X/ });
+    const ySlider = page.getByRole("slider", { name: /Eixo Y/ });
+    const zSlider = page.getByRole("slider", { name: /Eixo Z/ });
+
+    await expect(xSlider).toBeVisible();
+    await expect(ySlider).toBeVisible();
+    await expect(zSlider).toBeVisible();
+  });
+});

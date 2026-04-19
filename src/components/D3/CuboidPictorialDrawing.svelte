@@ -14,7 +14,7 @@
     yScaleControlId,
     zScaleControlId,
   }: {
-    locale?: "en" | "ja";
+    locale?: "en" | "ja" | "pt" | "hi" | "bn" | "zh-cn" | "es" | "ru";
     xScale?: number | string;
     yScale?: number | string;
     zScale?: number | string;
@@ -36,6 +36,42 @@
       yLabel: "Y 方向",
       zLabel: "Z 方向",
     },
+    pt: {
+      title: "Desenho em perspectiva de um cuboide",
+      xLabel: "Eixo X",
+      yLabel: "Eixo Y",
+      zLabel: "Eixo Z",
+    },
+    hi: {
+      title: "घनाभ का आरेखीय चित्र",
+      xLabel: "X अक्ष",
+      yLabel: "Y अक्ष",
+      zLabel: "Z अक्ष",
+    },
+    bn: {
+      title: "কিউবয়েডের চিত্রাঙ্কন",
+      xLabel: "X দিক",
+      yLabel: "Y দিক",
+      zLabel: "Z দিক",
+    },
+    es: {
+      title: "Dibujo pictórico de un cuboide",
+      xLabel: "Eje X",
+      yLabel: "Eje Y",
+      zLabel: "Eje Z",
+    },
+    ru: {
+      title: "Пикториальное изображение кубоида",
+      xLabel: "Ось X",
+      yLabel: "Ось Y",
+      zLabel: "Ось Z",
+    },
+    "zh-cn": {
+      title: "长方体的见取图",
+      xLabel: "X 方向",
+      yLabel: "Y 方向",
+      zLabel: "Z 方向",
+    },
   } as const;
 
   const origin = { x: 108, y: 110 };
@@ -47,7 +83,10 @@
   let yScale = $state(1);
   let zScale = $state(1);
 
-  const text = $derived(copy[locale === "en" ? "en" : "ja"]);
+  const language = $derived(
+    locale in copy ? (locale as keyof typeof copy) : "en",
+  );
+  const text = $derived(copy[language]);
   const resolvedXScaleControlId = $derived(
     xScaleControlId || `${baseId}-x-scale`,
   );

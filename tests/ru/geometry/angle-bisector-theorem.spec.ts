@@ -1,0 +1,69 @@
+import { expect, test } from "@playwright/test";
+
+const BASE = process.env.BASE_URL ?? "http://localhost:3000";
+const PATH = "/ru/geometry/angle-bisector-theorem/";
+
+test.describe("Теорема о биссектрисе угла (ru)", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(`${BASE}${PATH}`);
+  });
+
+  test("правильный заголовок отображается", async ({ page }) => {
+    await expect(page).toHaveTitle(/Теорема о биссектрисе угла/);
+    await expect(
+      page.getByRole("heading", {
+        name: "Теорема о биссектрисе угла",
+        level: 1,
+      }),
+    ).toBeVisible();
+  });
+
+  test("должен отображать интерактивный виджет", async ({ page }) => {
+    const svg = page.locator(
+      "svg[aria-label='Схема доказательства теоремы о биссектрисе угла']",
+    );
+    await expect(svg).toBeVisible();
+  });
+
+  test("должен иметь интерактивные точки", async ({ page }) => {
+    const points = page.locator("circle.cursor-grab");
+    await expect(points).toHaveCount(3);
+  });
+
+  test("должен иметь ползунок для управления шагами", async ({ page }) => {
+    const slider = page.getByRole("slider", { name: /Шаг/ });
+    await expect(slider).toBeVisible();
+    await expect(slider).toHaveValue("0");
+
+    await slider.fill("1");
+    await expect(slider).toHaveValue("1");
+    await expect(page.getByText("Шаг 1")).toBeVisible();
+
+    await slider.fill("4");
+    await expect(slider).toHaveValue("4");
+    await expect(page.getByText("Шаг 4")).toBeVisible();
+  });
+
+  test("можно перетаскивать точки", async ({ page }) => {
+    const pointA = page.locator("circle.cursor-grab").first();
+    const box = await pointA.boundingBox();
+    if (!box) throw new Error("Не удалось найти bounding box точки A");
+
+    const startX = box.x + box.width / 2;
+    const startY = box.y + box.height / 2;
+
+    await pointA.hover();
+    await page.mouse.down();
+    await page.mouse.move(startX + 50, startY + 50, { steps: 10 });
+    await page.mouse.up();
+
+    const newBox = await pointA.boundingBox();
+    if (!newBox)
+      throw new Error(
+        "Не удалось найти bounding box точки A после перетаскивания",
+      );
+
+    expect(newBox.x).not.toBe(box.x);
+    expect(newBox.y).not.toBe(box.y);
+  });
+});
