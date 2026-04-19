@@ -121,6 +121,7 @@
       cy={handlePos.y}
       r="11"
       fill="#f97316"
+      class="cursor-grab"
       style:cursor={isDragging ? "grabbing" : "grab"}
       style="touch-action: none;"
     />
@@ -128,6 +129,13 @@
 </WidgetContainer>
 
 <style>
+  .cursor-grab {
+    cursor: grab;
+  }
+  .cursor-grab:active {
+    cursor: grabbing;
+  }
+
   /* Optional: Add any specific styles here */
   svg {
     width: 100%;

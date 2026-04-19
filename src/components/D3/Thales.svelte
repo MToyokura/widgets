@@ -135,7 +135,7 @@
       cy={startPoint.y}
       r={10}
       fill="#2563eb"
-      style:cursor
+      class="cursor-grab"
       style="touch-action: none;"
     />
     <circle
@@ -144,7 +144,7 @@
       cy={endPoint.y}
       r={10}
       fill="#2563eb"
-      style:cursor
+      class="cursor-grab"
       style="touch-action: none;"
     />
     <circle
@@ -153,8 +153,17 @@
       cy={vertexPoint.y}
       r={10}
       fill="#e74c3c"
-      style:cursor
+      class="cursor-grab"
       style="touch-action: none;"
     />
   </svg>
 </WidgetContainer>
+
+<style>
+  .cursor-grab {
+    cursor: grab;
+  }
+  .cursor-grab:active {
+    cursor: grabbing;
+  }
+</style>

@@ -148,6 +148,7 @@
       cy={lineHandlePos.y}
       r="10"
       fill="#f97316"
+      class="cursor-grab"
       style="cursor: grab; touch-action: none;"
     />
 
@@ -157,12 +158,20 @@
       cy={centroid.y}
       r="8"
       fill="#2563eb"
+      class="cursor-grab"
       style="cursor: grab; touch-action: none;"
     />
   </svg>
 </WidgetContainer>
 
 <style>
+  .cursor-grab {
+    cursor: grab;
+  }
+  .cursor-grab:active {
+    cursor: grabbing;
+  }
+
   /* Optional: styles for cleaner transitions if desired */
   svg {
     user-select: none;

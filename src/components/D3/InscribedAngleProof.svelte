@@ -392,7 +392,7 @@
       cy={pointA.y}
       r={10}
       fill="#2563eb"
-      style:cursor
+      class="cursor-grab"
       style="touch-action: none;"
     />
     <circle
@@ -401,7 +401,7 @@
       cy={pointB.y}
       r={10}
       fill="#2563eb"
-      style:cursor
+      class="cursor-grab"
       style="touch-action: none;"
     />
     <circle
@@ -410,7 +410,7 @@
       cy={pointC.y}
       r={10}
       fill="#e74c3c"
-      style:cursor
+      class="cursor-grab"
       style="touch-action: none;"
     />
 
@@ -472,3 +472,12 @@
     </text>
   </svg>
 </WidgetContainer>
+
+<style>
+  .cursor-grab {
+    cursor: grab;
+  }
+  .cursor-grab:active {
+    cursor: grabbing;
+  }
+</style>
