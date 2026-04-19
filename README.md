@@ -1,49 +1,49 @@
-# Starlight Starter Kit: Basics
+# Widgets — Interactive Geometry Widgets
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+Interactive educational geometry widgets (open educational resources) built with Astro, Svelte, D3 and Three.js. The site contains localized content under `src/content/docs/` (for example `en`, `ja`, `zh-cn`).
 
-```
-npm create astro@latest -- --template starlight
-```
+## Quick start
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Prerequisites:
 
-## 🚀 Project Structure
+- Node 24 (Volta recommended — see `package.json` for the pinned Node version).
+- `npm` (or `pnpm`/`yarn`) installed.
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+Install dependencies:
 
-```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   └── docs/
-│   └── content.config.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
+```bash
+npm install
 ```
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+Run local development server:
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+```bash
+npm run dev
+# open http://localhost:4321
+```
 
-Static assets, like favicons, can be placed in the `public/` directory.
+Build and preview:
 
-## 🧞 Commands
+```bash
+npm run preview
+```
 
-All commands are run from the root of the project, from a terminal:
+Run Playwright tests:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+```bash
+npm run test
+# Run specific tests:
+npm run test -- tests/ja/geometry --project=chromium
+```
 
-## 👀 Want to learn more?
+## Project layout (high level)
 
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+- `src/components/` — reusable Svelte components (D3 and Three widgets live here).
+- `src/content/docs/` — localized MDX pages (folders per locale: `en`, `ja`, `zh-cn`, etc.).
+- `tests/` — Playwright specs grouped by locale (`tests/<locale>/geometry/`).
+- `astro.config.mjs`, `package.json` — project configuration and scripts.
+- `AGENTS.md` — instructions & checklist for adding locales and CI guidance.
+
+## Adding a new locale
+
+Follow the checklist in `AGENTS.md`
