@@ -1,27 +1,36 @@
 ---
-title: Inscribed and Central Angles
+title: Angles of a Circle
 sidebar:
-  order: 3000
+  order: 3050
 ---
 
 import Thales from "@/components/D3/Thales.svelte";
 import InscribedAngle from "@/components/D3/InscribedAngle.svelte";
 import CentralAngle from "@/components/D3/CentralAngle.svelte";
+import InscribedAngleProof from "@/components/D3/InscribedAngleProof.svelte";
 
-## Inscribed Angles
+## Inscribed angle
 
-An inscribed angle is an angle formed by three points on the circumference of a circle. The inscribed angle subtended by the same arc is always the same.
+An inscribed angle has its vertex on the circumference of a circle. Inscribed angles that subtend the same arc are equal.
 
 <InscribedAngle client:load />
 
-## Central Angles
+## Central angle
 
-A central angle is an angle whose vertex is the center of a circle. The central angle is twice the size of the inscribed angle subtended by the same arc.
+A central angle has its vertex at the center of the circle. A central angle subtending a given arc is twice the inscribed angle subtending the same arc.
 
 <CentralAngle client:load />
 
-## Thales' Theorem
+## Thales' theorem
 
-Thales' theorem states that if A, B, and C are distinct points on a circle where the line AC is a diameter, then the angle ∠ABC is a right angle.
+Thales' theorem states that an angle inscribed in a semicircle is a right angle. In other words, a triangle that has a diameter as one side is always a right triangle.
 
 <Thales client:load />
+
+## Proof of the inscribed angle theorem
+
+The inscribed angle theorem states that inscribed angles subtending the same arc are equal and are half the measure of the corresponding central angle.
+
+This can be proved using the triangle property that an exterior angle equals the sum of the two opposite interior angles.
+
+<InscribedAngleProof client:load />
