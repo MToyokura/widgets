@@ -118,13 +118,17 @@
 
   // --- Derived Paths (Triangles) ---
   const trianglePath = $derived(getTrianglePath(pointA, pointC, pointB));
+  const acPath = $derived(getLinePath(pointA, pointC));
   const aebTrianglePath = $derived(getTrianglePath(pointA, pointE, pointB));
   const afcTrianglePath = $derived(getTrianglePath(pointA, pointF, pointC));
   const adcTrianglePath = $derived(getTrianglePath(pointA, pointC, pointD));
   const ebcTrianglePath = $derived(getTrianglePath(pointE, pointC, pointB));
 
   // --- Derived Paths (Lines) ---
+  const abPath = $derived(getLinePath(pointA, pointB));
   const bisectorPath = $derived(getLinePath(pointA, pointD));
+  const dbPath = $derived(getLinePath(pointD, pointB));
+  const dcPath = $derived(getLinePath(pointD, pointC));
   const parallelThroughBPath = $derived(
     getLinePathThroughPoint(pointB, bisectorAngle, 600),
   );
@@ -259,15 +263,17 @@
   strokeWidth = "2.5",
   dashArray = "7 5",
   linecap?: "round",
+  stroke = "#6b7280",
+  opacity = "0.85",
 )}
   <path
     {d}
     fill="none"
-    stroke="#6b7280"
+    {stroke}
     stroke-width={strokeWidth}
     stroke-dasharray={dashArray}
     stroke-linecap={linecap}
-    opacity="0.85"
+    {opacity}
     class="pointer-none"
   />
 {/snippet}
@@ -328,26 +334,26 @@
     {#if steps === 3}
       {@render dashedTriangle(
         aebTrianglePath,
-        "rgba(59,130,246,0.14)",
-        "#2563eb",
+        "rgba(250,204,21,0.18)",
+        "#eab308",
       )}
       {@render dashedTriangle(
         afcTrianglePath,
-        "rgba(239,68,68,0.14)",
-        "#ef4444",
+        "rgba(202,138,4,0.18)",
+        "#a16207",
       )}
     {/if}
 
     {#if steps >= 4}
       {@render dashedTriangle(
         adcTrianglePath,
-        "rgba(34,197,94,0.14)",
-        "#16a34a",
+        "rgba(21,128,61,0.18)",
+        "#166534",
       )}
       {@render dashedTriangle(
         ebcTrianglePath,
-        "rgba(245,158,11,0.16)",
-        "#f59e0b",
+        "rgba(74,222,128,0.16)",
+        "#22c55e",
       )}
     {/if}
 
@@ -367,8 +373,27 @@
       {@render referenceLine(parallelThroughCPath)}
       {@render referenceLine(extendedBisectorPath)}
 
-      {#if steps !== 3}
+      {#if steps === 3}
+        {@render referenceLine(caExtendedPath, "2", "none", "round", "#eab308")}
+        {@render referenceLine(acPath, "2", "none", "round", "#a16207", "1")}
+      {:else if steps >= 4}
+        {@render referenceLine(
+          caExtendedPath,
+          "2",
+          "none",
+          "round",
+          "#eab308",
+          "1",
+        )}
+        {@render referenceLine(abPath, "2", "2 4", "round", "#eab308")}
+        {@render referenceLine(acPath, "2", "none", "round", "#a16207", "1")}
+        {@render referenceLine(dbPath, "2", "none", "round", "#22c55e", "1")}
+        {@render referenceLine(dcPath, "2", "none", "round", "#166534", "1")}
+      {:else if steps !== 4}
         {@render referenceLine(caExtendedPath, "2", "2 4", "round")}
+      {/if}
+
+      {#if steps !== 3 && steps !== 4}
         {@render referenceLine(baExtendedPath, "2", "2 4", "round")}
       {/if}
     {/if}
@@ -417,7 +442,9 @@
       {/if}
 
       {#if steps >= 2}
-        {@render angleDot(animatedBfcDot)}
+        {#if steps !== 4}
+          {@render angleDot(animatedBfcDot)}
+        {/if}
         {@render angleDot(animatedBeaDot)}
 
         {#if steps < 3}
