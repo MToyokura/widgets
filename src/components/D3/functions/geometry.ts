@@ -46,6 +46,17 @@ export function addPoints(...points: Point[]): Point {
   );
 }
 
+export function interpolatePoint(
+  from: Point,
+  to: Point,
+  progress: number,
+): Point {
+  return {
+    x: from.x + (to.x - from.x) * progress,
+    y: from.y + (to.y - from.y) * progress,
+  };
+}
+
 // ==========================================
 // 2. Transformations
 // ==========================================
@@ -165,6 +176,49 @@ export function getInscribedLinesPath(
 
 export function getCentralLinesPath(a: Point, vertex: Point, b: Point): string {
   return getPolylinePath([a, vertex, b]);
+}
+
+export function getLinesIntersection(
+  p1: Point,
+  angle1: number,
+  p2: Point,
+  angle2: number,
+): Point {
+  const v1 = { x: Math.cos(angle1), y: Math.sin(angle1) };
+  const v2 = { x: Math.cos(angle2), y: Math.sin(angle2) };
+  const cross = v1.x * v2.y - v1.y * v2.x;
+
+  if (Math.abs(cross) < 1e-8) {
+    const dot = (p1.x - p2.x) * v2.x + (p1.y - p2.y) * v2.y;
+    return { x: p2.x + v2.x * dot, y: p2.y + v2.y * dot };
+  }
+
+  const t = ((p2.x - p1.x) * v2.y - (p2.y - p1.y) * v2.x) / cross;
+  return { x: p1.x + t * v1.x, y: p1.y + t * v1.y };
+}
+
+export function getBisectorIntersection(a: Point, b: Point, c: Point): Point {
+  const dir = getAngleBisectorUnitVector(b, a, c);
+  const sVec = { x: c.x - b.x, y: c.y - b.y };
+  const q = { x: b.x - a.x, y: b.y - a.y };
+  const cross = dir.x * sVec.y - dir.y * sVec.x;
+
+  if (Math.abs(cross) < 1e-8) {
+    const segLen2 = sVec.x * sVec.x + sVec.y * sVec.y || 1;
+    const u0 = Math.max(
+      0,
+      Math.min(1, ((a.x - b.x) * sVec.x + (a.y - b.y) * sVec.y) / segLen2),
+    );
+    return { x: b.x + sVec.x * u0, y: b.y + sVec.y * u0 };
+  }
+
+  const t = (q.x * sVec.y - q.y * sVec.x) / cross;
+  const u = (q.x * dir.y - q.y * dir.x) / cross;
+
+  if (u >= 0 && u <= 1) return { x: a.x + t * dir.x, y: a.y + t * dir.y };
+
+  const uClamped = Math.max(0, Math.min(1, u));
+  return { x: b.x + sVec.x * uClamped, y: b.y + sVec.y * uClamped };
 }
 
 // ==========================================
