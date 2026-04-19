@@ -22,17 +22,16 @@
   const stepTwoAnimationDuration = 650;
 
   let stepTwoProgress = $state(steps >= 2 ? 1 : 0);
-
   let previousSteps = steps;
   let animationFrame = 0;
 
+  // --- Interactive Points ---
   let pointA = $state<Point>({ x: 128, y: 200 });
   let pointB = $state<Point>({ x: 86, y: 278 });
   let pointC = $state<Point>({ x: 296, y: 278 });
 
-  const trianglePath = $derived(getTrianglePath(pointA, pointC, pointB));
-
-  function getBisectorIntersection(a: Point, b: Point, c: Point) {
+  // --- Geometry Computation Helpers ---
+  function getBisectorIntersection(a: Point, b: Point, c: Point): Point {
     const dir = getAngleBisectorUnitVector(b, a, c);
 
     const s = b;
@@ -62,26 +61,12 @@
     return { x: s.x + sVec.x * uClamped, y: s.y + sVec.y * uClamped };
   }
 
-  const pointD = $derived(getBisectorIntersection(pointA, pointC, pointB));
-  const bisectorPath = $derived(getLinePath(pointA, pointD));
-  const bisectorAngle = $derived(
-    Math.atan2(pointD.y - pointA.y, pointD.x - pointA.x),
-  );
-  const parallelThroughBPath = $derived(
-    getLinePathThroughPoint(pointB, bisectorAngle, 600),
-  );
-  const parallelThroughCPath = $derived(
-    getLinePathThroughPoint(pointC, bisectorAngle, 600),
-  );
-  const badDot = $derived(getAngleLabelPosition(pointB, pointA, pointD, 18));
-  const cadDot = $derived(getAngleLabelPosition(pointC, pointA, pointD, 18));
-
   function getLinesIntersection(
     p1: Point,
     angle1: number,
     p2: Point,
     angle2: number,
-  ) {
+  ): Point {
     const v1 = { x: Math.cos(angle1), y: Math.sin(angle1) };
     const v2 = { x: Math.cos(angle2), y: Math.sin(angle2) };
     const cross = v1.x * v2.y - v1.y * v2.x;
@@ -97,28 +82,64 @@
     return { x: p1.x + t * v1.x, y: p1.y + t * v1.y };
   }
 
+  function interpolatePoint(from: Point, to: Point, progress: number): Point {
+    return {
+      x: from.x + (to.x - from.x) * progress,
+      y: from.y + (to.y - from.y) * progress,
+    };
+  }
+
+  // --- Derived Coordinates & Angles ---
+  const pointD = $derived(getBisectorIntersection(pointA, pointC, pointB));
+  const bisectorAngle = $derived(
+    Math.atan2(pointD.y - pointA.y, pointD.x - pointA.x),
+  );
+
   const caAngle = $derived(
     Math.atan2(pointA.y - pointC.y, pointA.x - pointC.x),
   );
   const pointE = $derived(
     getLinesIntersection(pointC, caAngle, pointB, bisectorAngle),
   );
-  const aebTrianglePath = $derived(getTrianglePath(pointA, pointE, pointB));
-  const adcTrianglePath = $derived(getTrianglePath(pointA, pointC, pointD));
-  const ebcTrianglePath = $derived(getTrianglePath(pointE, pointC, pointB));
-  const caExtendedPath = $derived(getLinePath(pointA, pointE));
-  const extendedBisectorPath = $derived(
-    getLinePathThroughPoint(pointA, bisectorAngle, 800),
-  );
+
   const baAngle = $derived(
     Math.atan2(pointA.y - pointB.y, pointA.x - pointB.x),
   );
   const pointF = $derived(
     getLinesIntersection(pointB, baAngle, pointC, bisectorAngle),
   );
+
+  const efAngle = $derived(
+    Math.atan2(pointF.y - pointE.y, pointF.x - pointE.x),
+  );
+  const pointX = $derived(
+    getLinesIntersection(pointE, efAngle, pointA, bisectorAngle),
+  );
+
+  // --- Derived Paths (Triangles) ---
+  const trianglePath = $derived(getTrianglePath(pointA, pointC, pointB));
+  const aebTrianglePath = $derived(getTrianglePath(pointA, pointE, pointB));
   const afcTrianglePath = $derived(getTrianglePath(pointA, pointF, pointC));
+  const adcTrianglePath = $derived(getTrianglePath(pointA, pointC, pointD));
+  const ebcTrianglePath = $derived(getTrianglePath(pointE, pointC, pointB));
+
+  // --- Derived Paths (Lines) ---
+  const bisectorPath = $derived(getLinePath(pointA, pointD));
+  const parallelThroughBPath = $derived(
+    getLinePathThroughPoint(pointB, bisectorAngle, 600),
+  );
+  const parallelThroughCPath = $derived(
+    getLinePathThroughPoint(pointC, bisectorAngle, 600),
+  );
+  const caExtendedPath = $derived(getLinePath(pointA, pointE));
+  const extendedBisectorPath = $derived(
+    getLinePathThroughPoint(pointA, bisectorAngle, 800),
+  );
   const baExtendedPath = $derived(getLinePath(pointA, pointF));
 
+  // --- Derived Dots (Angle Labels) ---
+  const badDot = $derived(getAngleLabelPosition(pointB, pointA, pointD, 18));
+  const cadDot = $derived(getAngleLabelPosition(pointC, pointA, pointD, 18));
   const verticalCadDot = $derived(
     getAngleLabelPosition(pointC, pointE, pointB, 18),
   );
@@ -127,23 +148,10 @@
   );
   const abeDot = $derived(getAngleLabelPosition(pointA, pointB, pointE, 18));
   const acfDot = $derived(getAngleLabelPosition(pointA, pointC, pointF, 18));
-
-  const efAngle = $derived(
-    Math.atan2(pointF.y - pointE.y, pointF.x - pointE.x),
-  );
-  const pointX = $derived(
-    getLinesIntersection(pointE, efAngle, pointA, bisectorAngle),
-  );
   const eaxDot = $derived(getAngleLabelPosition(pointE, pointA, pointX, 18));
   const faxDot = $derived(getAngleLabelPosition(pointF, pointA, pointX, 18));
 
-  function interpolatePoint(from: Point, to: Point, progress: number): Point {
-    return {
-      x: from.x + (to.x - from.x) * progress,
-      y: from.y + (to.y - from.y) * progress,
-    };
-  }
-
+  // Animated dots
   const animatedBeaDot = $derived(
     interpolatePoint(cadDot, verticalCadDot, stepTwoProgress),
   );
@@ -163,6 +171,7 @@
     interpolatePoint(cadDot, acfDot, stepTwoProgress),
   );
 
+  // --- Effects ---
   $effect(() => {
     const currentSteps = steps;
 
@@ -205,6 +214,7 @@
     };
   });
 
+  // --- Drag Behaviors ---
   function setupDragForPoint(update: (x: number, y: number) => void) {
     return (node: SVGCircleElement) => {
       const drag = d3.drag<SVGCircleElement, unknown>().on("drag", (event) => {
@@ -224,21 +234,88 @@
   const dragA = setupDragForPoint((x, y) => {
     pointA = { x, y };
   });
-
   const dragB = setupDragForPoint((x, y) => {
     pointB = { x, y };
   });
-
   const dragC = setupDragForPoint((x, y) => {
     pointC = { x, y };
   });
 </script>
 
+<!-- UI Snippets -->
+{#snippet dashedTriangle(d: string, fill: string, stroke: string)}
+  <path
+    {d}
+    {fill}
+    {stroke}
+    stroke-width="2"
+    stroke-dasharray="4 4"
+    class="pointer-none"
+  />
+{/snippet}
+
+{#snippet referenceLine(
+  d: string,
+  strokeWidth = "2.5",
+  dashArray = "7 5",
+  linecap?: "round",
+)}
+  <path
+    {d}
+    fill="none"
+    stroke="#6b7280"
+    stroke-width={strokeWidth}
+    stroke-dasharray={dashArray}
+    stroke-linecap={linecap}
+    opacity="0.85"
+    class="pointer-none"
+  />
+{/snippet}
+
+{#snippet angleDot(point: Point)}
+  <circle
+    cx={point.x}
+    cy={point.y}
+    r="4.5"
+    fill="#facc15"
+    stroke="#111827"
+    stroke-width="1.5"
+    class="pointer-none"
+  />
+{/snippet}
+
+{#snippet solidPoint(point: Point)}
+  <circle cx={point.x} cy={point.y} r={6} fill="#111827" class="pointer-none" />
+{/snippet}
+
+{#snippet pointLabel(
+  text: string,
+  point: Point,
+  fontSize = 16,
+  dx = 14,
+  dy = -8,
+)}
+  <text
+    x={point.x + dx}
+    y={point.y + dy}
+    fill="#111827"
+    font-size={fontSize}
+    font-weight="700"
+    text-anchor="start"
+    dominant-baseline="middle"
+    class="pointer-none"
+  >
+    {text}
+  </text>
+{/snippet}
+
+<!-- Main Visualization -->
 <WidgetContainer id="angle-bisector-proof-wrapper">
   <svg
     viewBox={`0 0 ${width} ${height}`}
     aria-label="Angle bisector theorem proof diagram"
   >
+    <!-- Background Triangles -->
     {#if steps < 3}
       <path
         d={trianglePath}
@@ -249,45 +326,32 @@
     {/if}
 
     {#if steps === 3}
-      <path
-        d={aebTrianglePath}
-        fill="rgba(59,130,246,0.14)"
-        stroke="#2563eb"
-        stroke-width="2"
-        stroke-dasharray="4 4"
-        style="pointer-events: none;"
-      />
-
-      <path
-        d={afcTrianglePath}
-        fill="rgba(239,68,68,0.14)"
-        stroke="#ef4444"
-        stroke-width="2"
-        stroke-dasharray="4 4"
-        style="pointer-events: none;"
-      />
+      {@render dashedTriangle(
+        aebTrianglePath,
+        "rgba(59,130,246,0.14)",
+        "#2563eb",
+      )}
+      {@render dashedTriangle(
+        afcTrianglePath,
+        "rgba(239,68,68,0.14)",
+        "#ef4444",
+      )}
     {/if}
 
     {#if steps >= 4}
-      <path
-        d={adcTrianglePath}
-        fill="rgba(34,197,94,0.14)"
-        stroke="#16a34a"
-        stroke-width="2"
-        stroke-dasharray="4 4"
-        style="pointer-events: none;"
-      />
-
-      <path
-        d={ebcTrianglePath}
-        fill="rgba(245,158,11,0.16)"
-        stroke="#f59e0b"
-        stroke-width="2"
-        stroke-dasharray="4 4"
-        style="pointer-events: none;"
-      />
+      {@render dashedTriangle(
+        adcTrianglePath,
+        "rgba(34,197,94,0.14)",
+        "#16a34a",
+      )}
+      {@render dashedTriangle(
+        ebcTrianglePath,
+        "rgba(245,158,11,0.16)",
+        "#f59e0b",
+      )}
     {/if}
 
+    <!-- Lines -->
     {#if steps < 1}
       <path
         d={bisectorPath}
@@ -299,61 +363,17 @@
     {/if}
 
     {#if steps >= 1}
-      <path
-        d={parallelThroughBPath}
-        fill="none"
-        stroke="#6b7280"
-        stroke-width="2.5"
-        stroke-dasharray="7 5"
-        opacity="0.85"
-        style="pointer-events: none;"
-      />
-
-      <path
-        d={parallelThroughCPath}
-        fill="none"
-        stroke="#6b7280"
-        stroke-width="2.5"
-        stroke-dasharray="7 5"
-        opacity="0.85"
-        style="pointer-events: none;"
-      />
-
-      <path
-        d={extendedBisectorPath}
-        fill="none"
-        stroke="#6b7280"
-        stroke-width="2.5"
-        stroke-dasharray="7 5"
-        opacity="0.85"
-        style="pointer-events: none;"
-      />
+      {@render referenceLine(parallelThroughBPath)}
+      {@render referenceLine(parallelThroughCPath)}
+      {@render referenceLine(extendedBisectorPath)}
 
       {#if steps !== 3}
-        <path
-          d={caExtendedPath}
-          fill="none"
-          stroke="#6b7280"
-          stroke-width="2"
-          stroke-dasharray="2 4"
-          stroke-linecap="round"
-          opacity="0.85"
-          style="pointer-events: none;"
-        />
-
-        <path
-          d={baExtendedPath}
-          fill="none"
-          stroke="#6b7280"
-          stroke-width="2"
-          stroke-dasharray="2 4"
-          stroke-linecap="round"
-          opacity="0.85"
-          style="pointer-events: none;"
-        />
+        {@render referenceLine(caExtendedPath, "2", "2 4", "round")}
+        {@render referenceLine(baExtendedPath, "2", "2 4", "round")}
       {/if}
     {/if}
 
+    <!-- Interactive Points -->
     <circle
       use:dragA
       cx={pointA.x}
@@ -361,7 +381,6 @@
       r={6}
       fill="#2563eb"
       class="cursor-grab"
-      style="touch-action: none;"
     />
     <circle
       use:dragB
@@ -370,7 +389,6 @@
       r={6}
       fill="#16a34a"
       class="cursor-grab"
-      style="touch-action: none;"
     />
     <circle
       use:dragC
@@ -379,192 +397,50 @@
       r={6}
       fill="#ef4444"
       class="cursor-grab"
-      style="touch-action: none;"
     />
 
-    <circle
-      cx={pointD.x}
-      cy={pointD.y}
-      r={6}
-      fill="#111827"
-      style="pointer-events: none;"
-    />
-
-    {#if steps !== 3}
-      <g style="pointer-events: none;">
-        {#if steps !== 4}
-          <circle
-            cx={badDot.x}
-            cy={badDot.y}
-            r="4.5"
-            fill="#facc15"
-            stroke="#111827"
-            stroke-width="1.5"
-          />
-        {/if}
-
-        <circle
-          cx={cadDot.x}
-          cy={cadDot.y}
-          r="4.5"
-          fill="#facc15"
-          stroke="#111827"
-          stroke-width="1.5"
-        />
-      </g>
-    {/if}
-
-    {#if steps >= 2}
-      <g style="pointer-events: none;">
-        <circle
-          cx={animatedBfcDot.x}
-          cy={animatedBfcDot.y}
-          r="4.5"
-          fill="#facc15"
-          stroke="#111827"
-          stroke-width="1.5"
-        />
-
-        <circle
-          cx={animatedBeaDot.x}
-          cy={animatedBeaDot.y}
-          r="4.5"
-          fill="#facc15"
-          stroke="#111827"
-          stroke-width="1.5"
-        />
-      </g>
-
-      <g style="pointer-events: none;">
-        {#if steps < 3}
-          <circle
-            cx={animatedEaxDot.x}
-            cy={animatedEaxDot.y}
-            r="4.5"
-            fill="#facc15"
-            stroke="#111827"
-            stroke-width="1.5"
-          />
-
-          <circle
-            cx={animatedFaxDot.x}
-            cy={animatedFaxDot.y}
-            r="4.5"
-            fill="#facc15"
-            stroke="#111827"
-            stroke-width="1.5"
-          />
-        {/if}
-
-        {#if steps !== 4}
-          <circle
-            cx={animatedAbeDot.x}
-            cy={animatedAbeDot.y}
-            r="4.5"
-            fill="#facc15"
-            stroke="#111827"
-            stroke-width="1.5"
-          />
-        {/if}
-
-        {#if steps !== 4}
-          <circle
-            cx={animatedAcfDot.x}
-            cy={animatedAcfDot.y}
-            r="4.5"
-            fill="#facc15"
-            stroke="#111827"
-            stroke-width="1.5"
-          />
-        {/if}
-      </g>
-    {/if}
-
-    <text
-      x={pointA.x + 14}
-      y={pointA.y - 8}
-      fill="#111827"
-      font-size="16"
-      font-weight="700"
-      text-anchor="start"
-      dominant-baseline="middle"
-    >
-      A
-    </text>
-    <text
-      x={pointB.x + 14}
-      y={pointB.y - 8}
-      fill="#111827"
-      font-size="16"
-      font-weight="700"
-      text-anchor="start"
-      dominant-baseline="middle"
-    >
-      B
-    </text>
-    <text
-      x={pointC.x + 14}
-      y={pointC.y - 8}
-      fill="#111827"
-      font-size="16"
-      font-weight="700"
-      text-anchor="start"
-      dominant-baseline="middle"
-    >
-      C
-    </text>
-    <text
-      x={pointD.x + 10}
-      y={pointD.y + 12}
-      fill="#111827"
-      font-size="14"
-      font-weight="700"
-      text-anchor="start"
-      dominant-baseline="middle"
-    >
-      D
-    </text>
+    <!-- Static Geometry Points -->
+    {@render solidPoint(pointD)}
 
     {#if steps >= 1}
-      <circle
-        cx={pointE.x}
-        cy={pointE.y}
-        r={6}
-        fill="#111827"
-        style="pointer-events: none;"
-      />
+      {@render solidPoint(pointE)}
+      {@render solidPoint(pointF)}
+    {/if}
 
-      <text
-        x={pointE.x + 10}
-        y={pointE.y - 8}
-        fill="#111827"
-        font-size="14"
-        font-weight="700"
-        text-anchor="start"
-        dominant-baseline="middle"
-      >
-        E
-      </text>
+    <!-- Angle Dots -->
+    <g class="pointer-none">
+      {#if steps !== 3}
+        {#if steps !== 4}
+          {@render angleDot(badDot)}
+        {/if}
+        {@render angleDot(cadDot)}
+      {/if}
 
-      <circle
-        cx={pointF.x}
-        cy={pointF.y}
-        r={6}
-        fill="#111827"
-        style="pointer-events: none;"
-      />
+      {#if steps >= 2}
+        {@render angleDot(animatedBfcDot)}
+        {@render angleDot(animatedBeaDot)}
 
-      <text
-        x={pointF.x + 10}
-        y={pointF.y - 8}
-        fill="#111827"
-        font-size="14"
-        font-weight="700"
-        text-anchor="start"
-        dominant-baseline="middle"
-      >
-        F
-      </text>
+        {#if steps < 3}
+          {@render angleDot(animatedEaxDot)}
+          {@render angleDot(animatedFaxDot)}
+        {/if}
+
+        {#if steps !== 4}
+          {@render angleDot(animatedAbeDot)}
+          {@render angleDot(animatedAcfDot)}
+        {/if}
+      {/if}
+    </g>
+
+    <!-- Text Labels -->
+    {@render pointLabel("A", pointA)}
+    {@render pointLabel("B", pointB)}
+    {@render pointLabel("C", pointC)}
+    {@render pointLabel("D", pointD, 14, 10, 12)}
+
+    {#if steps >= 1}
+      {@render pointLabel("E", pointE, 14, 10, -8)}
+      {@render pointLabel("F", pointF, 14, 10, -8)}
     {/if}
   </svg>
 
@@ -583,9 +459,14 @@
 <style>
   .cursor-grab {
     cursor: grab;
+    touch-action: none;
   }
 
   .cursor-grab:active {
     cursor: grabbing;
+  }
+
+  .pointer-none {
+    pointer-events: none;
   }
 </style>
