@@ -17,6 +17,10 @@ export const supportedLocales: SupportedLocale[] = [
     code: "ja",
     label: "日本語",
   },
+  {
+    code: "zh-cn",
+    label: "中文",
+  },
 ];
 
 export const languagePromptTemplates: Record<string, LanguagePromptTemplate> = {
@@ -27,6 +31,10 @@ export const languagePromptTemplates: Record<string, LanguagePromptTemplate> = {
   ja: {
     message: "このサイトは{language}版があります。",
     linkText: "{language}で開く",
+  },
+  "zh-cn": {
+    message: "本网站也提供{language}版本。",
+    linkText: "以{language}打开",
   },
 };
 

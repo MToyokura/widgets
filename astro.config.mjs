@@ -19,6 +19,10 @@ export default defineConfig({
           label: "日本語",
           lang: "ja",
         },
+        "zh-cn": {
+          label: "中文",
+          lang: "zh-cn",
+        },
       },
       social: [
         {
@@ -32,6 +36,7 @@ export default defineConfig({
           label: "Geometry",
           translations: {
             ja: "図形",
+            "zh-cn": "几何",
           },
           autogenerate: {
             directory: "geometry",

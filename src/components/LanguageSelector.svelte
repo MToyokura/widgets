@@ -12,6 +12,11 @@
       label: "日本語",
       description: "視覚的に学ぶ",
     },
+    {
+      href: "/zh-cn/geometry/transformation-of-figures-in-a-plane",
+      label: "中文",
+      description: "用于直观学习的交互式小部件。",
+    },
   ] as const;
 </script>
 

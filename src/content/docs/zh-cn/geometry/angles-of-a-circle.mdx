@@ -1,0 +1,36 @@
+---
+title: 圆周角与中心角
+sidebar:
+  order: 3050
+---
+
+import Thales from "@/components/D3/Thales.svelte";
+import InscribedAngle from "@/components/D3/InscribedAngle.svelte";
+import CentralAngle from "@/components/D3/CentralAngle.svelte";
+import InscribedAngleProof from "@/components/D3/InscribedAngleProof.svelte";
+
+## 圆周角
+
+圆周角的顶点位于圆的周上。对同一弧所对的圆周角相等。
+
+<InscribedAngle client:load />
+
+## 圆心角
+
+圆心角的顶点位于圆心。对同一弧所对的圆心角是对应圆周角的两倍。
+
+<CentralAngle client:load />
+
+## 泰勒斯定理（半圆定理）
+
+泰勒斯定理指出，半圆上的圆周角为直角。换句话说，以直径为一边的三角形总是直角三角形。
+
+<Thales client:load />
+
+## 圆周角定理的证明
+
+圆周角定理表明，对同一弧所对的圆周角相等，且等于对应圆心角的一半。
+
+这可以通过三角形的外角等于两个不相邻内角之和的性质来证明。
+
+<InscribedAngleProof client:load />

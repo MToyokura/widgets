@@ -1,0 +1,42 @@
+---
+title: 空间中直线与平面的性质
+sidebar:
+  order: 1030
+---
+
+import PerpendicularLineAndPlane from "@/components/three/PerpendicularLineAndPlane.svelte";
+import TwoLinesParallelToSameLine from "@/components/three/TwoLinesParallelToSameLine.svelte";
+import TwoLinesPerpendicularToSameLine from "@/components/three/TwoLinesPerpendicularToSameLine.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="zh-cn" client:visible />
+
+## 垂直于平面的直线
+
+要证明一条直线垂直于某一平面，只需证明它分别垂直于该平面内的两条相交直线。一旦满足此条件，该直线即被定义为垂直于整个平面，因此它与平面上任意直线所成的角均为 90°。
+
+<PerpendicularLineAndPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## 两条与同一条直线平行的直线
+
+两条都与同一条直线平行的直线彼此平行。
+
+<TwoLinesParallelToSameLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## 两条与同一条直线垂直的直线
+
+在空间中，两条都垂直于同一条直线的直线不一定相互平行。
+
+<TwoLinesPerpendicularToSameLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

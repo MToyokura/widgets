@@ -1,0 +1,69 @@
+---
+title: 通过平面图形的运动构造空间图形
+sidebar:
+  order: 1040
+---
+
+import MovingLineCreatesFlatPlane from "@/components/three/MovingLineCreatesFlatPlane.svelte";
+import MovingLineCreatesCylindricalSurface from "@/components/three/MovingLineCreatesCylindricalSurface.svelte";
+import MovingLineCreatesConicalSurface from "@/components/three/MovingLineCreatesConicalSurface.svelte";
+import MovingTriangleCreatesTriangularPrism from "@/components/three/MovingTriangleCreatesTriangularPrism.svelte";
+import RotatingSquareCreatesCylinder from "@/components/three/RotatingSquareCreatesCylinder.svelte";
+import RotatingTriangleCreatesCone from "@/components/three/RotatingTriangleCreatesCone.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="zh-cn" client:visible />
+
+## 通过平移线段构造平面
+
+当线段作平移运动时，其运动轨迹构成一个平面。
+
+<MovingLineCreatesFlatPlane
+  client:visible
+  locale="zh-cn"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## 通过旋转线段构造曲面
+
+圆柱或圆锥的侧面可以看作是单条线段绕固定直线（轴）旋转所形成的曲面。
+
+<MovingLineCreatesCylindricalSurface
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<MovingLineCreatesConicalSurface
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## 通过平移平面图形构造立体
+
+当平面图形作平移运动时，其运动轨迹构成立体。
+
+<MovingTriangleCreatesTriangularPrism
+  client:visible
+  locale="zh-cn"
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## 通过旋转平面图形构造立体
+
+当平面图形旋转时，其旋转轨迹构成立体。
+
+<RotatingSquareCreatesCylinder
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+<RotatingTriangleCreatesCone
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>

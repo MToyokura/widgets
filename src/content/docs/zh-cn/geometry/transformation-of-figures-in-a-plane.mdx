@@ -1,0 +1,27 @@
+---
+title: 平面图形的变换
+sidebar:
+  order: 1000
+---
+
+import Translation from "@/components/D3/Translation.svelte";
+import Rotation from "@/components/D3/Rotation.svelte";
+import Reflection from "@/components/D3/Reflection.svelte";
+
+## 平移
+
+平移将图形的每一点沿相同方向移动相同的距离。大小、形状和朝向保持不变，仅位置改变。
+
+<Translation client:visible />
+
+## 旋转
+
+旋转使图形绕固定中心按给定角度转动。到中心的距离保持不变，因此像与原图全等。
+
+<Rotation client:visible />
+
+## 反射
+
+反射是关于一条镜像直线的对称变换。每个点与其像到该直线的距离相等，连接它们的线段与该直线垂直。
+
+<Reflection client:visible />

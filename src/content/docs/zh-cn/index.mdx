@@ -1,0 +1,17 @@
+---
+title: Widgets
+description: 用于直观学习的交互式小部件。
+template: splash
+hero:
+  tagline: 交互式小部件用于直观学习。
+---
+
+import GetStartedButton from "../../../components/GetStartedButton.svelte";
+import LanguagePrompt from "../../../components/LanguagePrompt.svelte";
+
+<LanguagePrompt client:load />
+
+<GetStartedButton
+  href="/zh-cn/geometry/transformation-of-figures-in-a-plane"
+  label="开始"
+/>

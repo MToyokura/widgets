@@ -1,0 +1,84 @@
+---
+title: 空间中的直线与平面
+sidebar:
+  order: 1010
+---
+
+import PerpendicularLineAndPlane from "@/components/three/PerpendicularLineAndPlane.svelte";
+import ThreePointsNotCollinear from "@/components/three/ThreePointsNotCollinear.svelte";
+import LineAndPointNotOnLine from "@/components/three/LineAndPointNotOnLine.svelte";
+import IntersectingLinesOnPlane from "@/components/three/IntersectingLinesOnPlane.svelte";
+import IntersectingLinesAbovePlane from "@/components/three/IntersectingLinesAbovePlane.svelte";
+import ParallelLines from "@/components/three/ParallelLines.svelte";
+import SkewPosition from "@/components/three/SkewPosition.svelte";
+import RenderingSettings from "@/components/three/shared/RenderingSettings.svelte";
+
+<RenderingSettings locale="zh-cn" client:visible />
+
+## 平面的判定
+
+平面可以通过满足下列任意条件来确定：
+
+- 不在同一直线的三点
+- 一条直线和该直线外的一点
+- 两条相交直线
+
+### 不在同一直线的三点
+
+<ThreePointsNotCollinear
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### 一条直线和该直线外的一点
+
+<LineAndPointNotOnLine
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### 两条相交直线
+
+<IntersectingLinesOnPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## 两条直线的位置关系
+
+### 相交
+
+<IntersectingLinesAbovePlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### 平行（不相交）
+
+<ParallelLines
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+### 异面（既不相交也不平行）
+
+<SkewPosition
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
+
+## 垂直于平面的直线
+
+要证明一条直线垂直于某一平面，只需证明它分别垂直于该平面内的两条相交直线。一旦满足此条件，该直线即被定义为垂直于整个平面，因此它与平面上任意直线所成的角均为 90°。
+
+<PerpendicularLineAndPlane
+  client:visible
+  pixelRatioCapControlId="geometry-pixel-ratio-cap-toggle"
+  antialiasControlId="geometry-antialias-toggle"
+/>
