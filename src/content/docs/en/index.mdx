@@ -6,9 +6,12 @@ hero:
   tagline: Interactive widgets for visual learning.
 ---
 
-import LanguageSelector from "../../../components/LanguageSelector.svelte";
+import GetStartedButton from "../../../components/GetStartedButton.svelte";
 import LanguagePrompt from "../../../components/LanguagePrompt.svelte";
 
 <LanguagePrompt client:load />
 
-<LanguageSelector />
+<GetStartedButton
+  href="/en/geometry/transformation-of-figures-in-a-plane"
+  label="Get started"
+/>

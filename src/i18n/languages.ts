@@ -21,11 +21,11 @@ export const supportedLocales: SupportedLocale[] = [
 
 export const languagePromptTemplates: Record<string, LanguagePromptTemplate> = {
   en: {
-    message: "This page is also available in {language}.",
+    message: "This website is also available in {language}.",
     linkText: "Open in {language}",
   },
   ja: {
-    message: "このページは{language}でも読めます。",
+    message: "このサイトは{language}版があります。",
     linkText: "{language}で開く",
   },
 };
