@@ -11,8 +11,8 @@
     "format": "prettier --write --cache .",
     "check": "astro check && svelte-check && eslint .",
     "knip": "knip --fix --allow-remove-files",
-    "fix": "npm run lint:fix && npm run format && npm run knip",
-    "lint": "eslint . --fix"
+    "fix": "npm run lint && npm run format && npm run knip",
+    "lint": "eslint . --fix --cache"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",

@@ -441,11 +441,7 @@ export function getCentralAngleLabelPosition(
  * Calculates the unit vector of the angle bisector at a vertex.
  * Returns a fallback vector if the points are collinear or overlapping.
  */
-export function getAngleBisectorUnitVector(
-  a: Point,
-  vertex: Point,
-  b: Point,
-): Point {
+function getAngleBisectorUnitVector(a: Point, vertex: Point, b: Point): Point {
   const toA = unitVector(vertex, a);
   const toB = unitVector(vertex, b);
 
