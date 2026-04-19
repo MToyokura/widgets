@@ -10,7 +10,7 @@
     {
       href: "/ja/geometry/transformation-of-figures-in-a-plane",
       label: "日本語",
-      description: "視覚的に学ぼう",
+      description: "視覚的に学ぶ",
     },
   ] as const;
 </script>
