@@ -238,7 +238,8 @@
     fill={theme.fill}
     stroke={theme.stroke}
     stroke-width="2"
-    stroke-dasharray="4 4"
+    stroke-dasharray="5 7"
+    stroke-linecap="round"
     class="pointer-none"
   />
 {/snippet}
@@ -258,7 +259,7 @@
     fill="none"
     stroke={options.stroke ?? THEME.lines.default}
     stroke-width={options.strokeWidth ?? "2.5"}
-    stroke-dasharray={options.dashArray ?? "7 5"}
+    stroke-dasharray={options.dashArray ?? "5 7"}
     stroke-linecap={options.linecap ?? "round"}
     opacity={options.opacity ?? "0.85"}
     class="pointer-none"
@@ -337,7 +338,7 @@
     {#if steps < 1}
       {@render referenceLine(bisectorPath, {
         stroke: THEME.lines.bisector,
-        dashArray: "6 4",
+        dashArray: "5 7",
       })}
     {/if}
 
@@ -349,11 +350,9 @@
       {#if steps === 1 || steps === 2}
         {@render referenceLine(caExtendedPath, {
           strokeWidth: "2",
-          dashArray: "2 4",
         })}
         {@render referenceLine(baExtendedPath, {
           strokeWidth: "2",
-          dashArray: "2 4",
         })}
       {:else if steps === 3}
         {@render referenceLine(caExtendedPath, {
@@ -376,7 +375,6 @@
         })}
         {@render referenceLine(abPath, {
           strokeWidth: "2",
-          dashArray: "2 4",
           stroke: THEME.lines.ab,
         })}
         {@render referenceLine(acPath, {
@@ -436,7 +434,7 @@
 
     <!-- Angle Dots -->
     <g class="pointer-none">
-      {#if steps < 3}
+      {#if steps < 3 || steps === 4}
         {@render angleDot(angleCad)}
       {/if}
 
