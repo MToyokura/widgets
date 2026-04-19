@@ -14,9 +14,27 @@
   const width = 400;
   const height = 400;
 
-  let pointA = $state<Point>({ x: 110, y: 80 });
-  let pointB = $state<Point>({ x: 50, y: 300 });
-  let pointC = $state<Point>({ x: 350, y: 300 });
+  const SCALE = 1.25;
+
+  const rawA: Point = { x: 128, y: 148 };
+  const rawB: Point = { x: 86, y: 226 };
+  const rawC: Point = { x: 296, y: 226 };
+
+  const centroid: Point = {
+    x: (rawA.x + rawB.x + rawC.x) / 3,
+    y: (rawA.y + rawB.y + rawC.y) / 3,
+  };
+
+  function scalePoint(p: Point, s = SCALE): Point {
+    return {
+      x: centroid.x + s * (p.x - centroid.x),
+      y: centroid.y + s * (p.y - centroid.y),
+    };
+  }
+
+  let pointA = $state<Point>(scalePoint(rawA));
+  let pointB = $state<Point>(scalePoint(rawB));
+  let pointC = $state<Point>(scalePoint(rawC));
 
   const trianglePath = $derived(getTrianglePath(pointA, pointC, pointB));
 
