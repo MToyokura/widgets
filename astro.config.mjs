@@ -8,7 +8,7 @@ export default defineConfig({
   integrations: [
     svelte(),
     starlight({
-      title: "OER",
+      title: "Widgets",
       defaultLocale: "en",
       locales: {
         en: {

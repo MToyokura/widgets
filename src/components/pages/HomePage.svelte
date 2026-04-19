@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-  <title>OER</title>
+  <title>Widgets</title>
   <meta
     name="description"
     content="Choose a language to continue to the interactive geometry lessons."
