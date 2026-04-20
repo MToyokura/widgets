@@ -15,3 +15,48 @@ import LanguagePrompt from "../../../components/LanguagePrompt.svelte";
   href="/en/geometry/transformation-of-figures-in-a-plane"
   label="Get started"
 />
+
+## What is this?
+
+This is a proof of concept of what an interactive OER (Open Educational Resource) might look like.
+
+Building a site like this used to require an immense amount of time and specialized effort. Today, thanks to the explosion of open-source tools and the advent of AI coding agents, creating content is more accessible than ever.
+
+While there is still plenty of room for improvement, I have a pretty good hunch that this architecture can scale across other subjects, languages, and pages.
+
+A huge thank you to the creators of Astro, Svelte, D3, three.js, and the many other OSS libraries making this possible under the hood.
+
+## What’s next?
+
+There is still a long "to-do" list to make this a truly useful resource:
+
+- Adding more content.
+- Managing content and translations across multiple languages is still a bit clunky.
+- Adding more thorough explanations.
+- Bringing consistent theming to all the widgets.
+- Localization is scattered across multiple boundaries.
+  - The MDX files might be better off as a title + description + one big svelte component per page, with all the text and localization handled within the svelte component itself.
+
+**BUT** I’m just an average developer working a full-time job to pay the bills. Coding and creating stuff is my hobby. Because of that, I’m planning to step back from this project for a while. Or at least spend a lot less time on it.
+
+If you find value in what’s here and want to see it grow, I’m open to your support, and who knows, that might motivate me to spend more time on it in the future. I can't make any promises though.
+
+<script
+  type="text/javascript"
+  src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
+  data-name="bmc-button"
+  data-slug="MToyokura"
+  data-color="#FFDD00"
+  data-emoji="☕"
+  data-font="Cookie"
+  data-text="Buy me a coffee"
+  data-outline-color="#000000"
+  data-font-color="#000000"
+  data-coffee-color="#ffffff"
+></script>
+
+I might accept simple translation contributions via GitHub PRs. But again, I can't promise that I'll get to them.
+
+## License
+
+In the spirit of open education, this repository is in the [public domain (CC0 1.0)](https://creativecommons.org/publicdomain/zero/1.0/). You are more than welcome to fork it, build on it, and host your own version.
