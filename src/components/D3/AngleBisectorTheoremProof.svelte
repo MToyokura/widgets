@@ -24,7 +24,7 @@
     locale = "en",
   }: {
     steps?: number;
-    locale?: "en" | "ja" | "pt" | "es" | "hi" | "ru" | "bn";
+    locale?: "en" | "ja" | "pt" | "es" | "hi" | "ru" | "bn" | "zh-cn";
   } = $props();
 
   const width = 400;
@@ -41,32 +41,90 @@
     en: {
       diagramLabel: "Angle bisector theorem proof diagram",
       stepsLabel: "Step",
+      stepDescriptions: [
+        "Start with triangle ABC and the angle bisector AD, where D lies on BC.",
+        "Draw a line through B parallel to AD, and extend line AC to meet it at point E.",
+        "Since BE is parallel to AD, the corresponding angles and alternate interior angles show that ∠ABE=∠BAE.",
+        "Therefore, triangle ABE is isosceles, meaning AE=AB.",
+        "Using the property of parallel lines (or similar triangles △CAD∼△CEB), we get AE:AC=BD:CD. Substituting AB for AE, we obtain AB:AC=BD:CD.",
+      ],
     },
     ja: {
       diagramLabel: "角の二等分線定理の証明図",
       stepsLabel: "ステップ",
+      stepDescriptions: [
+        "△ABCで、∠Aの二等分線ADと辺BCの交点をDとする。",
+        "Bを通ってADに平行な直線を引き、ACの延長との交点をEとする。Cを通ってADに平行な直線を引き、ABの延長との交点をFとする。",
+        "∠BADおよび∠CADの対頂角、同位角、錯角を取る。",
+        "△AEBと△AFCは二等辺三角形であり、AE＝AB、AF＝AC となる。",
+        "△CEBと△CADは相似であることを用いると、AB：AC＝BD：CD が得られる。",
+      ],
     },
     pt: {
-      diagramLabel:
-        "Diagrama da demonstração do teorema da bissetriz do ângulo",
+      diagramLabel: "Diagrama da demonstração do teorema da bissetriz interna",
       stepsLabel: "Passo",
+      stepDescriptions: [
+        "Considere o triângulo ABC e a bissetriz AD, onde D pertence ao lado BC.",
+        "Trace uma reta por B paralela a AD, prolongando o lado AC até encontrá-la no ponto E; trace uma reta por C paralela a AD, prolongando o lado AB até o ponto F.",
+        "Como as novas retas são paralelas a AD, os ângulos em E, B, F e C são iguais às metades do ângulo A por correspondência e alternância.",
+        "Assim, os triângulos ABE e ACF são isósceles, resultando em AE = AB e AF = AC.",
+        "Usando a semelhança de triângulos gerada pelas paralelas, temos AE : AC = BD : CD. Substituindo AE por AB, obtemos AB : AC = BD : CD.",
+      ],
     },
     es: {
-      diagramLabel:
-        "Diagrama de la demostración del teorema de la bisectriz del ángulo",
+      diagramLabel: "Diagrama de la demostración del teorema de la bisectriz",
       stepsLabel: "Paso",
+      stepDescriptions: [
+        "Comienza con el triángulo ABC y la bisectriz AD, donde D se encuentra en BC.",
+        "Traza una recta por B paralela a AD y prolonga el lado AC hasta encontrarla en el punto E; traza una recta por C paralela a AD y prolonga el lado AB hasta el punto F.",
+        "Dado que las nuevas rectas son paralelas a AD, los ángulos en E, B, F y C son iguales a las dos mitades del ángulo A.",
+        "Por lo tanto, los triángulos ABE y ACF son isósceles, lo que implica que AE = AB y AF = AC.",
+        "Al aplicar la semejanza de triángulos creada por las paralelas, obtenemos AB : AC = BD : CD.",
+      ],
     },
     hi: {
       diagramLabel: "कोण समद्विभाजक प्रमेय के प्रमाण का आरेख",
       stepsLabel: "चरण",
+      stepDescriptions: [
+        "त्रिभुज ABC से शुरू करें, जहाँ AD कोण A का समद्विभाजक है और D, BC पर स्थित है।",
+        "B से AD के समांतर एक रेखा खींचें और AC को आगे बढ़ाते हुए उसे बिंदु E पर मिलाएँ; इसी प्रकार C से AD के समांतर रेखा खींचकर AB को F पर मिलाएँ।",
+        "चूंकि ये रेखाएँ AD के समांतर हैं, इसलिए संगत और एकांतर कोणों के गुण से E, B, F और C पर बने कोण, कोण A के अर्धकों के बराबर होंगे।",
+        "अतः त्रिभुज ABE और ACF समद्विबाहु हैं, जिससे AE = AB और AF = AC प्राप्त होता है।",
+        "समानुपातिकता प्रमेय (या समरूप त्रिभुजों) का उपयोग करने पर, हमें AB : AC = BD : CD प्राप्त होता है।",
+      ],
     },
     ru: {
-      diagramLabel: "Схема доказательства теоремы о биссектрисе угла",
+      diagramLabel: "Чертеж к доказательству теоремы о биссектрисе",
       stepsLabel: "Шаг",
+      stepDescriptions: [
+        "Рассмотрим треугольник ABC и биссектрису AD, где точка D лежит на стороне BC.",
+        "Проведите через вершину B прямую, параллельную AD, до пересечения с продолжением стороны AC в точке E; аналогично через C проведите прямую, параллельную AD, до пересечения с продолжением AB в точке F.",
+        "Так как новые прямые параллельны AD, углы при вершинах E, B, F и C равны половинам угла A (как соответствующие или накрест лежащие).",
+        "Следовательно, треугольники ABE и ACF являются равнобедренными, то есть AE = AB и AF = AC.",
+        "Используя подобие треугольников, образованных параллельными прямыми, получаем соотношение AB : AC = BD : CD.",
+      ],
     },
     bn: {
-      diagramLabel: "কোণ দ্বিভাজক উপপাদ্যের প্রমাণের চিত্র",
+      diagramLabel: "কোণ দ্বিভাজক উপপাদ্য প্রমাণের চিত্র",
       stepsLabel: "ধাপ",
+      stepDescriptions: [
+        "ত্রিভুজ ABC দিয়ে শুরু করি, যেখানে AD হলো ∠A-এর সমদ্বিভাজক এবং D বিন্দুটি BC বাহুর ওপর অবস্থিত।",
+        "B বিন্দু দিয়ে AD-এর সমান্তরাল একটি রেখা আঁকি এবং AC-কে বর্ধিত করে E বিন্দুতে ছেদ করি; একইভাবে C দিয়ে AD-এর সমান্তরাল রেখা আঁকি যা বর্ধিত AB-কে F বিন্দুতে ছেদ করে।",
+        "নতুন রেখাগুলো AD-এর সমান্তরাল হওয়ায়, অনুরূপ ও একান্তর কোণের নিয়মানুসারে E, B, F এবং C বিন্দুতে উৎপন্ন কোণগুলো ∠A-এর অর্ধেকের সমান।",
+        "ফলস্বরূপ, ত্রিভুজ ABE এবং ACF উভয়ই সমদ্বিবাহু, অর্থাৎ AE = AB এবং AF = AC।",
+        "সমান্তরাল রেখা দ্বারা গঠিত সদৃশ ত্রিভুজের বৈশিষ্ট্য ব্যবহার করে আমরা পাই AB : AC = BD : CD।",
+      ],
+    },
+    "zh-cn": {
+      diagramLabel: "角平分线定理证明图示",
+      stepsLabel: "步骤",
+      stepDescriptions: [
+        "在△ABC中，AD是∠A的角平分线，点D在边BC上。",
+        "过点B作AD de 平行线，与AC的延长线交于点E；过点C作AD的平行线，与AB的延长线交于点F。",
+        "由于这些直线平行于AD，根据同位角和内错角相等的原理，E、B、F、C处的角均等于∠A的一半。",
+        "因此，△ABE和△ACF均为等腰三角形，即 AE = AB 且 AF = AC。",
+        "利用平行线产生的相似三角形性质，可得 AE : AC = BD : CD。代入等量关系后得出 AB : AC = BD : CD。",
+      ],
     },
   } as const;
 
@@ -74,6 +132,9 @@
     locale in copy ? (locale as keyof typeof copy) : "en",
   );
   const text = $derived(copy[language]);
+  const currentStepDescription = $derived(
+    text.stepDescriptions[steps] ?? text.stepDescriptions[0],
+  );
 
   // --- Svelte 5 Tween for Declarative Animations ---
   const stepTwoProgress = new Tween(steps >= 2 ? 1 : 0, {
@@ -468,7 +529,8 @@
   {#snippet controls()}
     <WidgetSliderController
       id={`${baseId}-steps`}
-      label={`${text.stepsLabel} ${steps}`}
+      label={`${text.stepsLabel} ${steps + 1}`}
+      description={currentStepDescription}
       min={0}
       max={4}
       step={1}
