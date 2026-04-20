@@ -15,3 +15,48 @@ import LanguagePrompt from "../../../components/LanguagePrompt.svelte";
   href="/ja/geometry/transformation-of-figures-in-a-plane"
   label="始める"
 />
+
+## これは何ですか？
+
+これは、インタラクティブな OER（オープン教育リソース）がどのようなものが可能かを示す PoC です。
+
+以前は、このようなサイトを作るには膨大な時間と専門的な知識が必要でしたが、今では OSS と AI のおかげで一人でけっこういい感じのコンテンツが作れるようになりつつあります。
+
+改善の余地は多分にありますが、このサイトのアーキテクチャは他の教科、言語、より多くのコンテンツ数にも拡張できると思います。
+
+これを可能にしている Astro、Svelte、D3、three.js、そして他の多くの OSS ライブラリの制作者の皆さん、ありがとうございます。
+
+## 今後は？
+
+本当に役立つサイトにするにはやることが無数にあります。
+
+- もっとコンテンツを追加する。
+- コンテンツと翻訳の管理に改善の余地あり。
+- ちゃんとした解説を追加する。
+- ウィジェット間の見た目に一貫性を持たせる。
+- 多言語対応が複数のレイヤーに散らばっている。
+  - MDX ファイルは、タイトル + 説明 + 各ページに 1 つの大きな Svelte コンポーネント、という形のほうがよいかもしれない。その Svelte コンポーネント内に多言語対応を閉じ込める感じ。
+
+ただこれは趣味でやっていて、「こんな感じに組み合わせたら良い感じになるのでは？」というアイデアを試したもので、PoC としてはそれなりに納得の行くところまでできたので一旦開発を休止あるいは費やす時間を大幅に減らす予定です。
+
+もしもっとコンテンツを増やしてほしいと思っていただけるなら、支援していただけると開発するモチベーションになります（約束はできませんが）。
+
+<script
+  type="text/javascript"
+  src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
+  data-name="bmc-button"
+  data-slug="MToyokura"
+  data-color="#FFDD00"
+  data-emoji="☕"
+  data-font="Cookie"
+  data-text="Buy me a coffee"
+  data-outline-color="#000000"
+  data-font-color="#000000"
+  data-coffee-color="#ffffff"
+></script>
+
+日本語版の誤字、用語、言い回しの修正などの小規模な変更や追加は GitHub の PR を出していただけるとマージするかもしれません。
+
+## ライセンス
+
+このサイトのすべてのコンテンツ及びソースコードは[パブリックドメイン（CC0 1.0）](https://creativecommons.org/publicdomain/zero/1.0/deed.ja)です。自由に使っていただいて構いません。
