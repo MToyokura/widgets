@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const BASE = process.env.BASE_URL ?? "http://localhost:3000";
+const BASE = process.env.BASE_URL ?? "http://localhost:3000/widgets";
 const PATH = "/zh-cn/geometry/lines-and-planes-in-space/";
 
 test.describe("空间中的直线与平面 (zh-cn)", () => {

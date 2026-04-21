@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const BASE = process.env.BASE_URL ?? "http://localhost:3000";
+const BASE = process.env.BASE_URL ?? "http://localhost:3000/widgets";
 const PATH = "/hi/geometry/properties-of-lines-and-planes-in-space/";
 
 test.describe("अंतरिक्ष में रेखाओं और समतलों के गुणधर्म (hi)", () => {

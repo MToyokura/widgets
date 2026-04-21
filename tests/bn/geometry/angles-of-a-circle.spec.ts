@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const BASE = process.env.BASE_URL ?? "http://localhost:3000";
+const BASE = process.env.BASE_URL ?? "http://localhost:3000/widgets";
 const PATH = "/bn/geometry/angles-of-a-circle/";
 
 test.describe("বৃত্তের কোণ (bn)", () => {

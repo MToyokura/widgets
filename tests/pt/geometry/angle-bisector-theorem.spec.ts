@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const BASE = process.env.BASE_URL ?? "http://localhost:3000";
+const BASE = process.env.BASE_URL ?? "http://localhost:3000/widgets";
 const PATH = "/pt/geometry/angle-bisector-theorem/";
 
 test.describe("Teorema da Bissetriz do Ângulo (pt)", () => {

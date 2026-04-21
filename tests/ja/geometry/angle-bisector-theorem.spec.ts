@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const BASE = process.env.BASE_URL ?? "http://localhost:3000";
+const BASE = process.env.BASE_URL ?? "http://localhost:3000/widgets";
 const PATH = "/ja/geometry/angle-bisector-theorem/";
 
 test.describe("角の二等分線の定理 (ja)", () => {
@@ -16,9 +16,7 @@ test.describe("角の二等分線の定理 (ja)", () => {
   });
 
   test("インタラクティブなウィジェットが表示されること", async ({ page }) => {
-    const svg = page.locator(
-      "svg[aria-label='角の二等分線定理の証明図']",
-    );
+    const svg = page.locator("svg[aria-label='角の二等分線定理の証明図']");
     await expect(svg).toBeVisible();
   });
 

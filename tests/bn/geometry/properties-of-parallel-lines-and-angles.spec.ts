@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const BASE = process.env.BASE_URL ?? "http://localhost:3000";
+const BASE = process.env.BASE_URL ?? "http://localhost:3000/widgets";
 const PATH = "/bn/geometry/properties-of-parallel-lines-and-angles/";
 
 test.describe("সমান্তরাল রেখা ও কোণের বৈশিষ্ট্য (bn)", () => {

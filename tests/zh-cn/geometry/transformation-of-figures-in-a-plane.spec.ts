@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const BASE = process.env.BASE_URL ?? "http://localhost:3000";
+const BASE = process.env.BASE_URL ?? "http://localhost:3000/widgets";
 const PATH = "/zh-cn/geometry/transformation-of-figures-in-a-plane/";
 
 test.describe("平面图形的变换 (zh-cn)", () => {

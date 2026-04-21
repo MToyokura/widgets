@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const BASE = process.env.BASE_URL ?? "http://localhost:3000";
+const BASE = process.env.BASE_URL ?? "http://localhost:3000/widgets";
 const PATH = "/ru/geometry/properties-of-lines-and-planes-in-space/";
 
 test.describe("Свойства прямых и плоскостей в пространстве (ru)", () => {
