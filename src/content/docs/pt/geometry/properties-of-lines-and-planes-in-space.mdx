@@ -11,9 +11,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 <RenderingSettings locale="pt" client:visible />
 
-## Uma reta perpendicular a um plano
+## Reta perpendicular a um plano
 
-Dizer que uma reta é perpendicular a um plano basta mostrar que ela é perpendicular a duas retas secantes nesse plano. Uma vez satisfeita essa condição, a reta é definida como perpendicular a todo o plano e, como resultado, o ângulo que ela forma com qualquer reta existente no plano é de 90 graus.
+Para afirmar que uma reta é perpendicular a um plano, basta mostrar que ela é perpendicular a duas retas concorrentes contidas nesse plano. Quando essa condição é satisfeita, a reta é perpendicular a todo o plano e, consequentemente, forma um ângulo de 90° com qualquer reta do plano.
 
 <PerpendicularLineAndPlane
   client:visible
@@ -21,9 +21,9 @@ Dizer que uma reta é perpendicular a um plano basta mostrar que ela é perpendi
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## Duas retas paralelas à mesma reta
+## Retas paralelas a uma terceira reta
 
-Duas retas paralelas à mesma reta são paralelas entre si.
+Se duas retas distintas são paralelas a uma mesma terceira reta, então elas são paralelas entre si.
 
 <TwoLinesParallelToSameLine
   client:visible
@@ -31,9 +31,9 @@ Duas retas paralelas à mesma reta são paralelas entre si.
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## Duas retas perpendiculares à mesma reta
+## Retas perpendiculares a uma terceira reta
 
-No espaço, duas retas perpendiculares à mesma reta não são necessariamente paralelas entre si.
+Diferentemente do que ocorre na geometria plana, no espaço, duas retas perpendiculares a uma mesma terceira reta não são necessariamente paralelas entre si.
 
 <TwoLinesPerpendicularToSameLine
   client:visible

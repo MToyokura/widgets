@@ -15,15 +15,15 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 <RenderingSettings locale="hi" client:visible />
 
-## एक समतल का निर्धारण
+## समतल का निर्धारण (Determination of a Plane)
 
-एक समतल का निर्धारण निम्न में से किसी भी शर्त के पूरा होने पर हो जाता है:
+एक समतल का निर्धारण तब होता है जब वह निम्न में से किसी भी शर्त को पूरा करता है:
 
-- एक ही रेखा पर न स्थित तीन बिंदु
-- उस रेखा पर न स्थित एक बिंदु सहित एक रेखा
+- तीन अरेखीय बिंदु (एक ही रेखा पर न स्थित तीन बिंदु)
+- एक रेखा और उस पर न स्थित एक बिंदु
 - दो प्रतिच्छेदी रेखाएँ
 
-### एक ही रेखा पर न स्थित तीन बिंदु
+### तीन अरेखीय बिंदु
 
 <ThreePointsNotCollinear
   client:visible
@@ -31,7 +31,7 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### उस रेखा पर न स्थित एक बिंदु सहित एक रेखा
+### एक रेखा और उस पर न स्थित एक बिंदु
 
 <LineAndPointNotOnLine
   client:visible
@@ -47,9 +47,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## दो रेखाओं के बीच पारस्परिक संबंध
+## दो रेखाओं के बीच स्थितिक संबंध (Positional Relationship)
 
-### प्रतिच्छेदी
+### प्रतिच्छेदी रेखाएँ (Intersecting Lines)
 
 <IntersectingLinesAbovePlane
   client:visible
@@ -57,7 +57,7 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### समानांतर (प्रतिच्छेद नहीं करतीं)
+### समानांतर रेखाएँ (Parallel Lines)
 
 <ParallelLines
   client:visible
@@ -65,7 +65,8 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### तिर्यक स्थिति (न प्रतिच्छेदी, न समानांतर)
+### विषमतलीय या तिर्यक स्थिति (Skew Position)
+(वे रेखाएँ जो न तो प्रतिच्छेदी हैं और न ही समानांतर)
 
 <SkewPosition
   client:visible
@@ -73,9 +74,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## एक समतल के लंबवत एक रेखा
+## समतल के लंबवत रेखा
 
-यह दिखाने के लिए कि कोई रेखा किसी समतल के लंबवत है, इतना पर्याप्त है कि वह उस समतल की दो प्रतिच्छेदी रेखाओं के लंबवत हो। यह शर्त पूरी होते ही रेखा को पूरे समतल के लंबवत माना जाता है, और परिणामस्वरूप समतल की हर रेखा के साथ बनने वाला कोण 90 डिग्री होता है।
+किसी रेखा को किसी समतल के लंबवत (perpendicular) सिद्ध करने के लिए यह दिखाना पर्याप्त है कि वह उस समतल की दो प्रतिच्छेदी रेखाओं के लंबवत है। एक बार यह शर्त पूरी हो जाने पर, रेखा को पूरे समतल के लंबवत माना जाता है। फलस्वरूप, वह समतल पर स्थित प्रत्येक रेखा के साथ 90 डिग्री का कोण बनाती है।
 
 <PerpendicularLineAndPlane
   client:visible

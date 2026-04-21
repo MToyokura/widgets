@@ -1,5 +1,4 @@
----
-title: अंतरिक्ष में रेखाओं और समतलों के गुणधर्म
+title: अंतरिक्ष में रेखाओं और समतलों के गुणधर्म (Properties of Lines and Planes in Space)
 sidebar:
   order: 1030
 ---
@@ -11,9 +10,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 <RenderingSettings locale="hi" client:visible />
 
-## एक समतल के लंबवत एक रेखा
+## समतल के लंबवत रेखा (A line perpendicular to a plane)
 
-किसी रेखा के किसी समतल के लंबवत होने के लिए, इतना पर्याप्त है कि वह उस समतल की दो प्रतिच्छेदी रेखाओं के लंबवत हो। यह शर्त पूरी होते ही रेखा को पूरे समतल के लंबवत माना जाता है, और परिणामस्वरूप समतल की हर रेखा के साथ बनने वाला कोण 90 डिग्री होता है।
+किसी रेखा को किसी समतल के लंबवत होने के लिए, यह पर्याप्त है कि वह उस समतल की दो प्रतिच्छेदी रेखाओं के लंबवत हो। एक बार यह शर्त पूरी हो जाने पर, रेखा को संपूर्ण समतल के लंबवत माना जाता है। परिणामस्वरूप, वह समतल पर स्थित प्रत्येक रेखा के साथ 90 डिग्री का कोण बनाती है।
 
 <PerpendicularLineAndPlane
   client:visible
@@ -21,9 +20,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## एक ही रेखा के समानांतर दो रेखाएँ
+## एक ही रेखा के समांतर दो रेखाएँ
 
-एक ही रेखा के समानांतर दो रेखाएँ आपस में समानांतर होती हैं।
+एक ही रेखा के समांतर (parallel) दो रेखाएँ आपस में भी समांतर होती हैं।
 
 <TwoLinesParallelToSameLine
   client:visible
@@ -33,7 +32,7 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 ## एक ही रेखा के लंबवत दो रेखाएँ
 
-अंतरिक्ष में, एक ही रेखा के लंबवत दो रेखाएँ आवश्यक नहीं कि आपस में समानांतर हों।
+अंतरिक्ष (space) में, यदि दो रेखाएँ एक ही रेखा के लंबवत (perpendicular) हों, तो यह आवश्यक नहीं है कि वे आपस में समांतर हों।
 
 <TwoLinesPerpendicularToSameLine
   client:visible

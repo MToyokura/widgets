@@ -1,5 +1,5 @@
 ---
-title: Propiedades de líneas y planos en el espacio
+title: Propiedades de rectas y planos en el espacio
 sidebar:
   order: 1030
 ---
@@ -11,9 +11,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 <RenderingSettings locale="es" client:visible />
 
-## Una línea perpendicular a un plano
+## Recta perpendicular a un plano
 
-Para decir que una línea es perpendicular a un plano, es suficiente mostrar que es perpendicular a dos líneas que se intersectan en ese plano. Una vez que se cumple esta condición, la línea se define como perpendicular al plano completo, y por tanto, el ángulo que forma con cualquier línea en el plano será de 90 grados.
+Para determinar que una recta es perpendicular a un plano, basta con demostrar que es perpendicular a dos rectas que se intersecan en dicho plano. Una vez cumplida esta condición, la recta es perpendicular a todos los elementos del plano; por consiguiente, el ángulo que forme con cualquier recta contenida en el plano será de 90 grados.
 
 <PerpendicularLineAndPlane
   client:visible
@@ -21,9 +21,9 @@ Para decir que una línea es perpendicular a un plano, es suficiente mostrar que
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## Dos líneas paralelas a la misma línea
+## Dos rectas paralelas a una misma recta
 
-Dos líneas paralelas a la misma línea son paralelas entre sí.
+Dos rectas que son paralelas a una tercera recta son paralelas entre sí.
 
 <TwoLinesParallelToSameLine
   client:visible
@@ -31,9 +31,9 @@ Dos líneas paralelas a la misma línea son paralelas entre sí.
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## Dos líneas perpendiculares a la misma línea
+## Dos rectas perpendiculares a una misma recta
 
-En el espacio, dos líneas perpendiculares a la misma línea no son necesariamente paralelas entre sí.
+En el espacio, dos rectas perpendiculares a una misma recta no son necesariamente paralelas entre sí.
 
 <TwoLinesPerpendicularToSameLine
   client:visible

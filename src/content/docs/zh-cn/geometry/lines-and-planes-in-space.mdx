@@ -15,15 +15,16 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 <RenderingSettings locale="zh-cn" client:visible />
 
-## 平面的判定
+## 平面的确定
 
-平面可以通过满足下列任意条件来确定：
+在空间中，一个平面可以由下列条件之一唯一确定：
 
-- 不在同一直线的三点
+- 不在同一直线上的三点
 - 一条直线和该直线外的一点
 - 两条相交直线
+- 两条平行直线（未在此处列出，但同样成立）
 
-### 不在同一直线的三点
+### 不在同一直线上的三点
 
 <ThreePointsNotCollinear
   client:visible
@@ -47,9 +48,13 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## 两条直线的位置关系
+## 空间中两条直线的位置关系
+
+在三维空间中，两条直线之间的位置关系有以下三种：
 
 ### 相交
+
+两条直线有且只有一个公共点，它们位于同一平面内。
 
 <IntersectingLinesAbovePlane
   client:visible
@@ -57,7 +62,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### 平行（不相交）
+### 平行
+
+两条直线在同一平面内且没有公共点。
 
 <ParallelLines
   client:visible
@@ -65,7 +72,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### 异面（既不相交也不平行）
+### 异面
+
+两条直线既不相交也不平行。它们不在任何一个共同的平面内。
 
 <SkewPosition
   client:visible
@@ -73,9 +82,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## 垂直于平面的直线
+## 直线与平面垂直
 
-要证明一条直线垂直于某一平面，只需证明它分别垂直于该平面内的两条相交直线。一旦满足此条件，该直线即被定义为垂直于整个平面，因此它与平面上任意直线所成的角均为 90°。
+判定一条直线垂直于一个平面的关键在于：如果一条直线垂直于一个平面内的两条相交直线，那么这条直线就垂直于该平面。一旦达成垂直关系，该直线将垂直于该平面内的**任意**直线。
 
 <PerpendicularLineAndPlane
   client:visible

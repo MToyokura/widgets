@@ -1,5 +1,5 @@
 ---
-title: স্থানিক রেখা ও সমতলের গুণাবলি
+title: ত্রিমাত্রিক স্থানে রেখা ও সমতলের বৈশিষ্ট্যসমূহ
 sidebar:
   order: 1030
 ---
@@ -11,9 +11,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 <RenderingSettings locale="bn" client:visible />
 
-## একটি রেখা সমতলের প্রতি লম্ব
+## সমতলের ওপর লম্ব রেখা
 
-কোনও রেখাকে সমতলের প্রতি লম্ব বলা হলে, সাধারণত পর্যাপ্ত যে সেটি সমতলের উপর থাকা দুইটি ছেদকারী রেখার প্রতি লম্ব হয়। এই শর্ত পূরণ হলে সেই রেখাকে পুরো সমতলের প্রতি লম্ব হিসেবে সংজ্ঞায়িত করা যায়, এবং ফলে সমতলের উপর থাকা যেকোনো রেখার সাথে তার গঠিত কোণ ৯০° হবে।
+যদি কোনো সরলরেখা একটি সমতলের ওপর অবস্থিত দুটি পরস্পরছেদী সরলরেখার ওপর লম্ব হয়, তবে ওই রেখাটিকে উক্ত সমতলের ওপর লম্ব বলা হয়। এই শর্ত পূরণ হলে, রেখাটি ওই সমতলের ওপর অবস্থিত যেকোনো সরলরেখার সাথেই ৯০° কোণ উৎপন্ন করবে।
 
 <PerpendicularLineAndPlane
   client:visible
@@ -21,9 +21,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## একই রেখার প্রতি সমান্তরাল দুইটি রেখা
+## একই রেখার সমান্তরাল দুটি রেখা
 
-একই রেখার প্রতি সমান্তরাল দুইটি রেখা একে অপরের প্রতিও সমান্তরাল।
+দুটি সরলরেখা যদি একই সরলরেখার সমান্তরাল হয়, তবে তারা নিজেরাও পরস্পর সমান্তরাল হবে।
 
 <TwoLinesParallelToSameLine
   client:visible
@@ -31,9 +31,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## একই রেখার প্রতি সমকোণীয় দুইটি রেখা
+## একই রেখার ওপর লম্ব দুটি রেখা
 
-স্থানিক জ্যামিতিতে, একই রেখার প্রতি সমকোণীয় হওয়া দুইটি রেখা অবশ্যই একে অপরের প্রতি সমান্তরাল হবে না।
+ত্রিমাত্রিক জ্যামিতিতে, দুটি সরলরেখা একই সরলরেখার ওপর লম্ব হলেও তারা যে সর্বদা পরস্পর সমান্তরাল হবে এমনটি নয়।
 
 <TwoLinesPerpendicularToSameLine
   client:visible

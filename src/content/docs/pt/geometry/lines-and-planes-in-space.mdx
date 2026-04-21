@@ -17,11 +17,11 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 ## Determinação de um plano
 
-Um plano é determinado quando satisfaz qualquer uma das seguintes condições:
+Um plano é determinado de forma única quando satisfaz qualquer uma das seguintes condições:
 
 - Três pontos não colineares
-- Uma reta e um ponto fora dela
-- Duas retas secantes
+- Uma reta e um ponto externo a ela
+- Duas retas concorrentes (secantes)
 
 ### Três pontos não colineares
 
@@ -47,9 +47,9 @@ Um plano é determinado quando satisfaz qualquer uma das seguintes condições:
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## Relação posicional entre duas retas
+## Posição relativa entre duas retas
 
-### Secantes
+### Retas concorrentes (secantes)
 
 <IntersectingLinesAbovePlane
   client:visible
@@ -57,7 +57,7 @@ Um plano é determinado quando satisfaz qualquer uma das seguintes condições:
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### Paralelas (não secantes)
+### Retas paralelas (não se interceptam e são coplanares)
 
 <ParallelLines
   client:visible
@@ -65,7 +65,7 @@ Um plano é determinado quando satisfaz qualquer uma das seguintes condições:
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### Reversas (nem secantes nem paralelas)
+### Retas reversas (não são paralelas e não se interceptam)
 
 <SkewPosition
   client:visible
@@ -73,9 +73,9 @@ Um plano é determinado quando satisfaz qualquer uma das seguintes condições:
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## Uma reta perpendicular a um plano
+## Reta perpendicular a um plano
 
-Para afirmar que uma reta é perpendicular a um plano, basta mostrar que ela é perpendicular a duas retas secantes nesse plano. Uma vez satisfeita essa condição, a reta é definida como perpendicular a todo o plano e, como resultado, o ângulo que ela forma com qualquer reta existente no plano será de 90 graus.
+Para demonstrar que uma reta é perpendicular a um plano, basta provar que ela é perpendicular a duas retas concorrentes contidas nesse plano. Uma vez estabelecida essa condição, a reta será perpendicular a todas as retas do plano que passam pelo ponto de interseção.
 
 <PerpendicularLineAndPlane
   client:visible

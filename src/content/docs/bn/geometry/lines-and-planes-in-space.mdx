@@ -1,5 +1,5 @@
 ---
-title: স্থানিক রেখা ও সমতল
+title: ত্রিমাত্রিক স্থানে রেখা ও সমতল
 sidebar:
   order: 1010
 ---
@@ -15,15 +15,15 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 <RenderingSettings locale="bn" client:visible />
 
-## সমতল নির্ধারণ
+## সমতল নির্দিষ্টকরণ
 
-নিচের যেকোনো শর্ত পূরণ হলে একটি সমতল নির্ধারিত হয়:
+নিচের যেকোনো একটি শর্ত পূরণ হলে একটি নির্দিষ্ট সমতল পাওয়া যায়:
 
-- একই রেখায় না থাকা তিনটি বিন্দু
-- একটি রেখা এবং সেই রেখার উপর না থাকা একটি বিন্দু
-- দুইটি ছেদকারী রেখা
+- একই সরলরেখায় অবস্থিত নয় এমন তিনটি বিন্দু (অসমরেখ বিন্দু)
+- একটি সরলরেখা এবং সেই রেখার ওপর অবস্থিত নয় এমন একটি বিন্দু
+- পরস্পরছেদী দুটি সরলরেখা
 
-### একই রেখায় না থাকা তিনটি বিন্দু
+### অসমরেখ তিনটি বিন্দু
 
 <ThreePointsNotCollinear
   client:visible
@@ -31,7 +31,7 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### একটি রেখা এবং সেই রেখার উপর না থাকা একটি বিন্দু
+### একটি রেখা এবং তার বহিঃস্থ একটি বিন্দু
 
 <LineAndPointNotOnLine
   client:visible
@@ -39,7 +39,7 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### দুইটি ছেদকারী রেখা
+### পরস্পরছেদী দুটি রেখা
 
 <IntersectingLinesOnPlane
   client:visible
@@ -47,9 +47,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## দুইটি রেখার অবস্থাগত সম্পর্ক
+## দুটি রেখার আপেক্ষিক অবস্থান
 
-### ছেদকারী
+### পরস্পরছেদী রেখা
 
 <IntersectingLinesAbovePlane
   client:visible
@@ -57,7 +57,7 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### সমান্তরাল (ছেদকারী নয়)
+### সমান্তরাল রেখা (যারা পরস্পরকে ছেদ করে না)
 
 <ParallelLines
   client:visible
@@ -65,7 +65,7 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### স্কিউ (না ছেদ, না সমান্তরাল)
+### তির্যক রেখা (Skew Lines - যারা সমান্তরাল নয় এবং পরস্পরকে ছেদও করে না)
 
 <SkewPosition
   client:visible
@@ -73,9 +73,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## একটি রেখা সমতলের প্রতি লম্ব
+## সমতলের ওপর লম্ব রেখা
 
-কোনও রেখাকে সমতলের প্রতি লম্ব বলা হলে, সাধারণত পর্যাপ্ত যে সেটি সমতলের উপর থাকা দুইটি ছেদকারী রেখার প্রতি লম্ব হয়। এই শর্ত পূরণ হলে সেই রেখাকে পুরো সমতলের প্রতি লম্ব হিসেবে সংজ্ঞায়িত করা যায়, এবং ফলে সমতলের ওপর থাকা যেকোনো রেখার সাথে তার গঠিত কোণ ৯০° হবে।
+যদি কোনো সরলরেখা একটি সমতলের ওপর অবস্থিত দুটি পরস্পরছেদী সরলরেখার ওপর লম্ব হয়, তবে ওই রেখাটিকে উক্ত সমতলের ওপর লম্ব বলা হয়। এই শর্ত পূরণ হলে, রেখাটি ওই সমতলের ওপর অবস্থিত যেকোনো সরলরেখার সাথেই ৯০° কোণ উৎপন্ন করবে।
 
 <PerpendicularLineAndPlane
   client:visible

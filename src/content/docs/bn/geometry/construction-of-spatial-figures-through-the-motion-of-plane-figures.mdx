@@ -1,5 +1,5 @@
 ---
-title: সমতল চিত্রের গতি দ্বারা স্থানিক আকার নির্মাণ
+title: সমতল চিত্রের গতির মাধ্যমে ঘনবস্তু নির্মাণ
 sidebar:
   order: 1040
 ---
@@ -14,9 +14,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 <RenderingSettings locale="bn" client:visible />
 
-## রেখাংশকে সমান্তর করে সমতল সৃষ্টি করা
+## রেখাংশের সমান্তরাল চলনের মাধ্যমে সমতল সৃষ্টি
 
-যখন একটি রেখাংশকে সমান্তরভাবে সরানো হয়, তার চলনের পথ একটি সমতল গঠন করে।
+যখন একটি রেখাংশকে সমান্তরালভাবে সরানো হয়, তখন তার অতিক্রান্ত পথ একটি সমতল গঠন করে।
 
 <MovingLineCreatesFlatPlane
   client:visible
@@ -25,9 +25,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## রেখাকে ঘোরিয়ে বক্র পৃষ্ঠ সৃষ্টি করা
+## রেখাংশের ঘূর্ণনের মাধ্যমে বক্রপৃষ্ঠ সৃষ্টি
 
-সিলিন্ডার বা শঙ্কুর বাহ্যিক পৃষ্ঠকে একটি রেখাংশকে একটি স্থির রেখা (অক্ষ) এর চারপাশে ঘোরালে সৃষ্ট বক্র পৃষ্ঠ হিসেবে ধরা যায়।
+সিলিন্ডার (বেলন) বা শঙ্কুর পার্শ্বতলকে একটি রেখাংশের ঘূর্ণনের ফলে সৃষ্ট বক্রপৃষ্ঠ হিসেবে বিবেচনা করা যেতে পারে, যেখানে রেখাংশটি একটি স্থির অক্ষের চারপাশে ঘোরে।
 
 <MovingLineCreatesCylindricalSurface
   client:visible
@@ -41,9 +41,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## সমতল চিত্রকে সমান্তর করে ঘনবস্তু সৃষ্টি করা
+## সমতল চিত্রের সমান্তরাল চলনের মাধ্যমে ঘনবস্তু সৃষ্টি
 
-যখন একটি সমতল চিত্রকে সমান্তর করে সরানো হয়, তার চলনের পথ একটি ঘনবস্তু গঠন করে।
+যখন একটি সমতল চিত্রকে সমান্তরালভাবে সরানো হয়, তখন তার অতিক্রান্ত পথ একটি ঘনবস্তু গঠন করে।
 
 <MovingTriangleCreatesTriangularPrism
   client:visible
@@ -52,9 +52,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## সমতল চিত্রকে ঘোরিয়ে ঘনবস্তু সৃষ্টি করা
+## সমতল চিত্রের ঘূর্ণনের মাধ্যমে ঘনবস্তু সৃষ্টি
 
-যখন একটি সমতল চিত্রকে ঘোরানো হয়, তার ঘূর্ণনের পথে একটি ঘনবস্তু তৈরি হয়।
+যখন একটি সমতল চিত্রকে একটি অক্ষের সাপেক্ষে ঘোরানো হয়, তখন তার ঘূর্ণন পথে একটি ঘনবস্তু তৈরি হয়।
 
 <RotatingSquareCreatesCylinder
   client:visible

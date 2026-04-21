@@ -11,9 +11,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 <RenderingSettings locale="zh-cn" client:visible />
 
-## 垂直于平面的直线
+## 直线与平面垂直的性质
 
-要证明一条直线垂直于某一平面，只需证明它分别垂直于该平面内的两条相交直线。一旦满足此条件，该直线即被定义为垂直于整个平面，因此它与平面上任意直线所成的角均为 90°。
+判定一条直线垂直于平面的条件是：如果一条直线垂直于平面内的两条相交直线，则该直线垂直于该平面。一旦确定了这种垂直关系，该直线将垂直于该平面内的**任意**一条直线。
 
 <PerpendicularLineAndPlane
   client:visible
@@ -21,9 +21,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## 两条与同一条直线平行的直线
+## 平行线的传递性
 
-两条都与同一条直线平行的直线彼此平行。
+在空间中，如果两条直线都和第三条直线平行，那么这两条直线也互相平行。这一性质也被称为平行公理的传递性。
 
 <TwoLinesParallelToSameLine
   client:visible
@@ -31,9 +31,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## 两条与同一条直线垂直的直线
+## 垂直于同一条直线的两条直线
 
-在空间中，两条都垂直于同一条直线的直线不一定相互平行。
+与平面几何不同，在空间中，垂直于同一条直线的两条直线不一定互相平行。它们可能是相交、平行或异面的。
 
 <TwoLinesPerpendicularToSameLine
   client:visible

@@ -1,5 +1,5 @@
 ---
-title: Líneas y planos en el espacio
+title: Rectas y planos en el espacio
 sidebar:
   order: 1010
 ---
@@ -17,11 +17,11 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 ## Determinación de un plano
 
-Un plano está determinado cuando satisface cualquiera de las siguientes condiciones:
+Un plano queda determinado de forma única cuando cumple cualquiera de las siguientes condiciones:
 
-- Tres puntos que no están en la misma recta
-- Una línea y un punto que no está en esa línea
-- Dos líneas que se intersectan
+- Tres puntos no alineados (que no pertenecen a la misma recta).
+- Una recta y un punto exterior a ella.
+- Dos rectas que se intersecan.
 
 ### Tres puntos que no están en la misma recta
 
@@ -39,7 +39,7 @@ Un plano está determinado cuando satisface cualquiera de las siguientes condici
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### Dos líneas que se intersectan
+### Dos líneas que se intersecan
 
 <IntersectingLinesOnPlane
   client:visible
@@ -47,7 +47,7 @@ Un plano está determinado cuando satisface cualquiera de las siguientes condici
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## Relación posicional entre dos líneas
+## Relación posicional entre dos rectas
 
 ### Intersección
 
@@ -57,7 +57,7 @@ Un plano está determinado cuando satisface cualquiera de las siguientes condici
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### Paralelas (no se intersectan)
+### Paralelismo (no se intersecan)
 
 <ParallelLines
   client:visible
@@ -65,7 +65,7 @@ Un plano está determinado cuando satisface cualquiera de las siguientes condici
   antialiasControlId="geometry-antialias-toggle"
 />
 
-### Posición oblicua (ni intersección ni paralelas)
+### Rectas que se cruzan (ni se intersecan ni son paralelas)
 
 <SkewPosition
   client:visible
@@ -73,9 +73,9 @@ Un plano está determinado cuando satisface cualquiera de las siguientes condici
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## Una línea perpendicular a un plano
+## Recta perpendicular a un plano
 
-Para afirmar que una línea es perpendicular a un plano, es suficiente mostrar que es perpendicular a dos líneas que se intersectan en ese plano. Una vez cumplida esta condición, la línea se define como perpendicular a todo el plano, y por lo tanto, el ángulo que forma con cualquier línea sobre el plano será de 90 grados.
+Para determinar que una recta es perpendicular a un plano, basta con demostrar que es perpendicular a dos rectas que se intersecan en dicho plano. Una vez cumplida esta condición, la recta es perpendicular a todos los elementos del plano; por consiguiente, el ángulo que forme con cualquier recta contenida en el plano será de 90 grados.
 
 <PerpendicularLineAndPlane
   client:visible

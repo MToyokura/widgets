@@ -1,5 +1,5 @@
 ---
-title: Ángulos de un círculo
+title: Ángulos en la circunferencia
 sidebar:
   order: 3050
 ---
@@ -11,19 +11,19 @@ import InscribedAngleProof from "@/components/D3/InscribedAngleProof.svelte";
 
 ## Ángulo inscrito
 
-Un ángulo inscrito tiene su vértice en la circunferencia de un círculo. Los ángulos inscritos que subtienen el mismo arco son iguales.
+Un ángulo inscrito es aquel que tiene su vértice sobre la circunferencia. Los ángulos inscritos que subtienden el mismo arco son iguales entre sí.
 
 <InscribedAngle client:load />
 
 ## Ángulo central
 
-Un ángulo central tiene su vértice en el centro del círculo. Un ángulo central que subtiende un arco dado es el doble del ángulo inscrito que subtiende el mismo arco.
+Un ángulo central tiene su vértice en el centro del círculo. La medida de un ángulo central es el doble de la de cualquier ángulo inscrito que subtienda el mismo arco.
 
 <CentralAngle client:load />
 
-## Teorema de Thales
+## Teorema de Tales
 
-El teorema de Thales establece que un ángulo inscrito en un semicírculo es un ángulo recto. En otras palabras, un triángulo que tiene un diámetro como lado es siempre un triángulo rectángulo.
+El teorema de Tales establece que cualquier ángulo inscrito en una semicircunferencia es un ángulo recto. En otras palabras, un triángulo que tiene un diámetro como uno de sus lados es siempre un triángulo rectángulo.
 
 <Thales client:load />
 
@@ -31,6 +31,6 @@ El teorema de Thales establece que un ángulo inscrito en un semicírculo es un 
 
 El teorema del ángulo inscrito establece que los ángulos inscritos que subtienden el mismo arco son iguales y miden la mitad del ángulo central correspondiente.
 
-Se puede demostrar usando la propiedad del triángulo de que un ángulo exterior es igual a la suma de los dos ángulos interiores opuestos.
+Esto se puede demostrar utilizando la propiedad de que un ángulo exterior de un triángulo es igual a la suma de los dos ángulos interiores no adyacentes.
 
 <InscribedAngleProof client:load />

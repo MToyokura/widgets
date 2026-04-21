@@ -1,5 +1,5 @@
 ---
-title: Transformação de Figuras em um Plano
+title: Transformação de Figuras no Plano
 sidebar:
   order: 1000
 ---
@@ -10,18 +10,18 @@ import Reflection from "@/components/D3/Reflection.svelte";
 
 ## Translação
 
-Uma translação desloca todos os pontos de uma figura pela mesma distância na mesma direção. O tamanho, a forma e a orientação permanecem iguais; apenas a posição muda.
+A translação desloca todos os pontos de uma figura por uma mesma distância e em uma mesma direção. O tamanho, a forma e a orientação da figura original são preservados; apenas sua posição no plano é alterada.
 
 <Translation client:visible />
 
 ## Rotação
 
-Uma rotação gira uma figura em torno de um centro fixo por um ângulo dado. As distâncias até o centro permanecem constantes, então a imagem continua congruente à original.
+A rotação gira uma figura em torno de um ponto fixo (o centro de rotação) por um determinado ângulo. Como as distâncias de cada ponto até o centro permanecem constantes, a figura resultante é congruente à original.
 
 <Rotation client:visible />
 
 ## Reflexão
 
-Uma reflexão espelha a figura em relação a uma reta espelho. Cada ponto e sua imagem ficam à mesma distância da reta, e o segmento que os une é perpendicular a ela.
+A reflexão espelha uma figura em relação a uma reta chamada eixo de reflexão. Cada ponto da figura original e seu correspondente na imagem estão à mesma distância do eixo, e o segmento que os une é perpendicular a ele.
 
 <Reflection client:visible />

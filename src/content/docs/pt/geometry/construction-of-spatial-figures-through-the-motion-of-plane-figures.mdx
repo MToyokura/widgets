@@ -16,7 +16,7 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 ## Criando um plano pela translação de um segmento de reta
 
-Quando um segmento de reta é movido em paralelo, o traço do seu movimento forma um único plano.
+Quando um segmento de reta é deslocado paralelamente, o rastro do seu movimento gera um plano.
 
 <MovingLineCreatesFlatPlane
   client:visible
@@ -27,7 +27,7 @@ Quando um segmento de reta é movido em paralelo, o traço do seu movimento form
 
 ## Criando uma superfície curva pela rotação de uma reta
 
-Os lados de um cilindro ou de um cone podem ser considerados uma superfície curva criada pela rotação de um único segmento de reta em torno de uma reta fixa (o eixo).
+As superfícies laterais de um cilindro ou de um cone podem ser compreendidas como superfícies curvas geradas pela rotação de um segmento de reta em torno de um eixo fixo.
 
 <MovingLineCreatesCylindricalSurface
   client:visible
@@ -43,7 +43,7 @@ Os lados de um cilindro ou de um cone podem ser considerados uma superfície cur
 
 ## Criando um sólido pela translação de uma figura plana
 
-Quando uma figura plana é movida em paralelo, o traço do seu movimento forma um sólido.
+Quando uma figura plana é deslocada paralelamente, a trajetória do seu movimento delimita um sólido.
 
 <MovingTriangleCreatesTriangularPrism
   client:visible
@@ -54,7 +54,7 @@ Quando uma figura plana é movida em paralelo, o traço do seu movimento forma u
 
 ## Criando um sólido pela rotação de uma figura plana
 
-Quando uma figura plana é rotacionada, o traço de sua rotação forma um sólido.
+Quando uma figura plana é rotacionada em torno de um eixo, o volume percorrido por ela forma um sólido de revolução.
 
 <RotatingSquareCreatesCylinder
   client:visible

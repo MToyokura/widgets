@@ -1,5 +1,5 @@
 ---
-title: Ângulos de uma Circunferência
+title: Ângulos na Circunferência
 sidebar:
   order: 3050
 ---
@@ -9,28 +9,28 @@ import InscribedAngle from "@/components/D3/InscribedAngle.svelte";
 import CentralAngle from "@/components/D3/CentralAngle.svelte";
 import InscribedAngleProof from "@/components/D3/InscribedAngleProof.svelte";
 
-## Ângulo inscrito
+## Ângulo Inscrito
 
-Um ângulo inscrito tem seu vértice na circunferência de um círculo. Ângulos inscritos que subtendem o mesmo arco são iguais.
+Um ângulo inscrito é aquele cujo vértice pertence à circunferência. Ângulos inscritos que subtendem o mesmo arco possuem a mesma medida.
 
 <InscribedAngle client:load />
 
-## Ângulo central
+## Ângulo Central
 
-Um ângulo central tem seu vértice no centro do círculo. Um ângulo central que subtende um determinado arco é o dobro do ângulo inscrito que subtende o mesmo arco.
+Um ângulo central possui seu vértice no centro da circunferência. A medida de um ângulo central que subtende um determinado arco é o dobro da medida do ângulo inscrito que subtende o mesmo arco.
 
 <CentralAngle client:load />
 
 ## Teorema de Tales
 
-O teorema de Tales afirma que um ângulo inscrito em uma semicircunferência é um ângulo reto. Em outras palavras, um triângulo que tem um diâmetro como um de seus lados é sempre retângulo.
+O Teorema de Tales afirma que qualquer ângulo inscrito em uma semicircunferência é um ângulo reto (90°). Em outras palavras, um triângulo cujo lado mais longo é o diâmetro da circunferência é sempre um triângulo retângulo.
 
 <Thales client:load />
 
-## Demonstração do teorema do ângulo inscrito
+## Demonstração do Teorema do Ângulo Inscrito
 
-O teorema do ângulo inscrito afirma que ângulos inscritos que subtendem o mesmo arco são iguais e medem metade do ângulo central correspondente.
+O teorema estabelece que ângulos inscritos que subtendem o mesmo arco são iguais e medem metade do ângulo central correspondente.
 
-Isso pode ser provado usando a propriedade do triângulo de que um ângulo externo é igual à soma dos dois ângulos internos não adjacentes.
+Isso pode ser provado utilizando a propriedade do ângulo externo de um triângulo, que afirma que o ângulo externo é igual à soma dos dois ângulos internos não adjacentes.
 
 <InscribedAngleProof client:load />

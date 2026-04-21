@@ -1,5 +1,5 @@
 ---
-title: Построение пространственных фигур движением плоских фигур
+title: Образование пространственных фигур движением плоских фигур
 sidebar:
   order: 1040
 ---
@@ -14,9 +14,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 <RenderingSettings locale="ru" client:visible />
 
-## Создание плоскости перемещением отрезка
+## Образование плоскости перемещением отрезка
 
-Когда отрезок движется параллельно самому себе, след его движения образует плоскость.
+При параллельном переносе отрезка в пространстве (в направлении, не параллельном самому отрезку), траектория его движения образует часть плоскости.
 
 <MovingLineCreatesFlatPlane
   client:visible
@@ -25,9 +25,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## Создание кривой поверхности вращением отрезка
+## Образование кривых поверхностей вращением отрезка
 
-Боковые поверхности цилиндра или конуса можно представить как криволинейную поверхность, образованную вращением одного отрезка вокруг фиксированной прямой (оси).
+Боковую поверхность цилиндра или конуса можно рассматривать как поверхность вращения, образованную движением отрезка вокруг фиксированной прямой (оси).
 
 <MovingLineCreatesCylindricalSurface
   client:visible
@@ -41,9 +41,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## Создание тела перемещением плоской фигуры
+## Образование геометрического тела перемещением плоской фигуры
 
-Когда плоская фигура движется параллельно самой себе, след её движения образует тело.
+При параллельном переносе плоской фигуры в направлении, не лежащем в её плоскости, она «заметает» в пространстве геометрическое тело (например, призму).
 
 <MovingTriangleCreatesTriangularPrism
   client:visible
@@ -52,9 +52,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## Создание тела вращением плоской фигуры
+## Образование тел вращения
 
-Когда плоская фигура вращается, след её вращения образует тело.
+При вращении плоской фигуры вокруг оси, лежащей в той же плоскости, образуется тело вращения (например, цилиндр или конус).
 
 <RotatingSquareCreatesCylinder
   client:visible

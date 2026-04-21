@@ -1,5 +1,5 @@
 ---
-title: समतल आकृतियों की गति से स्थानिक आकृतियों का निर्माण
+title: समतल आकृतियों की गति से त्रिविमीय आकृतियों का निर्माण
 sidebar:
   order: 1040
 ---
@@ -14,9 +14,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 <RenderingSettings locale="hi" client:visible />
 
-## एक रेखाखंड के स्थानांतरण से तल का निर्माण
+## रेखाखंड के स्थानांतरण से समतल का निर्माण
 
-जब किसी रेखाखंड को समानांतर रूप से खिसकाया जाता है, तो उसकी गति का पथ एक तल बनाता है।
+जब किसी रेखाखंड को समांतर रूप से स्थानांतरित (translate) किया जाता है, तो उसके द्वारा तय किया गया पथ एक समतल (plane) बनाता है।
 
 <MovingLineCreatesFlatPlane
   client:visible
@@ -25,9 +25,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## एक रेखा के घूर्णन से वक्र पृष्ठ का निर्माण
+## रेखा के घूर्णन से वक्र पृष्ठ का निर्माण
 
-सिलिंडर या शंकु के पार्श्व भाग को एक ऐसी वक्र सतह के रूप में देखा जा सकता है, जो एक निश्चित रेखा (अक्ष) के चारों ओर एक रेखाखंड के घूमने से बनती है।
+बेलन (cylinder) या शंकु (cone) के पार्श्व भाग को एक ऐसे वक्र पृष्ठ के रूप में समझा जा सकता है, जो एक निश्चित रेखा (अक्ष) के चारों ओर एक रेखाखंड के घूमने (घूर्णन) से बनता है।
 
 <MovingLineCreatesCylindricalSurface
   client:visible
@@ -41,9 +41,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## एक समतल आकृति के स्थानांतरण से ठोस का निर्माण
+## समतल आकृति के स्थानांतरण से ठोस (Solid) का निर्माण
 
-जब किसी समतल आकृति को समानांतर रूप से खिसकाया जाता है, तो उसकी गति का पथ एक ठोस बनाता है।
+जब किसी समतल आकृति को समांतर रूप से विस्थापित या स्थानांतरित किया जाता है, तो उसका अनुगामी पथ एक ठोस आकृति बनाता है।
 
 <MovingTriangleCreatesTriangularPrism
   client:visible
@@ -52,9 +52,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## एक समतल आकृति के घूर्णन से ठोस का निर्माण
+## समतल आकृति के घूर्णन से ठोस का निर्माण
 
-जब किसी समतल आकृति को घुमाया जाता है, तो उसके घूर्णन का पथ एक ठोस बनाता है।
+जब किसी समतल आकृति को किसी अक्ष के चारों ओर घुमाया जाता है, तो उसके घूर्णन का पथ एक ठोस (solid) बनाता है।
 
 <RotatingSquareCreatesCylinder
   client:visible

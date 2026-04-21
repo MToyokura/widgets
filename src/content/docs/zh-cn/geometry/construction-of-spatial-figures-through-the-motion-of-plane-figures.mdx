@@ -14,9 +14,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
 
 <RenderingSettings locale="zh-cn" client:visible />
 
-## 通过平移线段构造平面
+## 通过线段的平移构造平面
 
-当线段作平移运动时，其运动轨迹构成一个平面。
+当一条线段沿某一方向进行平移运动时，其运动轨迹可以构成一个平面（或平面的一部分）。
 
 <MovingLineCreatesFlatPlane
   client:visible
@@ -25,9 +25,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## 通过旋转线段构造曲面
+## 通过线段的旋转构造曲面
 
-圆柱或圆锥的侧面可以看作是单条线段绕固定直线（轴）旋转所形成的曲面。
+圆柱或圆锥的侧面可以看作是由一条线段（母线）绕一条固定的直线（轴）旋转而成的曲面。这种形状被称为“旋转面”。
 
 <MovingLineCreatesCylindricalSurface
   client:visible
@@ -41,9 +41,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## 通过平移平面图形构造立体
+## 通过平面图形的平移构造几何体
 
-当平面图形作平移运动时，其运动轨迹构成立体。
+当一个平面图形（如三角形或长方形）沿垂直于其所在平面的方向平移时，其运动轨迹将构成一个柱体。
 
 <MovingTriangleCreatesTriangularPrism
   client:visible
@@ -52,9 +52,9 @@ import RenderingSettings from "@/components/three/shared/RenderingSettings.svelt
   antialiasControlId="geometry-antialias-toggle"
 />
 
-## 通过旋转平面图形构造立体
+## 通过平面图形的旋转构造几何体
 
-当平面图形旋转时，其旋转轨迹构成立体。
+当一个平面图形绕其平面内的一条定直线旋转时，所形成的几何体称为旋转体。例如，长方形绕其一边旋转形成圆柱，直角三角形绕其直角边旋转形成圆锥。
 
 <RotatingSquareCreatesCylinder
   client:visible
