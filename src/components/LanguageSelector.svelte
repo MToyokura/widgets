@@ -3,42 +3,42 @@
 <script lang="ts">
   const options = [
     {
-      href: "/en/geometry/transformation-of-figures-in-a-plane",
+      href: "/widgets/en/geometry/transformation-of-figures-in-a-plane",
       label: "English",
       description: "Interactive widgets for visual learning.",
     },
     {
-      href: "/ja/geometry/transformation-of-figures-in-a-plane",
+      href: "/widgets/ja/geometry/transformation-of-figures-in-a-plane",
       label: "日本語",
       description: "視覚的に学ぶ",
     },
     {
-      href: "/bn/geometry/transformation-of-figures-in-a-plane",
+      href: "/widgets/bn/geometry/transformation-of-figures-in-a-plane",
       label: "বাংলা",
       description: "দৃশ্যত শেখার জন্য ইন্টারঅ্যাক্টিভ উইজেট।",
     },
     {
-      href: "/pt/geometry/transformation-of-figures-in-a-plane",
+      href: "/widgets/pt/geometry/transformation-of-figures-in-a-plane",
       label: "Português",
       description: "Widgets interativos para aprendizagem visual.",
     },
     {
-      href: "/zh-cn/geometry/transformation-of-figures-in-a-plane",
+      href: "/widgets/zh-cn/geometry/transformation-of-figures-in-a-plane",
       label: "中文",
       description: "用于直观学习的交互式小部件。",
     },
     {
-      href: "/es/geometry/transformation-of-figures-in-a-plane",
+      href: "/widgets/es/geometry/transformation-of-figures-in-a-plane",
       label: "Español",
       description: "Widgets interactivos para el aprendizaje visual.",
     },
     {
-      href: "/ru/geometry/transformation-of-figures-in-a-plane",
+      href: "/widgets/ru/geometry/transformation-of-figures-in-a-plane",
       label: "Русский",
       description: "Интерактивные виджеты для визуального обучения.",
     },
     {
-      href: "/hi/geometry/transformation-of-figures-in-a-plane",
+      href: "/widgets/hi/geometry/transformation-of-figures-in-a-plane",
       label: "हिन्दी",
       description: "दृश्य सीखने के लिए इंटरैक्टिव विजेट।",
     },
