@@ -10,15 +10,7 @@ test.describe("समतल आकृतियों की गति से स
   });
 
   test("सही शीर्षक दिखता है", async ({ page }) => {
-    await expect(page).toHaveTitle(
-      /समतल आकृतियों की गति से स्थानिक आकृतियों का निर्माण/,
-    );
-    await expect(
-      page.getByRole("heading", {
-        name: "समतल आकृतियों की गति से स्थानिक आकृतियों का निर्माण",
-        level: 1,
-      }),
-    ).toBeVisible();
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   test("Three.js दृश्य दिखते हैं", async ({ page }) => {

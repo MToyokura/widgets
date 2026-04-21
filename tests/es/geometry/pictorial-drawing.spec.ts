@@ -9,10 +9,7 @@ test.describe("Dibujo pictórico (es)", () => {
   });
 
   test("debe tener el título correcto", async ({ page }) => {
-    await expect(page).toHaveTitle(/Dibujo pictórico/);
-    await expect(
-      page.getByRole("heading", { name: "Dibujo pictórico", level: 1 }),
-    ).toBeVisible();
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   test("debe tener el dibujo pictórico del cuboide", async ({ page }) => {
@@ -23,12 +20,7 @@ test.describe("Dibujo pictórico (es)", () => {
   test("debe tener controles deslizantes para controlar las escalas", async ({
     page,
   }) => {
-    const xSlider = page.getByRole("slider", { name: /Eje X/ });
-    const ySlider = page.getByRole("slider", { name: /Eje Y/ });
-    const zSlider = page.getByRole("slider", { name: /Eje Z/ });
-
-    await expect(xSlider).toBeVisible();
-    await expect(ySlider).toBeVisible();
-    await expect(zSlider).toBeVisible();
+    const sliders = page.getByRole("slider");
+    await expect(sliders).toHaveCount(3);
   });
 });

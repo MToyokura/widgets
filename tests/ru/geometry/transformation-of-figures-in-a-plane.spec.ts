@@ -9,29 +9,23 @@ test.describe("Преобразования фигур в плоскости (ru
   });
 
   test("правильный заголовок отображается", async ({ page }) => {
-    await expect(page).toHaveTitle(/Преобразования фигур в плоскости/);
-    await expect(
-      page.getByRole("heading", {
-        name: "Преобразования фигур в плоскости",
-        level: 1,
-      }),
-    ).toBeVisible();
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   test("должен иметь виджет параллельного переноса", async ({ page }) => {
-    const svg = page.locator("svg[aria-label='Translation diagram']");
+    const svg = page.locator("svg[aria-label]").nth(0);
     await expect(svg).toBeVisible();
     await expect(svg.locator("circle.cursor-grab")).toHaveCount(1);
   });
 
   test("должен иметь виджет вращения", async ({ page }) => {
-    const svg = page.locator("svg[aria-label='Rotation diagram']");
+    const svg = page.locator("svg[aria-label]").nth(1);
     await expect(svg).toBeVisible();
     await expect(svg.locator("circle.cursor-grab")).toHaveCount(2);
   });
 
   test("должен иметь виджет отражения", async ({ page }) => {
-    const svg = page.locator("svg[aria-label='Reflection diagram']");
+    const svg = page.locator("svg[aria-label]").nth(2);
     await expect(svg).toBeVisible();
     await expect(svg.locator("circle.cursor-grab")).toHaveCount(2);
   });

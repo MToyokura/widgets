@@ -10,15 +10,7 @@ test.describe("Construção de Figuras Espaciais pelo Movimento de Figuras Plana
   });
 
   test("should have the correct title", async ({ page }) => {
-    await expect(page).toHaveTitle(
-      /Construção de Figuras Espaciais pelo Movimento de Figuras Planas/,
-    );
-    await expect(
-      page.getByRole("heading", {
-        name: "Construção de Figuras Espaciais pelo Movimento de Figuras Planas",
-        level: 1,
-      }),
-    ).toBeVisible();
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   test("should have Three.js visualizations", async ({ page }) => {

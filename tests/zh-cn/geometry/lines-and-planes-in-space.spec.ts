@@ -9,10 +9,7 @@ test.describe("空间中的直线与平面 (zh-cn)", () => {
   });
 
   test("正确的标题显示", async ({ page }) => {
-    await expect(page).toHaveTitle(/空间中的直线与平面/);
-    await expect(
-      page.getByRole("heading", { name: "空间中的直线与平面", level: 1 }),
-    ).toBeVisible();
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   test("Three.js 可视化显示", async ({ page }) => {

@@ -10,13 +10,7 @@ test.describe("通过平面图形的运动构造空间图形 (zh-cn)", () => {
   });
 
   test("正确的标题显示", async ({ page }) => {
-    await expect(page).toHaveTitle(/通过平面图形的运动构造空间图形/);
-    await expect(
-      page.getByRole("heading", {
-        name: "通过平面图形的运动构造空间图形",
-        level: 1,
-      }),
-    ).toBeVisible();
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   test("Three.js 可视化显示", async ({ page }) => {

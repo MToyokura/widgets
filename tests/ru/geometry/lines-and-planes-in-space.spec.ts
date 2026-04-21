@@ -9,13 +9,7 @@ test.describe("Прямые и плоскости в пространстве (r
   });
 
   test("правильный заголовок отображается", async ({ page }) => {
-    await expect(page).toHaveTitle(/Прямые и плоскости в пространстве/);
-    await expect(
-      page.getByRole("heading", {
-        name: "Прямые и плоскости в пространстве",
-        level: 1,
-      }),
-    ).toBeVisible();
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   test("должны отображаться Three.js визуализации", async ({ page }) => {

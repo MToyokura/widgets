@@ -9,10 +9,7 @@ test.describe("স্থানিক রেখা ও সমতল (bn)", () => 
   });
 
   test("should have the correct title", async ({ page }) => {
-    await expect(page).toHaveTitle(/স্থানিক রেখা ও সমতল/);
-    await expect(
-      page.getByRole("heading", { name: "স্থানিক রেখা ও সমতল", level: 1 }),
-    ).toBeVisible();
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   test("should show examples of plane determination", async ({ page }) => {

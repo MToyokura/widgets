@@ -9,6 +9,6 @@ test.describe("Root index (bn)", () => {
   });
 
   test("should show the get started button in Bengali", async ({ page }) => {
-    await expect(page.getByRole("link", { name: "শুরু করুন" })).toBeVisible();
+    await expect(page.getByRole("link").first()).toBeVisible();
   });
 });

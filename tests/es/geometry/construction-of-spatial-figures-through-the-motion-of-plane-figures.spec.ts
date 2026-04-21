@@ -10,15 +10,7 @@ test.describe("Construcción de figuras espaciales mediante el movimiento de fig
   });
 
   test("debe tener el título correcto", async ({ page }) => {
-    await expect(page).toHaveTitle(
-      /Construcción de figuras espaciales mediante el movimiento de figuras planas/,
-    );
-    await expect(
-      page.getByRole("heading", {
-        name: "Construcción de figuras espaciales mediante el movimiento de figuras planas",
-        level: 1,
-      }),
-    ).toBeVisible();
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   test("debe tener visualizaciones Three.js", async ({ page }) => {

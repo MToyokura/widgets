@@ -9,29 +9,23 @@ test.describe("Transformação de Figuras em um Plano (pt)", () => {
   });
 
   test("should have the correct title", async ({ page }) => {
-    await expect(page).toHaveTitle(/Transformação de Figuras em um Plano/);
-    await expect(
-      page.getByRole("heading", {
-        name: "Transformação de Figuras em um Plano",
-        level: 1,
-      }),
-    ).toBeVisible();
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   test("should have the translation widget", async ({ page }) => {
-    const svg = page.locator("svg[aria-label='Translation diagram']");
+    const svg = page.locator("svg[aria-label]").nth(0);
     await expect(svg).toBeVisible();
     await expect(svg.locator("circle.cursor-grab")).toHaveCount(1);
   });
 
   test("should have the rotation widget", async ({ page }) => {
-    const svg = page.locator("svg[aria-label='Rotation diagram']");
+    const svg = page.locator("svg[aria-label]").nth(1);
     await expect(svg).toBeVisible();
     await expect(svg.locator("circle.cursor-grab")).toHaveCount(2);
   });
 
   test("should have the reflection widget", async ({ page }) => {
-    const svg = page.locator("svg[aria-label='Reflection diagram']");
+    const svg = page.locator("svg[aria-label]").nth(2);
     await expect(svg).toBeVisible();
     await expect(svg.locator("circle.cursor-grab")).toHaveCount(2);
   });

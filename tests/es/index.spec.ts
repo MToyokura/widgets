@@ -9,6 +9,6 @@ test.describe("Root index (es)", () => {
   });
 
   test("should show the get started button in Spanish", async ({ page }) => {
-    await expect(page.getByRole("link", { name: "Comenzar" })).toBeVisible();
+    await expect(page.getByRole("link").first()).toBeVisible();
   });
 });

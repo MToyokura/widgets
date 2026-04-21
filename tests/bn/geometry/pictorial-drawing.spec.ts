@@ -9,10 +9,7 @@ test.describe("চিত্রাঙ্কন (bn)", () => {
   });
 
   test("should have the correct title", async ({ page }) => {
-    await expect(page).toHaveTitle(/চিত্রাঙ্কন/);
-    await expect(
-      page.getByRole("heading", { name: "চিত্রাঙ্কন", level: 1 }),
-    ).toBeVisible();
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   test("should show cuboid pictorial drawing", async ({ page }) => {

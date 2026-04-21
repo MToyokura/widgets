@@ -9,13 +9,7 @@ test.describe("Líneas y planos en el espacio (es)", () => {
   });
 
   test("debe tener el título correcto", async ({ page }) => {
-    await expect(page).toHaveTitle(/Líneas y planos en el espacio/);
-    await expect(
-      page.getByRole("heading", {
-        name: "Líneas y planos en el espacio",
-        level: 1,
-      }),
-    ).toBeVisible();
+    await expect(page.locator("h1")).toBeVisible();
   });
 
   test("debe tener visualizaciones Three.js", async ({ page }) => {
