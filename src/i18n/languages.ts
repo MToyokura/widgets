@@ -103,16 +103,3 @@ export function getPathLocale(pathname: string) {
 
   return normalizeLocale(firstSegment);
 }
-
-export function buildLocalePath(pathname: string, locale: string) {
-  const segments = pathname.split("/").filter(Boolean);
-
-  if (segments.length === 0) {
-    return `/${locale}/`;
-  }
-
-  const [, ...rest] = segments;
-  const suffix = rest.length > 0 ? `${rest.join("/")}/` : "";
-
-  return `/${locale}/${suffix}`;
-}

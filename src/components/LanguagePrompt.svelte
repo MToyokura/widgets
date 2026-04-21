@@ -4,7 +4,6 @@
   import { onMount } from "svelte";
   import type { SupportedLocale } from "../i18n/languages";
   import {
-    buildLocalePath,
     getPathLocale,
     languagePromptTemplates,
     normalizeLocale,
@@ -55,7 +54,7 @@
       .map((locale) => ({
         code: locale.code,
         label: locale.label,
-        href: buildLocalePath(currentPathname, locale.code),
+        href: `/widgets/${locale.code}/`,
       }));
   };
 
