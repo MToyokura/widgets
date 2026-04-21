@@ -202,8 +202,7 @@
       cy={pointC.y}
       r={7}
       fill="#16a34a"
-      class="cursor-grab"
-      style="touch-action: none;"
+      style="touch-action: none; cursor: {cursor};"
     />
     <circle
       use:dragHandleA
@@ -211,8 +210,7 @@
       cy={pointA.y}
       r={10}
       fill="#2563eb"
-      class="cursor-grab"
-      style="touch-action: none;"
+      style="touch-action: none; cursor: {cursor};"
     />
     <circle
       use:dragHandleB
@@ -220,17 +218,7 @@
       cy={pointB.y}
       r={10}
       fill="#2563eb"
-      class="cursor-grab"
-      style="touch-action: none;"
+      style="touch-action: none; cursor: {cursor};"
     />
   </svg>
 </WidgetContainer>
-
-<style>
-  .cursor-grab {
-    cursor: grab;
-  }
-  .cursor-grab:active {
-    cursor: grabbing;
-  }
-</style>

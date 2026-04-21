@@ -135,8 +135,7 @@
       cy={startPoint.y}
       r={10}
       fill="#2563eb"
-      class="cursor-grab"
-      style="touch-action: none;"
+      style="touch-action: none; cursor: {cursor};"
     />
     <circle
       use:dragEndHandle
@@ -144,8 +143,7 @@
       cy={endPoint.y}
       r={10}
       fill="#2563eb"
-      class="cursor-grab"
-      style="touch-action: none;"
+      style="touch-action: none; cursor: {cursor};"
     />
     <circle
       use:dragVertexHandle
@@ -153,17 +151,7 @@
       cy={vertexPoint.y}
       r={10}
       fill="#e74c3c"
-      class="cursor-grab"
-      style="touch-action: none;"
+      style="touch-action: none; cursor: {cursor};"
     />
   </svg>
 </WidgetContainer>
-
-<style>
-  .cursor-grab {
-    cursor: grab;
-  }
-  .cursor-grab:active {
-    cursor: grabbing;
-  }
-</style>
