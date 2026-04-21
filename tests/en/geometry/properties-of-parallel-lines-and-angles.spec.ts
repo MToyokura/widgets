@@ -11,17 +11,24 @@ test.describe("Parallel Lines and Angle Properties (en)", () => {
   test("should have the correct title", async ({ page }) => {
     await expect(page).toHaveTitle(/Parallel Lines and Angle Properties/);
     await expect(
-      page.getByRole("heading", { name: "Parallel Lines and Angle Properties", level: 1 }),
+      page.getByRole("heading", {
+        name: "Parallel Lines and Angle Properties",
+        level: 1,
+      }),
     ).toBeVisible();
   });
 
   test("should have the corresponding angles widget", async ({ page }) => {
-    const svg = page.locator("svg[aria-label='Parallel lines and transversal diagram']");
+    const svg = page.locator(
+      "svg[aria-label='Parallel lines and transversal diagram']",
+    );
     await expect(svg).toBeVisible();
   });
 
   test("should have the alternate angles widget", async ({ page }) => {
-    const svg = page.locator("svg[aria-label='Parallel lines and alternate interior angles']");
+    const svg = page.locator(
+      "svg[aria-label='Parallel lines and alternate interior angles']",
+    );
     await expect(svg).toBeVisible();
   });
 

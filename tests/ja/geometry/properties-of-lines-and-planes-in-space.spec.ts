@@ -11,7 +11,10 @@ test.describe("空間における直線と平面の性質 (ja)", () => {
   test("正しいタイトルが表示されること", async ({ page }) => {
     await expect(page).toHaveTitle(/空間における直線と平面の性質/);
     await expect(
-      page.getByRole("heading", { name: "空間における直線と平面の性質", level: 1 }),
+      page.getByRole("heading", {
+        name: "空間における直線と平面の性質",
+        level: 1,
+      }),
     ).toBeVisible();
   });
 

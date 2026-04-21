@@ -16,7 +16,9 @@ test.describe("Angle Bisector Theorem (en)", () => {
   });
 
   test("should have the interactive widget", async ({ page }) => {
-    const svg = page.locator("svg[aria-label='Angle bisector theorem proof diagram']");
+    const svg = page.locator(
+      "svg[aria-label='Angle bisector theorem proof diagram']",
+    );
     await expect(svg).toBeVisible();
   });
 
@@ -56,8 +58,9 @@ test.describe("Angle Bisector Theorem (en)", () => {
     await page.mouse.up();
 
     const newBox = await pointA.boundingBox();
-    if (!newBox) throw new Error("Could not find point A bounding box after drag");
-    
+    if (!newBox)
+      throw new Error("Could not find point A bounding box after drag");
+
     expect(newBox.x).not.toBe(box.x);
     expect(newBox.y).not.toBe(box.y);
   });

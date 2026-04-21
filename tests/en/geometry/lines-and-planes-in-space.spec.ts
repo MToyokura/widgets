@@ -11,7 +11,10 @@ test.describe("Lines and Planes in Space (en)", () => {
   test("should have the correct title", async ({ page }) => {
     await expect(page).toHaveTitle(/Lines and Planes in Space/);
     await expect(
-      page.getByRole("heading", { name: "Lines and Planes in Space", level: 1 }),
+      page.getByRole("heading", {
+        name: "Lines and Planes in Space",
+        level: 1,
+      }),
     ).toBeVisible();
   });
 

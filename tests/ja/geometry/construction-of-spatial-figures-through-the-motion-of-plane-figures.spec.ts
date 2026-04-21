@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
-const PATH = "/ja/geometry/construction-of-spatial-figures-through-the-motion-of-plane-figures/";
+const PATH =
+  "/ja/geometry/construction-of-spatial-figures-through-the-motion-of-plane-figures/";
 
 test.describe("平面図形の運動による空間図形の構成 (ja)", () => {
   test.beforeEach(async ({ page }) => {
@@ -11,7 +12,10 @@ test.describe("平面図形の運動による空間図形の構成 (ja)", () => 
   test("正しいタイトルが表示されること", async ({ page }) => {
     await expect(page).toHaveTitle(/平面図形の運動による空間図形の構成/);
     await expect(
-      page.getByRole("heading", { name: "平面図形の運動による空間図形の構成", level: 1 }),
+      page.getByRole("heading", {
+        name: "平面図形の運動による空間図形の構成",
+        level: 1,
+      }),
     ).toBeVisible();
   });
 

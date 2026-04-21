@@ -11,7 +11,10 @@ test.describe("Properties of Lines and Planes in Space (en)", () => {
   test("should have the correct title", async ({ page }) => {
     await expect(page).toHaveTitle(/Properties of Lines and Planes in Space/);
     await expect(
-      page.getByRole("heading", { name: "Properties of Lines and Planes in Space", level: 1 }),
+      page.getByRole("heading", {
+        name: "Properties of Lines and Planes in Space",
+        level: 1,
+      }),
     ).toBeVisible();
   });
 

@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
-const PATH = "/en/geometry/construction-of-spatial-figures-through-the-motion-of-plane-figures/";
+const PATH =
+  "/en/geometry/construction-of-spatial-figures-through-the-motion-of-plane-figures/";
 
 test.describe("Construction of Spatial Figures through the Motion of Plane Figures (en)", () => {
   test.beforeEach(async ({ page }) => {
@@ -9,9 +10,14 @@ test.describe("Construction of Spatial Figures through the Motion of Plane Figur
   });
 
   test("should have the correct title", async ({ page }) => {
-    await expect(page).toHaveTitle(/Construction of Spatial Figures through the Motion of Plane Figures/);
+    await expect(page).toHaveTitle(
+      /Construction of Spatial Figures through the Motion of Plane Figures/,
+    );
     await expect(
-      page.getByRole("heading", { name: "Construction of Spatial Figures through the Motion of Plane Figures", level: 1 }),
+      page.getByRole("heading", {
+        name: "Construction of Spatial Figures through the Motion of Plane Figures",
+        level: 1,
+      }),
     ).toBeVisible();
   });
 

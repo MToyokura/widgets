@@ -17,7 +17,9 @@ test.describe("角の二等分線の定理 (ja)", () => {
 
   test("インタラクティブなウィジェットが表示されること", async ({ page }) => {
     // aria-label is hardcoded in English in the component
-    const svg = page.locator("svg[aria-label='Angle bisector theorem proof diagram']");
+    const svg = page.locator(
+      "svg[aria-label='Angle bisector theorem proof diagram']",
+    );
     await expect(svg).toBeVisible();
   });
 
@@ -57,8 +59,11 @@ test.describe("角の二等分線の定理 (ja)", () => {
     await page.mouse.up();
 
     const newBox = await pointA.boundingBox();
-    if (!newBox) throw new Error("ドラッグ後の点Aのバウンディングボックスが見つかりません");
-    
+    if (!newBox)
+      throw new Error(
+        "ドラッグ後の点Aのバウンディングボックスが見つかりません",
+      );
+
     expect(newBox.x).not.toBe(box.x);
     expect(newBox.y).not.toBe(box.y);
   });

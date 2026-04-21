@@ -11,7 +11,10 @@ test.describe("Transformation of Figures in a Plane (en)", () => {
   test("should have the correct title", async ({ page }) => {
     await expect(page).toHaveTitle(/Transformation of Figures in a Plane/);
     await expect(
-      page.getByRole("heading", { name: "Transformation of Figures in a Plane", level: 1 }),
+      page.getByRole("heading", {
+        name: "Transformation of Figures in a Plane",
+        level: 1,
+      }),
     ).toBeVisible();
   });
 

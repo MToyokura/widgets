@@ -16,12 +16,16 @@ test.describe("線と角の性質 (ja)", () => {
   });
 
   test("同位角のウィジェットが表示されること", async ({ page }) => {
-    const svg = page.locator("svg[aria-label='Parallel lines and transversal diagram']");
+    const svg = page.locator(
+      "svg[aria-label='Parallel lines and transversal diagram']",
+    );
     await expect(svg).toBeVisible();
   });
 
   test("錯角のウィジェットが表示されること", async ({ page }) => {
-    const svg = page.locator("svg[aria-label='Parallel lines and alternate interior angles']");
+    const svg = page.locator(
+      "svg[aria-label='Parallel lines and alternate interior angles']",
+    );
     await expect(svg).toBeVisible();
   });
 
