@@ -18,24 +18,24 @@ test.describe("Angles of a Circle (en)", () => {
   test("should have the inscribed angle widget", async ({ page }) => {
     const svg = page.locator("svg[aria-label='Inscribed angle diagram']");
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("should have the central angle widget", async ({ page }) => {
     const svg = page.locator("svg[aria-label='Central angle diagram']");
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("should have the Thales theorem widget", async ({ page }) => {
     const svg = page.locator("svg[aria-label='Thales diagram']");
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("should have the inscribed angle proof widget", async ({ page }) => {
     const svg = page.locator("svg[aria-label='Inscribed angle proof diagram']");
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 });

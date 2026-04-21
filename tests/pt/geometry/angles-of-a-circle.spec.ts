@@ -15,24 +15,24 @@ test.describe("Ângulos de uma Circunferência (pt)", () => {
   test("should have the inscribed angle widget", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(0);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("should have the central angle widget", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(1);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("should have the Thales theorem widget", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(2);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("should have the inscribed angle proof widget", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(3);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 });

@@ -16,9 +16,8 @@ test.describe("角の二等分線の定理 (ja)", () => {
   });
 
   test("インタラクティブなウィジェットが表示されること", async ({ page }) => {
-    // aria-label is hardcoded in English in the component
     const svg = page.locator(
-      "svg[aria-label='Angle bisector theorem proof diagram']",
+      "svg[aria-label='角の二等分線定理の証明図']",
     );
     await expect(svg).toBeVisible();
   });
@@ -29,20 +28,19 @@ test.describe("角の二等分線の定理 (ja)", () => {
   });
 
   test("ステップを制御するスライダーがあること", async ({ page }) => {
-    // The label is currently hardcoded as "Step" in the component
-    const slider = page.getByRole("slider", { name: /Step/ });
+    const slider = page.getByRole("slider", { name: /ステップ/ });
     await expect(slider).toBeVisible();
     await expect(slider).toHaveValue("0");
 
-    // ステップ1に移動
+    // ステップ1に移動 (ラベルは steps + 1 を表示するので "ステップ 2" になる)
     await slider.fill("1");
     await expect(slider).toHaveValue("1");
-    await expect(page.getByText("Step 1")).toBeVisible();
+    await expect(page.getByText("ステップ 2")).toBeVisible();
 
-    // ステップ4に移動
+    // ステップ4に移動 (ラベルは "ステップ 5" になる)
     await slider.fill("4");
     await expect(slider).toHaveValue("4");
-    await expect(page.getByText("Step 4")).toBeVisible();
+    await expect(page.getByText("ステップ 5")).toBeVisible();
   });
 
   test("点をドラッグできること", async ({ page }) => {

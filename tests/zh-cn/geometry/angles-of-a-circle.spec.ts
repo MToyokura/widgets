@@ -15,24 +15,24 @@ test.describe("圆周角与中心角 (zh-cn)", () => {
   test("圆周角的窗口部件显示", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(0);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("圆心角的窗口部件显示", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(1);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("泰勒斯定理的窗口部件显示", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(2);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("圆周角定理证明的窗口部件显示", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(3);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 });

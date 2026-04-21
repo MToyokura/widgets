@@ -33,15 +33,15 @@ test.describe("Angle Bisector Theorem (en)", () => {
     await expect(slider).toBeVisible();
     await expect(slider).toHaveValue("0");
 
-    // Move slider to step 1
+    // Move slider to step 1 (label shows "Step 2" since it displays steps + 1)
     await slider.fill("1");
     await expect(slider).toHaveValue("1");
-    await expect(page.getByText("Step 1")).toBeVisible();
+    await expect(page.getByText("Step 2")).toBeVisible();
 
-    // Move slider to step 4
+    // Move slider to step 4 (label shows "Step 5")
     await slider.fill("4");
     await expect(slider).toHaveValue("4");
-    await expect(page.getByText("Step 4")).toBeVisible();
+    await expect(page.getByText("Step 5")).toBeVisible();
   });
 
   test("should be able to drag points", async ({ page }) => {

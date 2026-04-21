@@ -18,24 +18,24 @@ test.describe("円周角と中心角 (ja)", () => {
   test("円周角のウィジェットが表示されること", async ({ page }) => {
     const svg = page.locator("svg[aria-label='Inscribed angle diagram']");
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("中心角のウィジェットが表示されること", async ({ page }) => {
     const svg = page.locator("svg[aria-label='Central angle diagram']");
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("タレスの定理のウィジェットが表示されること", async ({ page }) => {
     const svg = page.locator("svg[aria-label='Thales diagram']");
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("円周角の定理の証明のウィジェットが表示されること", async ({ page }) => {
     const svg = page.locator("svg[aria-label='Inscribed angle proof diagram']");
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 });

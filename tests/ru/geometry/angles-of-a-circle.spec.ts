@@ -15,19 +15,19 @@ test.describe("Углы окружности (ru)", () => {
   test("должен иметь виджет вписанного угла", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(0);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("должен иметь виджет центрального угла", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(1);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("должен иметь виджет теоремы Фалеса", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(2);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("должен иметь виджет доказательства вписанного угла", async ({
@@ -35,6 +35,6 @@ test.describe("Углы окружности (ru)", () => {
   }) => {
     const svg = page.locator("svg[aria-label]").nth(3);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 });

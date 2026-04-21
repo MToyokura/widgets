@@ -15,19 +15,19 @@ test.describe("Ángulos de un círculo (es)", () => {
   test("debe mostrar el widget de ángulo inscrito", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(0);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("debe mostrar el widget de ángulo central", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(1);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("debe mostrar el widget del teorema de Thales", async ({ page }) => {
     const svg = page.locator("svg[aria-label]").nth(2);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 
   test("debe mostrar el widget de demostración del ángulo inscrito", async ({
@@ -35,6 +35,6 @@ test.describe("Ángulos de un círculo (es)", () => {
   }) => {
     const svg = page.locator("svg[aria-label]").nth(3);
     await expect(svg).toBeVisible();
-    await expect(svg.locator("circle.cursor-grab")).toHaveCount(3);
+    await expect(svg.locator("circle[style*='touch-action']")).toHaveCount(3);
   });
 });
