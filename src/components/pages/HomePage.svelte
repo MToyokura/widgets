@@ -1,5 +1,4 @@
 <script lang="ts">
-  import LanguagePrompt from "../LanguagePrompt.svelte";
   import LanguageSelector from "../LanguageSelector.svelte";
 </script>
 
@@ -22,7 +21,6 @@
         <h2>Choose a language</h2>
       </div>
 
-      <LanguagePrompt />
       <LanguageSelector />
     </section>
   </main>
