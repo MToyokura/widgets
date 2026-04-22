@@ -27,10 +27,18 @@ test.describe("Teorema da Bissetriz do Ângulo (pt)", () => {
     await expect(slider).toBeVisible();
     await expect(slider).toHaveValue("0");
 
-    await slider.fill("1");
+    await slider.evaluate((el: HTMLInputElement) => {
+      el.value = "1";
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+      el.dispatchEvent(new Event("change", { bubbles: true }));
+    });
     await expect(slider).toHaveValue("1");
 
-    await slider.fill("4");
+    await slider.evaluate((el: HTMLInputElement) => {
+      el.value = "4";
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+      el.dispatchEvent(new Event("change", { bubbles: true }));
+    });
     await expect(slider).toHaveValue("4");
   });
 
