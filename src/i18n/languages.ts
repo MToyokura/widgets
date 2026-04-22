@@ -99,7 +99,12 @@ export function normalizeLocale(locale?: string | null) {
 }
 
 export function getPathLocale(pathname: string) {
-  const firstSegment = pathname.split("/").filter(Boolean)[0];
-
-  return normalizeLocale(firstSegment);
+  const segments = pathname.split("/").filter(Boolean);
+  for (const segment of segments) {
+    const normalized = normalizeLocale(segment);
+    if (normalized && supportedLocales.some(({ code }) => code === normalized)) {
+      return normalized;
+    }
+  }
+  return null;
 }
